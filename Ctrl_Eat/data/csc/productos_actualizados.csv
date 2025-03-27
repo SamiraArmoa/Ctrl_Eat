@@ -1,0 +1,41 @@
+id,nombre,ingredientes,Tipo
+1,Spaghetti Carbonara,87;63;107;85;94,Plato
+2,Paella Valenciana,11;101;45;68;57;122;1;14,Plato
+3,Tacos al Pastor,123;35;99;42;32;115,Plato
+4,Sushi Roll,11;8;111;4;105;119,Plato
+5,Lasagna,100;28;112;117;106,Plato
+6,Ceviche,92;75;33;6;42;110,Plato
+7,Moussaka,17;28;122;16;103;1,Plato
+8,Hamburguesa,83;30;73;122;104;32;79,Plato
+9,Ratatouille,17;23;96;97;122;1;5,Plato
+10,Ramen,50;25;64;34;8;36,Plato
+11,Chili con Carne,28;53;122;32;39;44,Plato
+12,Pizza Margarita,77;122;106;7;1,Plato
+13,Bobotie,28;81;63;48;86;72,Plato
+14,Coq au Vin,101;126;38;130;32;5,Plato
+15,Bibimbap,11;125;66;30;88,Plato
+16,Pad Thai,51;26;20;19;63;120,Plato
+17,Falafel,56;5;91;44;42;84,Plato
+18,Gazpacho,122;90;95;81;5;1,Plato
+19,Chow Mein,52;101;108;130;32;116,Plato
+20,Biryani,12;101;129;49;32;14,Plato
+21,Tortilla Española,63;89;32;1;110,Plato
+22,Pulpo a la Gallega,102;89;93;1;110,Plato
+23,Calamares a la Romana,24;60;63;1;110,Plato
+24,Cocido Madrileño,56;29;80;40;124;50,Plato
+25,Fabada Asturiana,9;40;80;121;71,Plato
+26,Pisto Manchego,122;95;17;23;32;1,Plato
+27,Migas,82;40;85;5;1,Plato
+28,Salmorejo,122;81;5;1;67;65,Plato
+29,Gambas al Ajillo,55;5;59;1;91,Plato
+30,Empanada Gallega,76;13;95;32;122,Plato
+31,Sangría,126;54;15;18;118,Bebida
+32,Horchata de Chufa,41;2;15;27,Bebida
+33,Mojito,109;62;15;75;118,Bebida
+34,Pisco Sour,98;69;15;43;10,Bebida
+35,Piña Colada,109;46;70;61,Bebida
+36,Caipirinha,22;15;74;61,Bebida
+37,Mate,78;3,Bebida
+38,Michelada,37;69;113;114;110,Bebida
+39,Baileys Whisky Cream,128;47;21;15,Bebida
+40,Agua de Valencia,31;131;127;58;15,Bebida
