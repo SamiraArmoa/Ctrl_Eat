@@ -6,5 +6,4 @@ typedef struct{
 	char* nombre;
 }Ingrediente;
 
-int guardarIngredientes(int id, char* nombre);
 #endif

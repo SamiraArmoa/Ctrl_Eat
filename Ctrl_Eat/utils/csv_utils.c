@@ -7,10 +7,10 @@
 
 #define MAX_LINE 2048
 
-int guardar_ingredientes(char *id, char *nombre){
+int guardar_productoIngrediente(int id_pr, int id_in) {
     sqlite3 *db;
     sqlite3_stmt *stmt;
-    int db_found = sqlite3_open("./db/local.db", &db);
+    int db_found = sqlite3_open("../data/db/restaurante.db", &db);
 
     if (db_found != SQLITE_OK) {
         printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
@@ -18,10 +18,10 @@ int guardar_ingredientes(char *id, char *nombre){
         return 1;
     }
 
-    char *insert_sql = "INSERT INTO Ingrediente(ID_IN, NOMBRE) VALUES (?, ?)";
+    char *insert_sql = "INSERT INTO PRODUCTO_INGREDIENTE(id_pr, id_in) VALUES (?, ?)";
     sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
-    sqlite3_bind_text(stmt, 1, id, strlen(id), SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 1, id_pr);
+    sqlite3_bind_int(stmt, 2, id_in);
 
     int result = sqlite3_step(stmt);
     sqlite3_finalize(stmt);
@@ -33,65 +33,139 @@ int guardar_ingredientes(char *id, char *nombre){
     }
     sqlite3_close(db);
     return 0;
+	printf("%s\n", id_in);
 }
 
-int guardar_productos(char *id, char *nombre, char *ingredientes, char* tipo, float precio ){
-    sqlite3 *db;
-    sqlite3_stmt *stmt;
-    int db_found = sqlite3_open("./db/local.db", &db);
+int guardar_productoIngredientes(int id_pr, char *ingredientes_ids) {
+	char *id_ingrediente = strtok(ingredientes_ids, ";"); // Obtiene el primer número
 
-    if (db_found != SQLITE_OK) {
-        printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return 1;
-    }
-
-    char *insert_sql = "INSERT INTO Producto(ID_PR, NOMBRE,PRECIO,TIPO) VALUES (?, ?, ?, ?)";
-    sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
-    sqlite3_bind_text(stmt, 1, id, strlen(id), SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
-    sqlite3_bind_double(stmt,3,precio);
-    sqlite3_bind_text(stmt, 4, tipo, strlen(tipo), SQLITE_STATIC);
-
-    int result = sqlite3_step(stmt);
-    sqlite3_finalize(stmt);
-
-    if (result != SQLITE_DONE) {
-        printf("Insert error: %s\n", sqlite3_errmsg(db));
-    } else {
-        printf("Insert successful\n");
-    }
-    sqlite3_close(db);
-    return 0;
+	while (ingredientes_ids != NULL) {
+//		printf("Ingrediente: %s\n", id_ingrediente); // Imprime el número actual
+		id_ingrediente = strtok(NULL, ";"); // Obtiene el siguiente número
+		int id_casteado = atoi(id_ingrediente);
+		guardar_productoIngrediente(id_pr, id_casteado);
+	}
+	return 0;
 }
 
-int guardar_restaurantes(char *id, char *nombre, char* ciudad){
-    sqlite3 *db;
-    sqlite3_stmt *stmt;
-    int db_found = sqlite3_open("./db/local.db", &db);
+int guardar_ingredientes(int id, char *nombre) {
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
 
-    if (db_found != SQLITE_OK) {
-        printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return 1;
-    }
+	if (db_found != SQLITE_OK) {
+		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1;
+	}
 
-    char *insert_sql = "INSERT INTO Restaurante(ID_RES, NOMBRE, CIUDAD) VALUES (?, ?, ?)";
-    sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
-    sqlite3_bind_text(stmt, 1, id, strlen(id), SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 3, ciudad, strlen(ciudad), SQLITE_STATIC);
+	char *insert_sql = "INSERT INTO Ingrediente(ID_IN, NOMBRE) VALUES (?, ?)";
+	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
+	sqlite3_bind_int(stmt, 1, id);
+	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
 
-    int result = sqlite3_step(stmt);
-    sqlite3_finalize(stmt);
+	int result = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
 
-    if (result != SQLITE_DONE) {
-        printf("Insert error: %s\n", sqlite3_errmsg(db));
-    } else {
-        printf("Insert successful\n");
-    }
-    sqlite3_close(db);
-    return 0;
+	if (result != SQLITE_DONE) {
+		printf("Insert error: %s\n", sqlite3_errmsg(db));
+	} else {
+		printf("Insert successful\n");
+	}
+	sqlite3_close(db);
+	return 0;
+}
+
+int guardar_productos(int id, char *nombre, char *ingredientes, char *tipo,
+		float precio) {
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+
+	if (db_found != SQLITE_OK) {
+		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1;
+	}
+
+	char *insert_sql =
+			"INSERT INTO Producto(ID_PR, NOMBRE,PRECIO,TIPO) VALUES (?, ?, ?, ?)";
+	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
+	sqlite3_bind_int(stmt, 1, id);
+	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
+	sqlite3_bind_double(stmt, 3, precio);
+	sqlite3_bind_text(stmt, 4, tipo, strlen(tipo), SQLITE_STATIC);
+
+	int result = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+
+	if (result != SQLITE_DONE) {
+		printf("Insert error: %s\n", sqlite3_errmsg(db));
+	} else {
+		printf("Insert successful\n");
+	}
+	sqlite3_close(db);
+	guardar_productoIngredientes(id, ingredientes);
+	return 0;
+}
+
+int guardar_restaurantes(char *id, char *nombre, char *ciudad) {
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+
+	if (db_found != SQLITE_OK) {
+		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1;
+	}
+
+	char *insert_sql =
+			"INSERT INTO Restaurante(ID_RES, NOMBRE, CIUDAD) VALUES (?, ?, ?)";
+	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
+	sqlite3_bind_text(stmt, 1, id, strlen(id), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 3, ciudad, strlen(ciudad), SQLITE_STATIC);
+
+	int result = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+
+	if (result != SQLITE_DONE) {
+		printf("Insert error: %s\n", sqlite3_errmsg(db));
+	} else {
+		printf("Insert successful\n");
+	}
+	sqlite3_close(db);
+	return 0;
+}
+
+int guardar_productoPedido(char *id_ped, char *id_pr) {
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+
+	if (db_found != SQLITE_OK) {
+		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1;
+	}
+
+	char *insert_sql =
+			"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_pr) VALUES (?, ?)";
+	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
+	sqlite3_bind_text(stmt, 1, id_ped, strlen(id_ped), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 2, id_pr, strlen(id_pr), SQLITE_STATIC);
+
+	int result = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+
+	if (result != SQLITE_DONE) {
+		printf("Insert error: %s\n", sqlite3_errmsg(db));
+	} else {
+		printf("Insert successful\n");
+	}
+	sqlite3_close(db);
+	return 0;
 }
 
 int cargar_ingredientes() {
@@ -124,7 +198,9 @@ int cargar_ingredientes() {
 				trimmed_nombre[len - 1] = '\0';
 				len--;
 			}
-			guardar_ingredientes(id, trimmed_nombre);
+
+			int id_casteado = atoi(id);
+			guardar_ingredientes(id_casteado, trimmed_nombre);
 //			printf("%s,%s\n", id, nombre);
 		} else {
 			fprintf(stderr, "ERROR EN LA LINEA: %s\n", line);
@@ -169,7 +245,8 @@ int cargar_productos() {
 			}
 
 			float precio_parseado = atof(trimmed_precio);
-			guardar_productos(id, nombre, ingredientes, tipo, precio_parseado);
+			int id_casteado = atoi(id);
+			guardar_productos(id_casteado, nombre, ingredientes, tipo, precio_parseado);
 //			printf("%s,%s,%s,%s \n", id, nombre, ingredientes, tipo);
 		} else {
 			fprintf(stderr, "ERROR EN LA LINEA: %s\n", line);
@@ -219,10 +296,9 @@ int cargar_restaurantes() {
 	return 0;
 }
 
-int main() {
+int main(int argc, char **argv) {
 	cargar_ingredientes();
 	cargar_productos();
 	cargar_restaurantes();
 	return 0;
 }
-
