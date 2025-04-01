@@ -4,16 +4,16 @@ id,nombre
 3,Agua Caliente
 4,Aguacate
 5,Ajo
-6,Ají
+6,Aji
 7,Albahaca
 8,Alga Nori
 9,Alubias Blancas
 10,Amargo de Angostura
 11,Arroz
 12,Arroz Basmati
-13,Atún
-14,Azafrán
-15,Azúcar
+13,Atun
+14,Azafran
+15,Azucar
 16,Bechamel
 17,Berenjena
 18,Brandy
@@ -21,7 +21,7 @@ id,nombre
 20,Cacahuates
 21,Cacao
 22,Cachaça
-23,Calabacín
+23,Calabacin
 24,Calamares
 25,Caldo de Pollo
 26,Camarones
@@ -32,7 +32,7 @@ id,nombre
 31,Cava
 32,Cebolla
 33,Cebolla Roja
-34,Cebollín
+34,Cebollin
 35,Cerdo Adobado
 36,Cerdo Chashu
 37,Cerveza
@@ -55,7 +55,7 @@ id,nombre
 54,Frutas
 55,Gambas
 56,Garbanzo
-57,Garrofón
+57,Garrofon
 58,Ginebra
 59,Guindilla
 60,Harina
@@ -65,15 +65,15 @@ id,nombre
 64,Huevo Cocido
 65,Huevo Duro
 66,Huevo Frito
-67,Jamón Ibérico
-68,Judía Verde
-69,Jugo de Limón
+67,Jamon Iberico
+68,Judia Verde
+69,Jugo de Limon
 70,Jugo de Piña
 71,Laurel
 72,Leche
 73,Lechuga
 74,Lima
-75,Limón
+75,Limon
 76,Masa de Empanada
 77,Masa de Pizza
 78,Mate
@@ -91,7 +91,7 @@ id,nombre
 90,Pepino
 91,Perejil
 92,Pescado Blanco
-93,Pimentón
+93,Pimenton
 94,Pimienta Negra
 95,Pimiento
 96,Pimiento Rojo
@@ -109,7 +109,7 @@ id,nombre
 108,Repollo
 109,Ron Blanco
 110,Sal
-111,Salmón
+111,Salmon
 112,Salsa Bechamel
 113,Salsa Inglesa
 114,Salsa Picante
@@ -117,11 +117,11 @@ id,nombre
 116,Salsa de Soja
 117,Salsa de Tomate
 118,Soda
-119,Sésamo
+119,Sesamo
 120,Tamarindo
 121,Tocino
 122,Tomate
-123,Tortilla de Maíz
+123,Tortilla de Maiz
 124,Verduras
 125,Verduras Salteadas
 126,Vino Tinto
