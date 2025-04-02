@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "csv_utils.h"
-//#include <sqlite3.h>
 #include "../lib/sqlite3/sqlite3.h"
 
 #define MAX_LINE 2048
@@ -11,6 +10,8 @@ int guardar_productoIngrediente(int id_pr, int id_in) {
     sqlite3 *db;
     sqlite3_stmt *stmt;
     int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+
+	printf("Producto: %i Ingrediente: %i\n", id_pr, id_in);
 
     if (db_found != SQLITE_OK) {
         printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
@@ -37,15 +38,22 @@ int guardar_productoIngrediente(int id_pr, int id_in) {
 }
 
 int guardar_productoIngredientes(int id_pr, char *ingredientes_ids) {
-	char *id_ingrediente = strtok(ingredientes_ids, ";"); // Obtiene el primer número
-
-	while (ingredientes_ids != NULL) {
-//		printf("Ingrediente: %s\n", id_ingrediente); // Imprime el número actual
-		id_ingrediente = strtok(NULL, ";"); // Obtiene el siguiente número
-		int id_casteado = atoi(id_ingrediente);
-		guardar_productoIngrediente(id_pr, id_casteado);
-	}
-	return 0;
+	printf("Cadena original: %s\n", ingredientes_ids);
+    
+    // Primera llamada a strtok para obtener el primer token
+    char *id_ingrediente = strtok(ingredientes_ids, ";");
+    
+    // Mientras haya tokens para procesar
+    while (id_ingrediente != NULL) {
+        int id_casteado = atoi(id_ingrediente);
+        printf("Procesando ingrediente ID: %d\n", id_casteado);
+        guardar_productoIngrediente(id_pr, id_casteado);
+        
+        // Obtener el siguiente token
+        id_ingrediente = strtok(NULL, ";");
+    }
+    
+    return 0;
 }
 
 int guardar_ingredientes(int id, char *nombre) {
@@ -72,6 +80,7 @@ int guardar_ingredientes(int id, char *nombre) {
 	} else {
 		printf("Insert successful\n");
 	}
+
 	sqlite3_close(db);
 	return 0;
 }
@@ -104,6 +113,7 @@ int guardar_productos(int id, char *nombre, char *ingredientes, char *tipo,
 	} else {
 		printf("Insert successful\n");
 	}
+
 	sqlite3_close(db);
 	guardar_productoIngredientes(id, ingredientes);
 	return 0;
