@@ -8,4 +8,5 @@ typedef struct{
 	float precio;
 }Producto;
 
+// int crearProductos();
 #endif
