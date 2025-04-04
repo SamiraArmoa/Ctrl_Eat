@@ -7,53 +7,54 @@
 #define MAX_LINE 2048
 
 int guardar_productoIngrediente(int id_pr, int id_in) {
-    sqlite3 *db;
-    sqlite3_stmt *stmt;
-    int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
 
 	printf("Producto: %i Ingrediente: %i\n", id_pr, id_in);
 
-    if (db_found != SQLITE_OK) {
-        printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return 1;
-    }
+	if (db_found != SQLITE_OK) {
+		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1;
+	}
 
-    char *insert_sql = "INSERT INTO PRODUCTO_INGREDIENTE(id_pr, id_in) VALUES (?, ?)";
-    sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
-    sqlite3_bind_int(stmt, 1, id_pr);
-    sqlite3_bind_int(stmt, 2, id_in);
+	char *insert_sql =
+			"INSERT INTO PRODUCTO_INGREDIENTE(id_pr, id_in) VALUES (?, ?)";
+	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
+	sqlite3_bind_int(stmt, 1, id_pr);
+	sqlite3_bind_int(stmt, 2, id_in);
 
-    int result = sqlite3_step(stmt);
-    sqlite3_finalize(stmt);
+	int result = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
 
-    if (result != SQLITE_DONE) {
-        printf("Insert error: %s\n", sqlite3_errmsg(db));
-    } else {
-        printf("Insert successful\n");
-    }
-    sqlite3_close(db);
-    return 0;
+	if (result != SQLITE_DONE) {
+		printf("Insert error: %s\n", sqlite3_errmsg(db));
+	} else {
+		printf("Insert successful\n");
+	}
+	sqlite3_close(db);
+	return 0;
 	printf("%s\n", id_in);
 }
 
 int guardar_productoIngredientes(int id_pr, char *ingredientes_ids) {
 	printf("Cadena original: %s\n", ingredientes_ids);
-    
-    // Primera llamada a strtok para obtener el primer token
-    char *id_ingrediente = strtok(ingredientes_ids, ";");
-    
-    // Mientras haya tokens para procesar
-    while (id_ingrediente != NULL) {
-        int id_casteado = atoi(id_ingrediente);
-        printf("Procesando ingrediente ID: %d\n", id_casteado);
-        guardar_productoIngrediente(id_pr, id_casteado);
-        
-        // Obtener el siguiente token
-        id_ingrediente = strtok(NULL, ";");
-    }
-    
-    return 0;
+
+	// Primera llamada a strtok para obtener el primer token
+	char *id_ingrediente = strtok(ingredientes_ids, ";");
+
+	// Mientras haya tokens para procesar
+	while (id_ingrediente != NULL) {
+		int id_casteado = atoi(id_ingrediente);
+		printf("Procesando ingrediente ID: %d\n", id_casteado);
+		guardar_productoIngrediente(id_pr, id_casteado);
+
+		// Obtener el siguiente token
+		id_ingrediente = strtok(NULL, ";");
+	}
+
+	return 0;
 }
 
 int guardar_ingredientes(int id, char *nombre) {
@@ -85,11 +86,10 @@ int guardar_ingredientes(int id, char *nombre) {
 	return 0;
 }
 
-int guardar_productos(int id, char *nombre, char *ingredientes, char *tipo,
-		float precio) {
+int guardar_productos(int id, char *nombre, char *tipo, float precio) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
-	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+	int db_found = sqlite3_open("../../data/db/restaurante.db", &db);
 
 	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
@@ -115,7 +115,6 @@ int guardar_productos(int id, char *nombre, char *ingredientes, char *tipo,
 	}
 
 	sqlite3_close(db);
-	guardar_productoIngredientes(id, ingredientes);
 	return 0;
 }
 
@@ -256,7 +255,9 @@ int cargar_productos() {
 
 			float precio_parseado = atof(trimmed_precio);
 			int id_casteado = atoi(id);
-			guardar_productos(id_casteado, nombre, ingredientes, tipo, precio_parseado);
+			guardar_productos(id_casteado, nombre, tipo,
+					precio_parseado);
+			guardar_productoIngredientes(id_casteado, ingredientes);
 //			printf("%s,%s,%s,%s \n", id, nombre, ingredientes, tipo);
 		} else {
 			fprintf(stderr, "ERROR EN LA LINEA: %s\n", line);
@@ -306,9 +307,13 @@ int cargar_restaurantes() {
 	return 0;
 }
 
-int main(int argc, char **argv) {
-	cargar_ingredientes();
-	cargar_productos();
-	cargar_restaurantes();
-	return 0;
+int cargar_csvs() {
+	int ce1 = cargar_ingredientes();
+	int ce2 = cargar_productos();
+	int ce3 = cargar_restaurantes();
+	if (ce1 == 0 && ce2 == 0 && ce3 == 0) {
+		return 0;
+	}
+	return 1;
 }
+
