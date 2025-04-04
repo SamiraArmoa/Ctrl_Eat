@@ -3,6 +3,7 @@
 #include <string.h>
 #include "pedidos/pedidos.h"
 #include "../utils/csv_utils.h"
+#include "productos/productos.h"
 #include <time.h>
 
 int imprimirMenu(int *opcion) {
@@ -43,6 +44,15 @@ int escogerOpcion(int *opcion) {
 			printf("Archivos cargados en la base de datos\n");
 		}
 		break;
+	case 10:
+		crearProductos();
+		break;
+	case 13:
+		verProductos();
+		break;
+	case 11:
+		eliminarProductos();
+		break;
 	default:
 		printf("No existe esa opcion\n");
 		break;
@@ -59,16 +69,15 @@ int main(int argc, char **argv) {
 	 p1.fchEntrega = temp2;
 	 imprimirPedido(p1);
 	 */
-	if (cargar_csv() != 0) {
-			fprintf(stderr, "Error al cargar los comandos\n\n");
-			return 1;
-		}
+//	if (cargar_csv() != 0) {
+//			fprintf(stderr, "Error al cargar los comandos\n\n");
+//			return 1;
+//		}
 	int opcion = 0;
-	while(opcion != 17) {
+	while (opcion != 17) {
 		imprimirMenu(&opcion);
 		escogerOpcion(&opcion);
 	}
-
 
 //	printf("%d", opcion);
 }
