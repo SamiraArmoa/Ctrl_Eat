@@ -3,13 +3,14 @@
 #include <string.h>
 #include "csv_utils.h"
 #include "../lib/sqlite3/sqlite3.h"
+#include "../data/db/db.h"
 
 #define MAX_LINE 2048
 
 int guardar_productoIngrediente(int id_pr, int id_in) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
-	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+	int db_found = sqlite3_open(DB_PATH, &db);
 
 	printf("Producto: %i Ingrediente: %i\n", id_pr, id_in);
 
@@ -60,7 +61,7 @@ int guardar_productoIngredientes(int id_pr, char *ingredientes_ids) {
 int guardar_ingredientes(int id, char *nombre) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
-	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+	int db_found = sqlite3_open(DB_PATH, &db);
 
 	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
@@ -89,7 +90,7 @@ int guardar_ingredientes(int id, char *nombre) {
 int guardar_productos(int id, char *nombre, char *tipo, float precio) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
-	int db_found = sqlite3_open("../../data/db/restaurante.db", &db);
+	int db_found = sqlite3_open(DB_PATH, &db);
 
 	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
@@ -121,7 +122,7 @@ int guardar_productos(int id, char *nombre, char *tipo, float precio) {
 int guardar_restaurantes(char *id, char *nombre, char *ciudad) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
-	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+	int db_found = sqlite3_open(DB_PATH, &db);
 
 	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
@@ -151,7 +152,7 @@ int guardar_restaurantes(char *id, char *nombre, char *ciudad) {
 int guardar_productoPedido(char *id_ped, char *id_pr) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
-	int db_found = sqlite3_open("../data/db/restaurante.db", &db);
+	int db_found = sqlite3_open(DB_PATH, &db);
 
 	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
