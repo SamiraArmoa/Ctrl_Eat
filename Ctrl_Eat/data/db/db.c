@@ -10,7 +10,7 @@ int obtenerUltimoIdProductos(int* id) {
     int rc;
 
     // Abrir la base de datos
-    rc = sqlite3_open("../../data/db/restaurante.db", &db);
+    rc = sqlite3_open(DB_PATH, &db);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
@@ -30,6 +30,7 @@ int obtenerUltimoIdProductos(int* id) {
     if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
         // Obtener los valores de cada columna (con comprobación de NULL)
         *id = sqlite3_column_int(stmt, 0);
+        printf("Id calculado: %i",*id);
     } else {
         printf("El comando: %s no existe\n");
     }
