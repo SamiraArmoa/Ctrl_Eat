@@ -58,30 +58,38 @@ void eliminarEmpleado(Empleado empleados[], int *count) {
 
 // Actualizar por ID
 void actualizarEmpleado(Empleado empleados[], int count) {
-    char id[10];
-    printf("Ingresa el ID del empleado a actualizar: ");
+    char idBuscado[10];
+
+    printf("Ingrese el ID del empleado a actualizar (ej. EMP001): ");
+    fflush(stdout);
     fflush(stdin);
-    scanf("%s", id);
+    scanf(" %[^\n]", idBuscado);
+
+    int encontrado = 0;
 
     for (int i = 0; i < count; i++) {
-        if (strcmp(empleados[i].id, id) == 0) {
+        if (strcmp(empleados[i].id, idBuscado) == 0) {
+            printf("Empleado encontrado: %s - Cargo actual: %s - Cuenta actual: %s\n",
+                   empleados[i].nombre, empleados[i].cargo, empleados[i].cuentaBancaria);
+
             printf("Nuevo nombre: ");
-            fflush(stdin);
             scanf(" %[^\n]", empleados[i].nombre);
 
             printf("Nuevo cargo: ");
-            fflush(stdin);
             scanf(" %[^\n]", empleados[i].cargo);
 
             printf("Nueva cuenta bancaria: ");
-            fflush(stdin);
             scanf(" %[^\n]", empleados[i].cuentaBancaria);
 
-            printf("Empleado actualizado.\n");
-            return;
+            printf("Empleado actualizado correctamente.\n");
+            encontrado = 1;
+            break;
         }
     }
-    printf("No se ha podido encontrar el empleado con ese ID.\n");
+
+    if (!encontrado) {
+        printf("No se ha encontrado ningún empleado con el ID %s\n", idBuscado);
+    }
 }
 
 // Mostrar todos los empleados
