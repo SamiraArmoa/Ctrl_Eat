@@ -11,4 +11,5 @@ typedef struct{
 int crearProductos();
 int verProductos();
 int eliminarProductos();
+int actualizarProductos();
 #endif

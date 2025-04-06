@@ -160,12 +160,27 @@ int verProductos() {
 	printf("Introduce 0 para terminar de anadir ingredientes\n");
 	return SQLITE_OK;
 }
+
 int eliminarProductos() {
 	int id_pr = 0;
 	int rc;
 	verProductos();
 	printf("Inserta el id del producto que quieres eliminar: ");
 	scanf("%d", &id_pr);
+
+	int confirmacion = 0;
+//	printf("\nELIMINAR PRODUCTO\n");
+	printf("¿Quieres eliminar este producto?\n");
+	printf("1. SI\n");
+	printf("2. NO\n");
+	printf("Opcion: ");
+	scanf("%d", &confirmacion);
+
+	if (confirmacion != 1) {
+		printf("Eliminación cancelada.\n");
+		return 0; // Salimos sin hacer nada
+	}
+
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	rc = sqlite3_open(DB_PATH, &db);
@@ -199,4 +214,59 @@ int eliminarProductos() {
 	}
 	sqlite3_close(db);
 	return 0;
+}
+
+int actualizarProductos() {
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int rc;
+	int id_pr = 0;
+
+	verProductos();
+	printf("Inserta el id del producto que quieres actualizar: ");
+	scanf("%d", &id_pr);
+
+	// Abrir la base de datos
+	rc = sqlite3_open(DB_PATH, &db);
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "Error al abrir la base de datos: %s\n",
+				sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return rc;
+	}
+
+	// Preparar la consulta SQL
+	char *sql =
+			"UPDATE Producto SET ID_PR = ?, NOMBRE = ?, PRECIO = ?, TIPO = ?";
+	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "Error al preparar la consulta: %s\n",
+				sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return rc;
+	}
+
+	// Ejecutar la consulta y procesar los resultados
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+		// Obtener los valores de cada columna (con comprobación de NULL)
+		int id_pr = (int) sqlite3_column_int(stmt, 0);
+		char *nombre = (char*) sqlite3_column_text(stmt, 1);
+		float precio = (float) sqlite3_column_double(stmt, 2);
+		char *tipo = (char*) sqlite3_column_text(stmt, 3);
+
+		printf("%i. Nombre:%s Precio:%.2f Tipo:%s\n", id_pr, nombre, precio,
+				tipo);
+	}
+
+	// Verificar si ocurrió algún error durante la consulta
+	if (rc != SQLITE_DONE) {
+		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
+				sqlite3_errmsg(db));
+	}
+
+	// Finalizar la consulta y cerrar la base de datos
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+	printf("Introduce 0 para terminar de anadir ingredientes\n");
+	return SQLITE_OK;
 }
