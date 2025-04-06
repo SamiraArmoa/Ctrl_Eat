@@ -8,12 +8,9 @@ typedef struct {
     char cuentaBancaria[30];
 } Empleado;
 
-
-void crearEmpleado(Empleado empleados[], int *count);
-void eliminarEmpleado(Empleado empleados[], int *count);
-void actualizarEmpleado(Empleado empleados[], int count);
-void verEmpleados(Empleado empleados[], int count);
-void generarIDEmpleado(int numero, char *id);
-
+int crearEmpleado();
+int eliminarEmpleado();
+int actualizarEmpleado();
+int verEmpleados();
 #endif
 
