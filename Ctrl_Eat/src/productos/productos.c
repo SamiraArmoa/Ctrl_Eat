@@ -158,6 +158,7 @@ int verProductos() {
 	sqlite3_finalize(stmt);
 	sqlite3_close(db);
 	printf("Introduce 0 para terminar de anadir ingredientes\n");
+	fflush(stdout);
 	return SQLITE_OK;
 }
 
@@ -177,7 +178,7 @@ int eliminarProductos() {
 	scanf("%d", &confirmacion);
 
 	if (confirmacion != 1) {
-		printf("Eliminación cancelada.\n");
+		printf("Eliminacion cancelada.\n");
 		return 0; // Salimos sin hacer nada
 	}
 
@@ -221,10 +222,44 @@ int actualizarProductos() {
 	sqlite3_stmt *stmt;
 	int rc;
 	int id_pr = 0;
+	char *nombre;
+	float precio;
+	char *tipo;
+	char nom[100];
+	char tip[25];
 
 	verProductos();
 	printf("Inserta el id del producto que quieres actualizar: ");
-	scanf("%d", &id_pr);
+	fflush(stdin);
+	scanf("%i", &id_pr);
+
+	printf("Nombre: ");
+	fflush(stdin);
+	fgets(nom, 100, stdin);
+	nom[strcspn(nom, "\n")] = '\0';
+	// Asignar memoria dinámica para el nombre según la longitud
+	nombre = malloc((strlen(nom) + 1) * sizeof(char));
+	if (nombre == NULL) {
+		printf("Error al asignar memoria para el nombre.\n");
+		return -1;  // Error si no se pudo asignar memoria
+	}
+	strcpy(nombre, nom);  // Copiar la cadena leída en nombre
+
+	printf("Precio: ");
+	fflush(stdin);
+	scanf("%f", &precio);
+
+	printf("Tipo: ");
+	fflush(stdin);
+	fgets(tip, 25, stdin);
+	tip[strcspn(tip, "\n")] = '\0';
+	// Asignar memoria dinámica para el tipo según la longitud
+	tipo = malloc((strlen(tip) + 1) * sizeof(char));
+	if (tipo == NULL) {
+		printf("Error al asignar memoria para el tipo.\n");
+		return -1;  // Error si no se pudo asignar memoria
+	}
+	strcpy(tipo, tip);  // Copiar la cadena leída en tipo
 
 	// Abrir la base de datos
 	rc = sqlite3_open(DB_PATH, &db);
@@ -237,36 +272,28 @@ int actualizarProductos() {
 
 	// Preparar la consulta SQL
 	char *sql =
-			"UPDATE Producto SET ID_PR = ?, NOMBRE = ?, PRECIO = ?, TIPO = ?";
-	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+			"UPDATE Producto SET NOMBRE = ?, PRECIO = ?, TIPO = ? WHERE ID_PR = ?";
+	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
+	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
+	rc += sqlite3_bind_double(stmt, 2, precio);
+	rc += sqlite3_bind_text(stmt, 3, tipo, strlen(tipo), SQLITE_STATIC);
+	rc += sqlite3_bind_int(stmt, 4, id_pr);
+
 	if (rc != SQLITE_OK) {
-		fprintf(stderr, "Error al preparar la consulta: %s\n",
+		fprintf(stderr, "Error al vincular el parámetro: %s\n",
 				sqlite3_errmsg(db));
+		sqlite3_finalize(stmt);
 		sqlite3_close(db);
 		return rc;
 	}
-
-	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
-		// Obtener los valores de cada columna (con comprobación de NULL)
-		int id_pr = (int) sqlite3_column_int(stmt, 0);
-		char *nombre = (char*) sqlite3_column_text(stmt, 1);
-		float precio = (float) sqlite3_column_double(stmt, 2);
-		char *tipo = (char*) sqlite3_column_text(stmt, 3);
-
-		printf("%i. Nombre:%s Precio:%.2f Tipo:%s\n", id_pr, nombre, precio,
-				tipo);
-	}
-
-	// Verificar si ocurrió algún error durante la consulta
-	if (rc != SQLITE_DONE) {
-		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
-				sqlite3_errmsg(db));
-	}
-
-	// Finalizar la consulta y cerrar la base de datos
+	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
+
+	if (result != SQLITE_DONE) {
+		printf("Insert error: %s\n", sqlite3_errmsg(db));
+	} else {
+		printf("Insert successful\n");
+	}
 	sqlite3_close(db);
-	printf("Introduce 0 para terminar de anadir ingredientes\n");
-	return SQLITE_OK;
+	return 0;
 }
