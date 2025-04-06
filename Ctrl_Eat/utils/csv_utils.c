@@ -149,7 +149,7 @@ int guardar_restaurantes(char *id, char *nombre, char *ciudad) {
 	return 0;
 }
 
-int guardar_productoPedido(char *id_ped, char *id_pr) {
+int guardar_productoPedido(int id_ped, int id_pr) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int db_found = sqlite3_open(DB_PATH, &db);
@@ -161,10 +161,10 @@ int guardar_productoPedido(char *id_ped, char *id_pr) {
 	}
 
 	char *insert_sql =
-			"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_pr) VALUES (?, ?)";
+			"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_producto) VALUES (?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
-	sqlite3_bind_text(stmt, 1, id_ped, strlen(id_ped), SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 2, id_pr, strlen(id_pr), SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 1, id_ped);
+	sqlite3_bind_int(stmt, 2, id_pr);
 
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
@@ -177,6 +177,54 @@ int guardar_productoPedido(char *id_ped, char *id_pr) {
 	sqlite3_close(db);
 	return 0;
 }
+int guardarPedidos(int domic,char *fchEntrega, char *fchPedido){
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int rc;
+
+    // Abrir la base de datos
+    rc = sqlite3_open(DB_PATH, &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return rc;
+    }
+
+    // Preparar la consulta SQL para insertar un nuevo pedido
+    char *sql = "INSERT INTO Pedido (FCHA_ENTREGA, FCHA_PEDIDO, DOMICILIO, ID_CL, ID_RES) VALUES (?, ?, ?, ?, ?)";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al preparar la consulta: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return rc;
+    }
+
+    // Convertir domic (0 o 1) a cadena
+    const char *domic_str = domic ? "Sí" : "No";
+
+    // Bind de los valores a la consulta
+    sqlite3_bind_text(stmt, 1, fchEntrega, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, fchPedido, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, domic_str, -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 4, 1); // TODO id_cl valor
+    sqlite3_bind_int(stmt, 5, 1); // TODO id_res calor
+
+    // Ejecutar la consulta
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Error al ejecutar la consulta: %s\n", sqlite3_errmsg(db));
+    } else {
+        printf("Pedido creado exitosamente\n");
+    }
+
+    // Finalizar y cerrar
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return SQLITE_OK;
+}
+
+
 
 int cargar_ingredientes() {
 	FILE *file = fopen("../data/csv/ingredientes.csv", "r");
