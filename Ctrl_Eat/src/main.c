@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pedidos/pedidos.h"
-#include "../utils/csv_utils.h"
 #include "productos/productos.h"
+#include "empleados/empleados.h"
+#include "../utils/csv_utils.h"
 #include <time.h>
 
 int imprimirMenu(int *opcion) {
@@ -43,6 +44,18 @@ int escogerOpcion(int *opcion) {
 		if (ce == 0) {
 			printf("Archivos cargados en la base de datos\n");
 		}
+		break;
+	case 2:
+		crearEmpleado();
+		break;
+	case 3:
+		eliminarEmpleado();
+		break;
+	case 4:
+		actualizarEmpleado();
+		break;
+	case 5:
+		verEmpleados();
 		break;
 	case 10:
 		crearProductos();
