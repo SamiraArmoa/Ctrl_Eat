@@ -6,7 +6,11 @@
 
 
 
-int main(int argc, char **argv) {
+	void generarID(int numero, char *id) {
+		sprintf(id, "I%03d", numero);
+		fflush(stdout);
+		fflush(stdin);
+	}
 
 	void crearIngrediente(Ingrediente ingredientes[], int *count) {
 	    if (*count >= 300) {
@@ -93,4 +97,5 @@ int main(int argc, char **argv) {
 	        fflush(stdin);
 	    }
 
-}
+	}
+
