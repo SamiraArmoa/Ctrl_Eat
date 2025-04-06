@@ -1,3 +1,4 @@
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,8 +6,10 @@
 #include "productos/productos.h"
 #include "empleados/empleados.h"
 #include "../utils/csv_utils.h"
+#include "productos/productos.h"
+#include "restaurantes/restaurantes.h"
+#include "cliente/cliente.h"
 #include <time.h>
-
 int imprimirMenu(int *opcion) {
 	int num;
 
@@ -28,7 +31,8 @@ int imprimirMenu(int *opcion) {
 	printf("14. Crear ingredientes\n");
 	printf("15. Eliminar ingredientes\n");
 	printf("16. Ver ingredientes\n");
-	printf("17. Salir\n");
+	printf("17. Crear pedidos\n");
+	printf("18. Salir\n");
 
 	scanf("%d", &num);
 	*opcion = num;
@@ -37,7 +41,7 @@ int imprimirMenu(int *opcion) {
 
 int escogerOpcion(int *opcion) {
 	int ce = 5;
-
+	Restaurante restaurante;
 	switch (*opcion) {
 	case 1:
 		ce = cargar_csvs();
@@ -57,6 +61,18 @@ int escogerOpcion(int *opcion) {
 	case 5:
 		verEmpleados();
 		break;
+	case 6:
+		actualizarRestaurante();
+		break;
+	case 7:
+		crearRestaurante();
+		break;
+	case 8:
+		imprimirClientes();
+		break;
+	case 9:
+		//imprimirPedido();
+		break;
 	case 10:
 		crearProductos();
 		break;
@@ -69,6 +85,9 @@ int escogerOpcion(int *opcion) {
 	case 13:
 		verProductos();
 		break;
+	case 17:
+		crearPedido();
+		break;
 
 	default:
 		printf("No existe esa opcion\n");
@@ -77,25 +96,12 @@ int escogerOpcion(int *opcion) {
 }
 
 int main(int argc, char **argv) {
-	/*pedido prueba
-	 Pedido p1 = {1, 25.50, "Si"};
-	 struct tm temp1 = {0}, temp2 = {0};
-	 strptime("2025-03-01", "%Y-%m-%d", &temp1);
-	 strptime("2025-03-02", "%Y-%m-%d", &temp2);
-	 p1.fchPedido = temp1;
-	 p1.fchEntrega = temp2;
-	 imprimirPedido(p1);
-	 */
-//	if (cargar_csv() != 0) {
-//			fprintf(stderr, "Error al cargar los comandos\n\n");
-//			return 1;
-//		}
+
 	int opcion = 0;
-	while (opcion != 17) {
+	while (opcion != 18) {
 		imprimirMenu(&opcion);
 		escogerOpcion(&opcion);
 	}
-
-//	printf("%d", opcion);
+	return 0;
 }
 
