@@ -47,12 +47,16 @@ int escogerOpcion(int *opcion) {
 	case 10:
 		crearProductos();
 		break;
-	case 13:
-		verProductos();
-		break;
 	case 11:
 		eliminarProductos();
 		break;
+	case 12:
+		actualizarProductos();
+		break;
+	case 13:
+		verProductos();
+		break;
+
 	default:
 		printf("No existe esa opcion\n");
 		break;
