@@ -9,7 +9,7 @@ typedef struct{
 
 int crearIngrediente();
 
-int eliminarIngredientes(int id);
+int eliminarIngredientes();
 
 int verIngredientes() ;
 
