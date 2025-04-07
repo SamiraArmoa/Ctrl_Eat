@@ -87,6 +87,15 @@ int escogerOpcion(int *opcion) {
 	case 13:
 		verProductos();
 		break;
+	case 14:
+		crearIngrediente();
+		break;
+	case 15:
+		eliminarIngredientes();
+		break;
+	case 16:
+		verIngredientes();
+		break;
 	case 17:
 		crearPedido();
 		break;
