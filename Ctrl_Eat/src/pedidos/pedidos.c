@@ -169,7 +169,7 @@ int imprimirPedidos() {
     }
 
     // Preparar la consulta SQL
-    char *sql = "SELECT ID_PED, FCH_PEDIDO, FCH_ENTREGA, DOMICILIO, ID_CL, ID_RES FROM Pedido";
+    char *sql = "SELECT ID_PED, FCHA_ENTREGA, FCHA_PEDIDO, DOMICILIO, ID_CL, ID_RES FROM Pedido";
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Error al preparar la consulta: %s\n", sqlite3_errmsg(db));
@@ -180,14 +180,14 @@ int imprimirPedidos() {
     // Ejecutar la consulta y procesar los resultados
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
         int id_ped = sqlite3_column_int(stmt, 0);
-        char *fchPedido = (char*) sqlite3_column_text(stmt, 1);
-        char *fchEntrega = (char*) sqlite3_column_text(stmt, 2);
+        char *fchEntrega = (char*) sqlite3_column_text(stmt, 1);
+		char *fchPedido = (char*) sqlite3_column_text(stmt, 2);
         int domic = sqlite3_column_int(stmt, 3);
         int id_cl = sqlite3_column_int(stmt, 4);
         int id_res = sqlite3_column_int(stmt, 5);
 
-        printf("ID Pedido: %d\nFecha Pedido: %s\nFecha Entrega: %s\nDomicilio: %d\nID Cliente: %d\nID Restaurante: %d\n\n",
-               id_ped,fchPedido, fchEntrega, domic,  id_cl, id_res);
+        printf("ID Pedido: %d\nFecha Entrerga: %s\nFecha Pedido: %s\nDomicilio: %d\nID Cliente: %d\nID Restaurante: %d\n\n",
+               id_ped, fchEntrega, fchPedido, domic,  id_cl, id_res);
     }
 
     // Verificar si ocurrió algún error durante la consulta
@@ -198,7 +198,6 @@ int imprimirPedidos() {
     // Finalizar la consulta y cerrar la base de datos
     sqlite3_finalize(stmt);
     sqlite3_close(db);
-    printf("LOL\n");
     fflush(stdout);
     return SQLITE_OK;
 }
