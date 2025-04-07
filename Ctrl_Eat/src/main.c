@@ -7,6 +7,7 @@
 #include "empleados/empleados.h"
 #include "../utils/csv_utils.h"
 #include "restaurantes/restaurantes.h"
+#include "ingredientes/ingredientes.h"
 #include "cliente/cliente.h"
 #include <time.h>
 int imprimirMenu(int *opcion) {
