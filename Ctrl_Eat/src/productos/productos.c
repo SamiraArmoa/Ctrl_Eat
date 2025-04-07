@@ -167,6 +167,7 @@ int eliminarProductos() {
 	int rc;
 	verProductos();
 	printf("Inserta el id del producto que quieres eliminar: ");
+	fflush(stdin);
 	scanf("%d", &id_pr);
 
 	int confirmacion = 0;
