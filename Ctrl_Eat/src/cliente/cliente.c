@@ -60,7 +60,7 @@ int crearCliente() {
 
 	obtenerUltimoIdClientes(&id);
 	id++;
-	printf("CREAR EMPLEADO\n");
+	printf("CREAR CLIENTE\n");
 	printf("Nombre: ");
 	fflush(stdin);
 	fgets(nom, 100, stdin);
@@ -90,7 +90,7 @@ int crearCliente() {
 	fgets(str, MAX_LENGTH, stdin);
 	sscanf(str, "%i", &telefono);
 
-	printf("\nContraseña: ");
+	printf("\nContrasena: ");
 	fgets(con, 100, stdin);
 	con[strcspn(con, "\n")] = '\0';
 	// Asignar memoria din�mica para el nombre seg�n la longitud
