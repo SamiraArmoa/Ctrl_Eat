@@ -148,35 +148,6 @@ int guardar_restaurantes(char *id, char *nombre, char *ciudad) {
 	sqlite3_close(db);
 	return 0;
 }
-
-int guardar_productoPedido(int id_ped, int id_pr) {
-	sqlite3 *db;
-	sqlite3_stmt *stmt;
-	int db_found = sqlite3_open(DB_PATH, &db);
-
-	if (db_found != SQLITE_OK) {
-		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
-		sqlite3_close(db);
-		return 1;
-	}
-
-	char *insert_sql =
-			"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_producto) VALUES (?, ?)";
-	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
-	sqlite3_bind_int(stmt, 1, id_ped);
-	sqlite3_bind_int(stmt, 2, id_pr);
-
-	int result = sqlite3_step(stmt);
-	sqlite3_finalize(stmt);
-
-	if (result != SQLITE_DONE) {
-		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	} else {
-		printf("Insert successful\n");
-	}
-	sqlite3_close(db);
-	return 0;
-}
 int guardarPedidos(int domic,char *fchEntrega, char *fchPedido){
     sqlite3 *db;
     sqlite3_stmt *stmt;
@@ -224,6 +195,34 @@ int guardarPedidos(int domic,char *fchEntrega, char *fchPedido){
     return SQLITE_OK;
 }
 
+int guardar_productoPedido(int id_ped, int id_pr) {
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int db_found = sqlite3_open(DB_PATH, &db);
+
+	if (db_found != SQLITE_OK) {
+		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1;
+	}
+
+	char *insert_sql =
+			"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_producto) VALUES (?, ?)";
+	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
+	sqlite3_bind_int(stmt, 1, id_ped);
+	sqlite3_bind_int(stmt, 2, id_pr);
+
+	int result = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+
+	if (result != SQLITE_DONE) {
+		printf("Insert error: %s\n", sqlite3_errmsg(db));
+	} else {
+		printf("Insert successful\n");
+	}
+	sqlite3_close(db);
+	return 0;
+}
 
 
 int cargar_ingredientes() {

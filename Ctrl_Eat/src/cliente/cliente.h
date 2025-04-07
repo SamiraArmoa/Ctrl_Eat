@@ -1,11 +1,6 @@
 #ifndef CLIENTES_H_
 #define CLIENTES_H_
 
-
-#include <stdio.h>
-#include <stdlib.h>
-
-
 typedef struct {
     int id;
     char nombre[100];
@@ -14,10 +9,10 @@ typedef struct {
     char contrasena[100];
 } Cliente;
 
-
-int crearCliente(Cliente *cliente);
+int crearCliente();
+int eliminarCliente();
+int actualizarCliente();
 int imprimirClientes();
-
 
 #endif
 

@@ -16,7 +16,7 @@ typedef struct {
 } Pedido;
 
 // New method declarations
-int imprimirPedido();
+int imprimirPedidos();
 int crearPedido();
 
 

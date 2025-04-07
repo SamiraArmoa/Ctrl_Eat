@@ -76,7 +76,7 @@ int crearEmpleado() {
 	nom[strcspn(car, "\n")] = '\0';
 	// Asignar memoria din�mica para el nombre seg�n la longitud
 	cargo = malloc((strlen(car) + 1) * sizeof(char));
-	if (nombre == NULL) {
+	if (cargo == NULL) {
 		printf("Error al asignar memoria para el nombre.\n");
 		return -1;  // Error si no se pudo asignar memoria
 	}
