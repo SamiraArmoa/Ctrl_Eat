@@ -6,12 +6,12 @@ typedef struct{
 	char* nombre;
 }Ingrediente;
 
-void crearIngrediente(Ingrediente ingredientes[], int *count);
+void crearIngrediente();
 
-void eliminarIngrediente(Ingrediente ingredientes[], int *count);
+void eliminarIngrediente();
 
-void actualizarIngrediente(Ingrediente ingredientes[], int count);
 
-void listarIngredientes(Ingrediente ingredientes[], int count);
+
+void listarIngredientes();
 
 #endif

@@ -61,30 +61,7 @@
 	    fflush(stdin);
 	}
 
-	// Actualiza el nombre de un ingrediente dado su ID
-	void actualizarIngrediente(Ingrediente ingredientes[], int count) {
-	    char id[5];
-	    printf("Ingrese el ID del ingrediente a actualizar: ");
-	    fflush(stdout);
-	    fflush(stdin);
-	    scanf("%s", id);
 
-	    for (int i = 0; i < count; i++) {
-	        if (strcmp(ingredientes[i].id, id) == 0) {
-	            printf("Ingrese el nuevo nombre: ");
-	            fflush(stdout);
-	            fflush(stdin);
-	            scanf(" %[^\n]", ingredientes[i].nombre);
-	            printf("Ingrediente actualizado: %s - ID: %s\n", ingredientes[i].nombre, ingredientes[i].id);
-	            fflush(stdout);
-	            fflush(stdin);
-	            return;
-	        }
-	    }
-	    printf("No se encontró el ingrediente con ese ID.\n");
-	    fflush(stdout);
-	    fflush(stdin);
-	}
 
 	// Lista todos los ingredientes
 	void listarIngredientes(Ingrediente ingredientes[], int count) {
