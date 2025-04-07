@@ -6,7 +6,6 @@
 #include "productos/productos.h"
 #include "empleados/empleados.h"
 #include "../utils/csv_utils.h"
-#include "productos/productos.h"
 #include "restaurantes/restaurantes.h"
 #include "cliente/cliente.h"
 #include <time.h>
@@ -32,7 +31,10 @@ int imprimirMenu(int *opcion) {
 	printf("15. Eliminar ingredientes\n");
 	printf("16. Ver ingredientes\n");
 	printf("17. Crear pedidos\n");
-	printf("18. Salir\n");
+	printf("18. Crear cliente\n");
+	printf("19. Eliminar cliente\n");
+	printf("20. Actualizar cliente\n");
+	printf("21. Salir\n");
 
 	scanf("%d", &num);
 	*opcion = num;
@@ -71,7 +73,7 @@ int escogerOpcion(int *opcion) {
 		imprimirClientes();
 		break;
 	case 9:
-		//imprimirPedido();
+		imprimirPedidos();
 		break;
 	case 10:
 		crearProductos();
@@ -88,6 +90,15 @@ int escogerOpcion(int *opcion) {
 	case 17:
 		crearPedido();
 		break;
+	case 18:
+		crearCliente();
+		break;
+	case 19:
+		eliminarCliente();
+		break;
+	case 20:
+		actualizarCliente();
+		break;
 
 	default:
 		printf("No existe esa opcion\n");
@@ -98,7 +109,7 @@ int escogerOpcion(int *opcion) {
 int main(int argc, char **argv) {
 
 	int opcion = 0;
-	while (opcion != 18) {
+	while (opcion != 21) {
 		imprimirMenu(&opcion);
 		escogerOpcion(&opcion);
 	}
