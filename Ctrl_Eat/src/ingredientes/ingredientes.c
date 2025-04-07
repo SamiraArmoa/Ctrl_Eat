@@ -3,76 +3,119 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include"ingredientes.h"
+#include "../../lib/sqlite3/sqlite3.h"
+#include "../../data/db/db.h"
 
 
+#define MAX_LENGTH 100
 
-	void generarID(int numero, char *id) {
-		sprintf(id, "I%03d", numero);
-		fflush(stdout);
-		fflush(stdin);
-	}
+int crearIngrediente() {
+    char nombre[MAX_LENGTH];
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int rc;
 
-	void crearIngrediente(Ingrediente ingredientes[], int *count) {
-	    if (*count >= 300) {
-	        printf("No se pueden agregar más ingredientes.\n");
-	        fflush(stdout);
-	        fflush(stdin);
-	        return;
-	    }
+    printf("Introduce el nombre del ingrediente: ");
+    fflush(stdin);
+    fgets(nombre, MAX_LENGTH, stdin);
+    nombre[strcspn(nombre, "\n")] = '\0';
 
-	    printf("Ingrese el nombre del ingrediente: ");
-	    fflush(stdout);
-	    fflush(stdin);
-	    scanf(" %[^\n]", ingredientes[*count].nombre);
-	    generarID(*count + 1, ingredientes[*count].id);
+    rc = sqlite3_open(DB_PATH, &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+        return rc;
+    }
 
-	    printf("Ingrediente creado: %s - ID: %s\n", ingredientes[*count].nombre, ingredientes[*count].id);
-	    fflush(stdout);
-	    fflush(stdin);
+    const char *sql = "INSERT INTO Ingrediente (NOMBRE) VALUES (?);";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al preparar la consulta: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return rc;
+    }
 
-	    (*count)++;
-	}
+    sqlite3_bind_text(stmt, 1, nombre, -1, SQLITE_STATIC);
 
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Error al insertar ingrediente: %s\n", sqlite3_errmsg(db));
+    } else {
+        printf("Ingrediente creado correctamente.\n");
+    }
 
-	void eliminarIngrediente(Ingrediente ingredientes[], int *count) {
-	    char nombre[50];
-	    printf("Ingrese el nombre del ingrediente a eliminar: ");
-	    fflush(stdout);
-	    fflush(stdin);
-	    scanf(" %[^\n]", nombre);
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
 
-	    for (int i = 0; i < *count; i++) {
-	        if (strcmp(ingredientes[i].nombre, nombre) == 0) {
-	            printf("Ingrediente %s eliminado.\n", ingredientes[i].nombre);
-	            fflush(stdout);
-	            fflush(stdin);
+    return SQLITE_OK;
+}
 
-	            // Mover los elementos restantes
-	            for (int j = i; j < *count - 1; j++) {
-	                ingredientes[j] = ingredientes[j + 1];
-	            }
+int eliminarIngredientes(int id) {
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int rc;
 
-	            (*count)--;
-	            return;
-	        }
-	    }
-	    printf("No se encontró el ingrediente.\n");
-	    fflush(stdout);
-	    fflush(stdin);
-	}
+    rc = sqlite3_open(DB_PATH, &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+        return rc;
+    }
 
+    const char *sql = "DELETE FROM Ingrediente WHERE ID_ING = ?;";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al preparar la consulta: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return rc;
+    }
 
+    sqlite3_bind_int(stmt, 1, id);
 
-	// Lista todos los ingredientes
-	void listarIngredientes(Ingrediente ingredientes[], int count) {
-	    printf("\nLista de Ingredientes:\n");
-	    fflush(stdout);
-	    fflush(stdin);
-	    for (int i = 0; i < count; i++) {
-	        printf("ID: %s - Nombre: %s\n", ingredientes[i].id, ingredientes[i].nombre);
-	        fflush(stdout);
-	        fflush(stdin);
-	    }
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Error al eliminar ingrediente: %s\n", sqlite3_errmsg(db));
+    } else {
+        printf("Ingrediente eliminado correctamente.\n");
+    }
 
-	}
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return SQLITE_OK;
+}
+
+int verIngredientes() {
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int rc;
+
+    rc = sqlite3_open(DB_PATH, &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
+        return rc;
+    }
+
+    const char *sql = "SELECT ID_ING, NOMBRE FROM Ingrediente;";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Error al preparar la consulta: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return rc;
+    }
+
+    printf("Lista de ingredientes:\n");
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        int id = sqlite3_column_int(stmt, 0);
+        const char *nombre = (const char *)sqlite3_column_text(stmt, 1);
+        printf("ID: %d | Nombre: %s\n", id, nombre);
+    }
+
+    if (rc != SQLITE_DONE) {
+        fprintf(stderr, "Error al obtener ingredientes: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return SQLITE_OK;
+}
 

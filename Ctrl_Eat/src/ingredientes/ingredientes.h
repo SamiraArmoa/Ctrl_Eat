@@ -1,17 +1,16 @@
 #ifndef INGREDIENTES_H
-#define INGREDIENTES_C
+#define INGREDIENTES_H
+
 
 typedef struct{
 	int id;
 	char* nombre;
 }Ingrediente;
 
-void crearIngrediente();
+int crearIngrediente();
 
-void eliminarIngrediente();
+int eliminarIngredientes(int id);
 
-
-
-void listarIngredientes();
+int verIngredientes() ;
 
 #endif
