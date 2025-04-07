@@ -13,7 +13,7 @@
 int imprimirMenu(int *opcion) {
 	int num;
 
-	printf("Bienvenido Administrados\n");
+	printf("Bienvenido Administrador\n");
 	printf("Elige una opcion:\n");
 	printf("1. Cargar ingredientes, restaurantes y productos desde el .csv\n");
 	printf("2. Crear empleados\n");
