@@ -23,4 +23,12 @@ int updateClientes(int id_cl, char* nombre, char* email, int telefono, char* con
 int insertarIngredientes(char* nombre);
 int imprimirIngredientes();
 int deleteIngredientes(int id_in);
+
+int obtenerUltimoIdRestaurante(int* id);
+int updateRestaurante(int id, char* nombre, char* ciudad);
+int createRestaurante(char* nombre, char* ciudad);
+
+int obtenerProductos();
+int obtenerUltimoIdPedido(int *id);
+int getPedidos();
 #endif /* DATA_DB_DB_H_ */
