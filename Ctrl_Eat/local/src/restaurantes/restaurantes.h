@@ -9,4 +9,5 @@ typedef struct {
 } Restaurante;
 int actualizarRestaurante();
 int crearRestaurante();
+int verRestaurantes();
 #endif

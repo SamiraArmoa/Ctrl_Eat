@@ -26,7 +26,8 @@ int deleteIngredientes(int id_in);
 
 int obtenerUltimoIdRestaurante(int* id);
 int updateRestaurante(int id, char* nombre, char* ciudad);
-int createRestaurante(char* nombre, char* ciudad);
+int insertarRestaurante(char* nombre, char* ciudad);
+int imprimirRestaurante();
 
 int obtenerProductos();
 int obtenerUltimoIdPedido(int *id);
