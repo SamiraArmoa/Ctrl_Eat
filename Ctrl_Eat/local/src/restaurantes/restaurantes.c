@@ -11,6 +11,7 @@ int actualizarRestaurante() {
 	char nom[100];
 	char ciu[100];
 
+	verRestaurantes();
 	printf("Ingrese el ID del restaurante a actualizar: ");
 	fflush(stdin);
 	scanf("%d", &id);
@@ -69,6 +70,12 @@ int crearRestaurante() {
 		return -1;  // Error si no se pudo asignar memoria
 	}
 	strcpy(ciudad, ciu);
+	insertarRestaurante(nombre,ciudad);
 
 	return 0;
+}
+
+int verRestaurantes() {
+	int rc = imprimirRestaurante();
+	return rc;
 }
