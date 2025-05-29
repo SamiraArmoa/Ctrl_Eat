@@ -8,3 +8,4 @@
 #define LOGS_PATH_"Ctrl_Eat/data/logs/error.log"
 
 #endif /* CTRL_EAT_DATA_DB_CONFIG_H_ */
+//
