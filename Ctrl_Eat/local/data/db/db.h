@@ -10,12 +10,12 @@ int imprimirEmpleados();
 int updateEmpleados(int id_em, char* nombre, char* cargo, char* cuentaBancaria);
 
 int guardar_productoIngrediente(int id_pr, int id_in);
-int guardar_productos(int id, char *nombre, char *tipo, float precio);
+int guardar_productos(int id, char *nombre, char *tipo, float precio, char* tamanio, char* alergenos);
 int obtenerUltimoIdProductos(int* id);
 int imprimirProductos();
 int obtenerIngredientes();
 int deleteProductos(int id_pr);
-int updateProductos(int id_pr, char* nombre, float precio, char* tipo);
+int updateProductos(int id_pr, char *nombre, float precio, char *tipo, char *tamanio, char *alergenos);
 
 int insertarClientes(char* nombre, char* email, int telefono, char* contrasena);
 int verClientes();
@@ -34,7 +34,7 @@ int insertarRestaurante(char* nombre, char* ciudad);
 int imprimirRestaurante();
 
 int obtenerProductos();
-int guardarPedidos(int domic,char *fchEntrega, char *fchPedido);
+int guardarPedidos(int domic);
 int guardar_productoPedido(int id_ped, int id_pr);
 int obtenerUltimoIdPedido(int *id);
 int getPedidos();
