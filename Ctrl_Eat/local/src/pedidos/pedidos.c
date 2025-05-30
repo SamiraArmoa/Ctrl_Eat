@@ -71,7 +71,7 @@ int crearPedido() {
 
 // Nueva función para imprimir pedidos
 int imprimirPedidos() {
-    int rc = imprimirPedidos();
+    int rc = getPedidos();
     return rc;
 
 }
