@@ -10,26 +10,23 @@
 
 class Producto {
 private:
-	int id;
-	const char* nombre;
-	int precio;
+    int id;
+    const char* nombre;
+    int precio;
 
 public:
+    Producto();
+    Producto(int id, const char*& nombre, int precio);
+    ~Producto();
 
-	Producto();
+    int getId() const;
+    const char* getNombre() const;
+    int getPrecio() const;
 
-	Producto(int id, const const char*& nombre, int precio);
-
-	~Producto();
-
-	int getId() const;
-	const char* getNombre() const;
-	int getPrecio() const;
-
-	void setId(int id);
-	void setNombre(const char*& nombre);
-	void setPrecio(int precio);
-	void mostrar() const;
+    void setId(int id);
+    void setNombre(const char*& nombre);
+    void setPrecio(int precio);
+    void mostrar() const;
 };
 
 #endif /* CTRL_EAT_REMOTE_SRC_PRODUCTO_PRODUCTO_H_ */
