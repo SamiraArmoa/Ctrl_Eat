@@ -6,14 +6,25 @@
  */
 #include <iostream>
 #include "../src/usuario/Usuario.h"
+#include "clientSocket.h"
 #include "../src/producto/producto.h"
 #include "../src/pedidos/Pedidos.h"
 #include "../src/restaurantes/Restaurante.h"
 using namespace std;
 static Usuario usuario;
-void datosPedido() {
-//
-}
+
+void datosPedido();
+int pagarPedido(Pedidos &pedido);
+int hacerPedido(Pedidos &pedido);
+int elegirRestaurante();
+void editarPerfil();
+void historialDePedido();
+void registrarse();
+int bienvenida();
+void cerrarSesion();
+int pantallaInicio();
+int pedido();
+int pagarPedido();
 
 int pagarPedido(Pedidos &pedido) {
 	int opcion;
@@ -60,10 +71,6 @@ void editarPerfil() {
 	cout << "Pulsa enter para continuar";
 }
 
-
-void historialDePedido() {
-//TODO:
-}
 void iniciarSesion() {
 	char email[30];
 	char contrasena[30];
@@ -76,7 +83,7 @@ void iniciarSesion() {
 	cout << "Pulsa enter para continuar";
 	cin >> NULL;
 
-	bool existe = Usuario::iniciarSesion(email, contrasena);
+	bool existe = (email, contrasena);
 	if (existe) {
 		pantallaInicio();
 	} else {
@@ -105,7 +112,7 @@ void registrarse() {
 	cin >> telefono;
 	cout << "Pulsa enter para continuar";
 //int id, const char* nombre, const char* email, int telefono, const char*contrasena
-	Usuario usuario = new Usuario(id, nombre, email, telefono, contrasena);
+	Usuario usuario = Usuario(1, nombre,  email, telefono, contrasena);
 }
 
 int bienvenida() {
@@ -131,46 +138,9 @@ int bienvenida() {
 	return 0;
 }
 
-void cerrarSesion(){
+void cerrarSesion() {
 	usuario = new Usuario();
 	bienvenida();
-}
-
-
-int elegirRestaurante() {
-	int opcion;
-	cout << "Selecciona un restaurante: " << endl;
-	cout << "1. Ctrl + Madrid" << endl;
-	cout << "2. Ctrl + Barcelona" << endl;
-	cout << "3. Ctrl + Bilbao" << endl;
-	cout << "4. Ctrl + Malaga" << endl;
-	cout << "5. Ctrl + Sevilla" << endl;
-	cout << "6. Ctrl + Zaragoza" << endl;
-	cout << "7. Ctrl + Granada" << endl;
-	cout << "8. Ctrl + Murcia" << endl;
-	cout << "9. Ctrl + Alicante" << endl;
-	cin >> opcion;
-	cout << "Respuesta: " << opcion;
-
-	return 0;
-}
-
-void editarPerfil() {
-	char nombre[30];
-	char email[30];
-	char contrasena[30];
-	unsigned int telefono;
-
-	cout << "Editar perfil";
-	cout << "Nombre: ";
-	cin >> nombre;
-	cout << "Email: ";
-	cin >> email;
-	cout << "Contrasena: ";
-	cin >> contrasena;
-	cout << "Telefono: ";
-	cin >> telefono;
-	cout << "Pulsa enter para continuar";
 }
 
 int pantallaInicio() {
