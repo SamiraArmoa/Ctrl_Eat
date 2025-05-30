@@ -12,20 +12,18 @@ using namespace std;
 
 
 // Constructor por defecto
-Producto::Producto() : id(0), nombre(""), precio(0), tipo("") {}
+Producto::Producto() : id(0), nombre(""), precio(0) {}
 
 // Constructor con parámetros
-Producto::Producto(int id, const const char*& nombre, int precio, const const char*& tipo){
+Producto::Producto(int id, const const char*& nombre, int precio){
 this->id = id;
 setNombre(nombre);
 setPrecio(precio);
-setTipo(tipo);
 }
 
 virtual Producto::~Producto() {
 delete[] nombre;
 delete[] precio;
-delete[] tipo;
 }
 
 // Destructor
@@ -41,9 +39,6 @@ delete[] this->nombre;
 int Producto::getPrecio(){ // @suppress("Member declaration not found")
 return precio;
 }
-const char* Producto::getTipo(){ // @suppress("Member declaration not found")
-return tipo;
-}
 
 // Setters
 void Producto::setId(int id) {
@@ -57,15 +52,10 @@ strcpy((char*)this->nombre, nombre);
 void Producto::setPrecio(int precio) {
 this->precio = precio;
 }
-void Producto::setTipo(const char* nombre) { // @suppress("Member declaration not found")
-	delete[] this->tipo;
-	this->tipo = new char[strlen((char*) tipo) + 1];
-	strcpy((char*)this->tipo, (char*) tipo);
-}
 
 // Método para mostrar la información del producto
 void Producto::mostrar() const {
     std::cout << "ID: " << id << ", Nombre: " << nombre
-              << ", Precio: " << precio << ", Tipo: " << tipo << std::endl;
+              << ", Precio: " << precio << ", Tipo: " << std::endl;
 }
 

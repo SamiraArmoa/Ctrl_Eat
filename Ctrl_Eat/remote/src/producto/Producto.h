@@ -13,26 +13,22 @@ private:
 	int id;
 	const char* nombre;
 	int precio;
-	const char* tipo;
 
 public:
 
 	Producto();
 
-	Producto(int id, const const char*& nombre, int precio, const const char*& tipo);
+	Producto(int id, const const char*& nombre, int precio);
 
 	~Producto();
 
 	int getId() const;
 	const char* getNombre() const;
 	int getPrecio() const;
-	const char* getTipo() const;
 
 	void setId(int id);
 	void setNombre(const char*& nombre);
 	void setPrecio(int precio);
-	void setTipo(const char*& tipo);
-
 	void mostrar() const;
 };
 
