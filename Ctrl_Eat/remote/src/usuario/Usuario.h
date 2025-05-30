@@ -7,6 +7,7 @@
 
 #ifndef REMOTE_SRC_USUARIO_USUARIO_H_
 #define REMOTE_SRC_USUARIO_USUARIO_H_
+#include <sstream>
 
 class Usuario {
 private:
@@ -33,6 +34,9 @@ public:
 	void setEmail(const char* email);
 	void setTelefono(int telefono);
 	void setContrasena(const char* contrasena);
+
+	std::string verUsuario();
+
 };
 
 #endif /* REMOTE_SRC_USUARIO_USUARIO_H_ */

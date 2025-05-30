@@ -17,7 +17,7 @@ private:
 public:
     Producto();
     Producto(int id, const char*& nombre, int precio);
-    ~Producto();
+    virtual ~Producto();
 
     int getId() const;
     const char* getNombre() const;

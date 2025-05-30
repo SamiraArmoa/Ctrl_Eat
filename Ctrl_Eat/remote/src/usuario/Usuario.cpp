@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 #include "string.h"
-
+#include <sstream>
 Usuario::Usuario() {
 	id = 0;
 	nombre = "Anonimo";
@@ -76,4 +76,15 @@ void Usuario::setContrasena(const char* contrasena) {
 	delete[] this->contrasena;
 	this->contrasena = new char[strlen(contrasena) + 1];
 	strcpy((char*)this->contrasena,contrasena);
+}
+
+std::string Usuario::verUsuario() {
+    std::ostringstream oss;
+    oss << "ID: " << id << "\n"
+        << "Nombre: " << nombre << "\n"
+        << "Email: " << email << "\n"
+        << "Telefono: " << telefono <<"\n"
+		<< "Contrasena" << contrasena <<"\n";
+
+    return oss.str();
 }
