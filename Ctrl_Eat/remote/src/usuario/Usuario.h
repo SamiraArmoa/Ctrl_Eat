@@ -7,29 +7,28 @@
 
 #ifndef REMOTE_SRC_USUARIO_USUARIO_H_
 #define REMOTE_SRC_USUARIO_USUARIO_H_
-#include <sstream>
 
 class Usuario {
 private:
-    int idUsuario;
+    int id;
     const char* nombre;
     const char* email;
     int telefono;
     const char* contrasena;
 public:
 	Usuario();
-	Usuario(int idUsuario, const char* nombre, const char* email, int telefono, const char* contrasena);
+	Usuario(int id, const char* nombre, const char* email, int telefono, const char* contrasena);
 	virtual ~Usuario();
 
 
-	int getIdUsuario();
+	int getId();
 	const char* getNombre();
 	const char* getEmail();
 	int getTelefono();
 	const char* getContrasena();
 
 
-	void setIdUsuario(int idUsuario);
+	void setId(int id);
 	void setNombre(const char* nombre);
 	void setEmail(const char* email);
 	void setTelefono(int telefono);

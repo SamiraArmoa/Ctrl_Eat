@@ -7,25 +7,29 @@
 #include "productos.h"
 
 #define MAX_LENGTH 100
-int asignarIngredientesProductos(int id_pr) {
+int asignarIngredientesProductos(int id_pr)
+{
 	int opcion = -1;
-	while (opcion != 0) {
+	while (opcion != 0)
+	{
 		obtenerIngredientes();
 		printf("Introduce el id del ingrediente: ");
 		scanf("%d", &opcion);
-		if (opcion != 0) {
+		if (opcion != 0)
+		{
 			guardar_productoIngrediente(id_pr, opcion);
 		}
 	}
 }
 
-int crearProductos() {
+int crearProductos()
+{
 	char str[MAX_LENGTH];
 	float precio;
 	char *nombre;
 	char *tipo;
-	char *tamanio=NULL;
-	char *alergenos=NULL;
+	char *tamanyo = "";
+	char *alergenos = "";
 
 	printf("CREAR PRODUCTO\n");
 	printf("Nombre: ");
@@ -35,71 +39,43 @@ int crearProductos() {
 	str[strcspn(str, "\n")] = '\0';
 	// Asignar memoria din�mica para el nombre seg�n la longitud
 	nombre = malloc((strlen(str) + 1) * sizeof(char));
-	if (nombre == NULL) {
+	if (nombre == NULL)
+	{
 		printf("Error al asignar memoria para el nombre.\n");
-		return -1;  // Error si no se pudo asignar memoria
+		return -1; // Error si no se pudo asignar memoria
 	}
-	strcpy(nombre, str);  // Copiar la cadena le�da en nombre
+	strcpy(nombre, str); // Copiar la cadena le�da en nombre
 
 	printf("\nPrecio: ");
 	fgets(str, MAX_LENGTH, stdin);
 	sscanf(str, "%f", &precio);
 
-	printf("\nTipo(Bebida o Plato): ");
+	printf("\nTipo: ");
 	fgets(str, MAX_LENGTH, stdin);
+
 	str[strcspn(str, "\n")] = '\0';
 	// Asignar memoria din�mica para el nombre seg�n la longitud
 	tipo = malloc((strlen(str) + 1) * sizeof(char));
-	if (tipo == NULL) {
+	if (tipo == NULL)
+	{
 		printf("Error al asignar memoria para el tipo.\n");
-		return -1;  // Error si no se pudo asignar memoria
+		return -1; // Error si no se pudo asignar memoria
 	}
-	strcpy(tipo, str);  // Copiar la cadena le�da en nombre
+	strcpy(tipo, str); // Copiar la cadena le�da en nombre
 
-
-	// LÓGICA SEGÚN EL TIPO
-	if (strcmp(tipo, "Bebida") == 0) {
-		// TAMAÑO
-		printf("\nTamanio: ");
-		fflush(stdin);
+	if (strcmp(tipo, "Bebida"))
+	{
+		printf("\nTamaño: ");
 		fgets(str, MAX_LENGTH, stdin);
 		str[strcspn(str, "\n")] = '\0';
-
-		tamanio = malloc((strlen(str) + 1) * sizeof(char));
-		if (tamanio == NULL) {
-			printf("Error al asignar memoria para el tamaño.\n");
-			free(nombre); free(tipo);
-			return -1;
-		}
-		strcpy(tamanio, str);
-
-		// ALÉRGENOS = ""
-		alergenos = malloc(1);
-		strcpy(alergenos, "");
+		strcpy(tamanyo, str);
 	}
-	else if (strcmp(tipo, "Plato") == 0) {
-		// ALÉRGENOS
+	else
+	{
 		printf("\nAlergenos: ");
-		fflush(stdin);
 		fgets(str, MAX_LENGTH, stdin);
 		str[strcspn(str, "\n")] = '\0';
-
-		alergenos = malloc((strlen(str) + 1) * sizeof(char));
-		if (alergenos == NULL) {
-			printf("Error al asignar memoria para los alérgenos.\n");
-			free(nombre); free(tipo);
-			return -1;
-		}
 		strcpy(alergenos, str);
-
-		// TAMAÑO = ""
-		tamanio = malloc(1);
-		strcpy(tamanio, "");
-	}
-	else {
-		printf("Tipo inválido. Debe ser 'Bebida' o 'Plato'.\n");
-		free(nombre); free(tipo);
-		return -1;
 	}
 
 	precio = roundf(precio * 100) / 100.0f;
@@ -108,22 +84,18 @@ int crearProductos() {
 	obtenerUltimoIdProductos(&id);
 	id++;
 	printf("ID_Obtenido = %i", id);
-	guardar_productos(id, nombre, tipo, precio, tamanio,alergenos);
+	guardar_productos(id, nombre, tipo, precio, tamanyo, alergenos);
 	asignarIngredientesProductos(id);
-
-	free(nombre);
-	free(tipo);
-	free(tamanio);
-	free(alergenos);
-	return 0;
 }
 
-int verProductos() {
+int verProductos()
+{
 	int rc = imprimirProductos();
 	return rc;
 }
 
-int eliminarProductos() {
+int eliminarProductos()
+{
 	int id_pr = 0;
 	verProductos();
 	printf("Inserta el id del producto que quieres eliminar: ");
@@ -131,14 +103,15 @@ int eliminarProductos() {
 	scanf("%d", &id_pr);
 
 	int confirmacion = 0;
-//	printf("\nELIMINAR PRODUCTO\n");
+	//	printf("\nELIMINAR PRODUCTO\n");
 	printf("�Quieres eliminar este producto?\n");
 	printf("1. SI\n");
 	printf("2. NO\n");
 	printf("Opcion: ");
 	scanf("%d", &confirmacion);
 
-	if (confirmacion != 1) {
+	if (confirmacion != 1)
+	{
 		printf("Eliminacion cancelada.\n");
 		return 0; // Salimos sin hacer nada
 	}
@@ -146,18 +119,19 @@ int eliminarProductos() {
 	return 0;
 }
 
-int actualizarProductos() {
+int actualizarProductos()
+{
 	int id_pr = 0;
 	char *nombre;
 	float precio;
 	char *tipo;
+	char *tamanyo = "";
+	char *alergenos = "";
+
 	char nom[100];
 	char tip[25];
-
-	char *tamanio=NULL;
-	char *alergenos=NULL;
 	char tam[25];
-	char ale[100];
+	char alg[100];
 
 	verProductos();
 
@@ -171,70 +145,45 @@ int actualizarProductos() {
 	nom[strcspn(nom, "\n")] = '\0';
 	// Asignar memoria din�mica para el nombre seg�n la longitud
 	nombre = malloc((strlen(nom) + 1) * sizeof(char));
-	if (nombre == NULL) {
+	if (nombre == NULL)
+	{
 		printf("Error al asignar memoria para el nombre.\n");
-		return -1;  // Error si no se pudo asignar memoria
+		return -1; // Error si no se pudo asignar memoria
 	}
-	strcpy(nombre, nom);  // Copiar la cadena le�da en nombre
+	strcpy(nombre, nom); // Copiar la cadena le�da en nombre
 
 	printf("Precio: ");
 	fflush(stdin);
 	scanf("%f", &precio);
 
-	// TIPO
-	printf("Tipo (Bebida o Plato): ");
+	printf("Tipo: ");
+	fflush(stdin);
 	fgets(tip, 25, stdin);
 	tip[strcspn(tip, "\n")] = '\0';
+	// Asignar memoria din�mica para el tipo seg�n la longitud
 	tipo = malloc((strlen(tip) + 1) * sizeof(char));
-	if (tipo == NULL) {
+	if (tipo == NULL)
+	{
 		printf("Error al asignar memoria para el tipo.\n");
-		free(nombre);
-		return -1;
+		return -1; // Error si no se pudo asignar memoria
 	}
-	strcpy(tipo, tip);
+	strcpy(tipo, tip); // Copiar la cadena le�da en tipo
 
-	// Si es Bebida, pedir TAMAÑO
-	if (strcmp(tipo, "Bebida") == 0) {
-		printf("Tamaño: ");
-		fgets(tam, 25, stdin);
+	if (strcmp(tipo, "Bebida"))
+	{
+		printf("\nTamaño: ");
+		fgets(tam, MAX_LENGTH, stdin);
 		tam[strcspn(tam, "\n")] = '\0';
-		tamanio = malloc((strlen(tam) + 1) * sizeof(char));
-		if (tamanio == NULL) {
-			printf("Error al asignar memoria para el tamaño.\n");
-			free(nombre);
-			free(tipo);
-			return -1;
-		}
-		strcpy(tamanio, tam);
+		strcpy(tamanyo, tam);
+	}
+	else
+	{
+		printf("\nAlergenos: ");
+		fgets(alg, MAX_LENGTH, stdin);
+		alg[strcspn(alg, "\n")] = '\0';
+		strcpy(alergenos, alg);
+	}
 
-		// Si es Bebida, alergenos se guarda como cadena vacía
-		alergenos = malloc(1);
-		strcpy(alergenos, "");
-	}
-	// Si es Plato, pedir ALÉRGENOS
-	else if (strcmp(tipo, "Plato") == 0) {
-		printf("Alérgenos: ");
-		fgets(ale, 100, stdin);
-		ale[strcspn(ale, "\n")] = '\0';
-		alergenos = malloc((strlen(ale) + 1) * sizeof(char));
-		if (alergenos == NULL) {
-			printf("Error al asignar memoria para los alérgenos.\n");
-			free(nombre);
-			free(tipo);
-			return -1;
-		}
-		strcpy(alergenos, ale);
-
-		// Si es Plato, tamanio se guarda como cadena vacía
-		tamanio = malloc(1);
-		strcpy(tamanio, "");
-	}
-	else {
-		printf("Tipo inválido. Debe ser 'Bebida' o 'Plato'.\n");
-		free(nombre);
-		free(tipo);
-		return -1;
-	}
-	updateProductos(id_pr, nombre, precio, tipo,tamanio,alergenos);
+	updateProductos(id_pr, nombre, precio, tipo, tamanyo, alergenos);
 	return 0;
 }

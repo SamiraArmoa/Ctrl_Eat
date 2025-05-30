@@ -7,24 +7,27 @@
 
 #include "Pedidos.h"
 #include "string.h"
-#include <vector>
-using namespace std;
 Pedidos::Pedidos() {
 	id = 0;
+	fechaEntrega = "00/00/0000";
+	fechaPedido = "00/00/0000";
 	domicilio = "Desconocido";
 	idCliente = 0;
 	idRestaurante = 0;
 
 }
-Pedidos::Pedidos(int id, const char* domicilio, int idUsuario, int idRestaurante) {
+Pedidos::Pedidos(int id, const char* fechaEntrega, const char* fechaPedido, const char* domicilio, int idCliente, int idRestaurante) {
 	this->id = id;
-	this->idCliente = idUsuario;
+	this->idCliente = idCliente;
 	this->idRestaurante = idRestaurante;
+	setFechaEntrega(fechaEntrega);
+	setFechaPedido(fechaPedido);
 	setDomicilio(domicilio);
 }
 
 Pedidos::~Pedidos() {
-
+	delete[] fechaEntrega;
+	delete[] fechaPedido;
 	delete[] domicilio;
 }
 // Getters
@@ -32,6 +35,13 @@ int Pedidos::getId() {
 	return id;
 }
 
+const char* Pedidos::getFechaEntrega() {
+	return fechaEntrega;
+}
+
+const char* Pedidos::getFechaPedido() {
+	return fechaPedido;
+}
 
 const char* Pedidos::getDomicilio() {
 	return domicilio;
@@ -50,6 +60,18 @@ void Pedidos::setId(int id) {
 	this->id = id;
 }
 
+void Pedidos::setFechaEntrega(const char* fechaEntrega) {
+	delete[] this->fechaEntrega;
+	this->fechaEntrega = new char[strlen(fechaEntrega) + 1];
+	strcpy((char*)this->fechaEntrega, fechaEntrega);
+}
+
+void Pedidos::setFechaPedido(const char* fechaPedido) {
+	delete[] this->fechaPedido;
+	this->fechaPedido = new char[strlen(fechaPedido) + 1];
+	strcpy((char*)this->fechaPedido, fechaPedido);
+}
+
 void Pedidos::setDomicilio(const char* domicilio) {
 	delete[] this->domicilio;
 	this->domicilio = new char[strlen(domicilio) + 1];
@@ -62,16 +84,4 @@ void Pedidos::setIdCliente(int idCliente) {
 
 void Pedidos::setIdRestaurante(int idRestaurante) {
 	this->idRestaurante = idRestaurante;
-}
-
-vector<Pedidos> Pedidos::verPedidos(const vector<Pedidos>& todos, int idCliente) {
-    vector<Pedidos> resultado;
-
-    for (const Pedidos& p : todos) {
-        if (p.getIdUsuario() == idUsuario) {
-            resultado.push_back(p);
-        }
-    }
-
-    return resultado;
 }

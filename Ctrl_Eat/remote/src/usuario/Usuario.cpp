@@ -12,15 +12,15 @@ using namespace std;
 #include <sstream>
 
 Usuario::Usuario() {
-	idUsuario = 0;
+	id = 0;
 	nombre = "Anonimo";
 	email = "sin_email@ejemplo.com";
 	telefono = 0;
 	contrasena = "";
 }
 
-Usuario::Usuario(int idUsuario, const char* nombre, const char* email, int telefono, const char*contrasena){
-	this->idUsuario = idUsuario;
+Usuario::Usuario(int id, const char* nombre, const char* email, int telefono, const char*contrasena){
+	this->id = id;
 	this->telefono = telefono;
 	setContrasena(contrasena);
 	setNombre(nombre);
@@ -32,8 +32,8 @@ Usuario::~Usuario() {
 	delete[] contrasena;
 }
 
-int Usuario::getIdUsuario() {
-    return idUsuario;
+int Usuario::getId() {
+    return id;
 }
 
 const char* Usuario::getNombre() {
@@ -53,8 +53,8 @@ const char* Usuario::getContrasena() {
 }
 
 
-void Usuario::setIdUsuario(int idUsuario) {
-    this->idUsuario = idUsuario;
+void Usuario::setId(int id) {
+    this->id = id;
 }
 
 void Usuario::setNombre(const char *nombre) {

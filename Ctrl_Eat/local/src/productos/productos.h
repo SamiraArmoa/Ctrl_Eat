@@ -6,8 +6,6 @@ typedef struct{
 	char* nombre;
 	char* tipo;
 	float precio;
-	char* tamanio;
-	char* alergenos;
 }Producto;
 
 int crearProductos();
