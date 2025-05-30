@@ -15,19 +15,20 @@ Usuario::Usuario() {
 	nombre = "Anonimo";
 	email = "sin_email@ejemplo.com";
 	telefono = 0;
-	contrasena = 0;
+	contrasena = "";
 }
 
-Usuario::Usuario(int id, const char* nombre, const char* email, int telefono, int contrasena){
+Usuario::Usuario(int id, const char* nombre, const char* email, int telefono, const char*contrasena){
 	this->id = id;
 	this->telefono = telefono;
-	this->contrasena = contrasena;
+	setContrasena(contrasena);
 	setNombre(nombre);
 	setEmail(email);
 }
 Usuario::~Usuario() {
     delete[] nombre;
     delete[] email;
+    delete[] contrasena;
 }
 
 int Usuario::getId() {
@@ -46,7 +47,7 @@ int Usuario::getTelefono() {
     return telefono;
 }
 
-int Usuario::getContrasena() {
+const char* Usuario::getContrasena() {
     return contrasena;
 }
 
@@ -71,6 +72,8 @@ void Usuario::setTelefono(int telefono) {
     this->telefono = telefono;
 }
 
-void Usuario::setContrasena(int contrasena) {
-    this->contrasena = contrasena;
+void Usuario::setContrasena(const char* contrasena) {
+	delete[] this->contrasena;
+	this->contrasena = new char[strlen(contrasena) + 1];
+	strcpy((char*)this->contrasena,contrasena);
 }
