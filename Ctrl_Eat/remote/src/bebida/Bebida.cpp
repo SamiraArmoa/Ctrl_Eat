@@ -17,8 +17,9 @@ Bebida::Bebida() : Producto(), tamanio(nullptr) {}
 Bebida::Bebida(int id, const char*& nombre, int precio, const char* tamanio)
     : Producto(id, nombre, precio), tamanio(tamanio) {}
 
-Bebida::~Bebida() {}
-
+Bebida::~Bebida() {}Usuario::~Usuario() {
+    delete[] tamanio;
+}
 const char* Bebida::getTamanio() const {
     return tamanio;
 }

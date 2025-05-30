@@ -26,9 +26,6 @@ delete[] nombre;
 delete[] precio;
 }
 
-// Destructor
-Producto::~Producto() {}
-
 // Getters
 int Producto::getId(){ // @suppress("Member declaration not found")
 return id;

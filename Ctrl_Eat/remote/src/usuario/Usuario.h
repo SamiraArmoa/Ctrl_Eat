@@ -10,25 +10,25 @@
 
 class Usuario {
 private:
-    int id;
+    int idUsuario;
     const char* nombre;
     const char* email;
     int telefono;
     const char* contrasena;
 public:
 	Usuario();
-	Usuario(int id, const char* nombre, const char* email, int telefono, const char* contrasena);
+	Usuario(int idUsuario, const char* nombre, const char* email, int telefono, const char* contrasena);
 	virtual ~Usuario();
 
 
-	int getId();
+	int getIdUsuario();
 	const char* getNombre();
 	const char* getEmail();
 	int getTelefono();
 	const char* getContrasena();
 
 
-	void setId(int id);
+	void setIdUsuario(int idUsuario);
 	void setNombre(const char* nombre);
 	void setEmail(const char* email);
 	void setTelefono(int telefono);
