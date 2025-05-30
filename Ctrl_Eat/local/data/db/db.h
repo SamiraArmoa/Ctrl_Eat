@@ -38,4 +38,6 @@ int guardarPedidos(int domic,char *fchEntrega, char *fchPedido);
 int guardar_productoPedido(int id_ped, int id_pr);
 int obtenerUltimoIdPedido(int *id);
 int getPedidos();
+
+int esUsuarioValido(char* nombre, char* contrasena);
 #endif /* DATA_DB_DB_H_ */
