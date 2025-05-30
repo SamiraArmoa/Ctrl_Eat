@@ -80,7 +80,7 @@ void Usuario::setContrasena(const char* contrasena) {
 
 std::string Usuario::verUsuario() {
     std::ostringstream oss;
-    oss << "ID: " << id << "\n"
+    oss << "ID: " << idUsuario << "\n"
         << "Nombre: " << nombre << "\n"
         << "Email: " << email << "\n"
         << "Telefono: " << telefono <<"\n"
