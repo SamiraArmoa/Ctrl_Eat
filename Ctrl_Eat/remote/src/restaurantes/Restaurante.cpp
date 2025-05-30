@@ -11,9 +11,9 @@ using namespace std;
 #include "string.h"
 
 Restaurante::Restaurante() {
-	id = 12345;
-	nombre = "Ctrl_Murcia";
-	ciudad = "Murcia";
+	id = 999;
+	nombre = "";
+	ciudad = "";
 }
 
 Restaurante::Restaurante(int id, const char *nombre, const char *ciudad) {
