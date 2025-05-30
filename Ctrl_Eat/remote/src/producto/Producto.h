@@ -29,9 +29,9 @@ public:
 	const char* getTipo() const;
 
 	void setId(int id);
-	void setNombre(const const char*& nombre);
+	void setNombre(const char*& nombre);
 	void setPrecio(int precio);
-	void setTipo(const const char*& tipo);
+	void setTipo(const char*& tipo);
 
 	void mostrar() const;
 };
