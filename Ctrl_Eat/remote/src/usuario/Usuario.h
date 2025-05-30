@@ -14,10 +14,10 @@ private:
     const char* nombre;
     const char* email;
     int telefono;
-    int contrasena;
+    const char* contrasena;
 public:
 	Usuario();
-	Usuario(int id, const char* nombre, const char* email, int telefono, int contrasena);
+	Usuario(int id, const char* nombre, const char* email, int telefono, const char* contrasena);
 	virtual ~Usuario();
 
 
@@ -25,14 +25,14 @@ public:
 	const char* getNombre();
 	const char* getEmail();
 	int getTelefono();
-	int getContrasena();
+	const char* getContrasena();
 
 
 	void setId(int id);
 	void setNombre(const char* nombre);
 	void setEmail(const char* email);
 	void setTelefono(int telefono);
-	void setContrasena(int contrasena);
+	void setContrasena(const char* contrasena);
 };
 
 #endif /* REMOTE_SRC_USUARIO_USUARIO_H_ */
