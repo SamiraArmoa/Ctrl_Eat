@@ -7,6 +7,7 @@
 
 #include "Producto.h"
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 
@@ -31,15 +32,36 @@ delete[] tipo;
 Producto::~Producto() {}
 
 // Getters
-int Producto::getId(){
+int Producto::getId(){ // @suppress("Member declaration not found")
 return id;
+}
+const char* Producto::getNombre(){ // @suppress("No return") // @suppress("Member declaration not found")
+delete[] this->nombre;
+}
+int Producto::getPrecio(){ // @suppress("Member declaration not found")
+return precio;
+}
+const char* Producto::getTipo(){ // @suppress("Member declaration not found")
+return tipo;
 }
 
 // Setters
-void Producto::setId(int id) { this->id = id; }
-void Producto::setNombre(const std::string& nombre) { this->nombre = nombre; }
-void Producto::setPrecio(int precio) { this->precio = precio; }
-void Producto::setTipo(const std::string& tipo) { this->tipo = tipo; }
+void Producto::setId(int id) {
+this->id = id;
+}
+void Producto::setNombre(const char* nombre) { // @suppress("Member declaration not found")
+delete[] this->nombre;
+this->nombre = new char[strlen(nombre) + 1];
+strcpy((char*)this->nombre, nombre);
+}
+void Producto::setPrecio(int precio) {
+this->precio = precio;
+}
+void Producto::setTipo(const char* nombre) { // @suppress("Member declaration not found")
+	delete[] this->tipo;
+	this->tipo = new char[strlen((char*) tipo) + 1];
+	strcpy((char*)this->tipo, (char*) tipo);
+}
 
 // Método para mostrar la información del producto
 void Producto::mostrar() const {
@@ -47,47 +69,3 @@ void Producto::mostrar() const {
               << ", Precio: " << precio << ", Tipo: " << tipo << std::endl;
 }
 
-/*
-Restaurante::Restaurante(int id, const char *nombre, const char *ciudad) {
-this->id = id;
-setNombre(nombre);
-setCiudad(ciudad);
-}
-
-virtual Restaurante::~Restaurante() {
-delete[] nombre;
-delete[] ciudad;
-}
-
-// Getters
-int Restaurante::getId() {
-return id;
-}
-
-const char* Restaurante::getNombre() {
-return nombre;
-}
-
-const char* Restaurante::getCiudad() {
-return ciudad;
-}
-
-// Setters
-void Restaurante::setId(int id) {
-this->id = id;
-}
-
-void Restaurante::setNombre(const char *nombre) {
-delete[] this->nombre;
-
-this->nombre = new char[strlen(nombre) + 1];
-strcpy((char*)this->nombre, nombre);
-}
-
-void Restaurante::setCiudad(const char *ciudad) {
-delete[] this->ciudad;
-
-this->ciudad = new char[strlen(ciudad) + 1];
-strcpy((char*)this->ciudad, ciudad);
-}
-*/
