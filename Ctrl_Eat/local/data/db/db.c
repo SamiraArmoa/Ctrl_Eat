@@ -239,7 +239,7 @@ int guardar_productoIngrediente(int id_pr, int id_in) {
 	return 0;
 }
 
-int guardar_productos(int id, char *nombre, char *tipo, float precio) {
+int guardar_productos(int id, char *nombre, char *tipo, float precio, char* tamanio, char* alergenos) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int db_found = sqlite3_open(DB_PATH, &db);
@@ -251,12 +251,14 @@ int guardar_productos(int id, char *nombre, char *tipo, float precio) {
 	}
 
 	char *insert_sql =
-			"INSERT INTO Producto(ID_PR, NOMBRE,PRECIO,TIPO) VALUES (?, ?, ?, ?)";
+			"INSERT INTO Producto(ID_PR, NOMBRE,PRECIO,TIPO) VALUES (?, ?, ?, ?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
 	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
 	sqlite3_bind_double(stmt, 3, precio);
 	sqlite3_bind_text(stmt, 4, tipo, strlen(tipo), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 5, tamanio, strlen(tamanio), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 6, alergenos, strlen(alergenos), SQLITE_STATIC);
 
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
@@ -401,7 +403,7 @@ int imprimirProductos() {
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_PR,NOMBRE,PRECIO,TIPO FROM Producto";
+	char *sql = "SELECT ID_PR,NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
@@ -417,9 +419,11 @@ int imprimirProductos() {
 		char *nombre = (char*) sqlite3_column_text(stmt, 1);
 		float precio = (float) sqlite3_column_double(stmt, 2);
 		char *tipo = (char*) sqlite3_column_text(stmt, 3);
+		char *tamanio = (char*) sqlite3_column_text(stmt, 4);
+		char *alergenos = (char*) sqlite3_column_text(stmt, 5);
 
-		printf("%i. Nombre:%s Precio:%.2f Tipo:%s\n", id_pr, nombre, precio,
-				tipo);
+		printf("%i. Nombre:%s Precio:%.2f Tipo:%s Tamanio:%s Alergenos:%s\n", id_pr, nombre, precio,
+				tipo, tamanio, alergenos);
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
@@ -452,10 +456,10 @@ int deleteProductos(int id_pr) {
 
 	char *insert_sql = "DELETE FROM Producto WHERE ID_PR = ?";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
-	// Vincular el par�metro de la consulta (nombre de comando) al marcador de posici�n `?`
-	rc = sqlite3_bind_int(stmt, 1, id_pr); // 1 es el �ndice del primer `?`
+	// Vincular el parametro de la consulta (nombre de comando) al marcador de posici�n `?`
+	rc = sqlite3_bind_int(stmt, 1, id_pr); // 1 es el indice del primer `?`
 	if (rc != SQLITE_OK) {
-		fprintf(stderr, "Error al vincular el par�metro: %s\n",
+		fprintf(stderr, "Error al vincular el parametro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
 		sqlite3_close(db);
@@ -473,7 +477,7 @@ int deleteProductos(int id_pr) {
 	return 0;
 }
 
-int updateProductos(int id_pr, char *nombre, float precio, char *tipo) {
+int updateProductos(int id_pr, char *nombre, float precio, char *tipo, char *tamanio, char *alergenos) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
@@ -489,12 +493,14 @@ int updateProductos(int id_pr, char *nombre, float precio, char *tipo) {
 
 	// Preparar la consulta SQL
 	char *sql =
-			"UPDATE Producto SET NOMBRE = ?, PRECIO = ?, TIPO = ? WHERE ID_PR = ?";
+			"UPDATE Producto SET NOMBRE = ?, PRECIO = ?, TIPO = ?, TAMANIO=?, ALERGENOS=? WHERE ID_PR = ?";
 	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
 	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
 	rc += sqlite3_bind_double(stmt, 2, precio);
 	rc += sqlite3_bind_text(stmt, 3, tipo, strlen(tipo), SQLITE_STATIC);
-	rc += sqlite3_bind_int(stmt, 4, id_pr);
+	rc += sqlite3_bind_text(stmt, 4, tamanio, strlen(tamanio), SQLITE_STATIC);
+	rc += sqlite3_bind_text(stmt, 5, alergenos, strlen(alergenos), SQLITE_STATIC);
+	rc += sqlite3_bind_int(stmt, 6, id_pr);
 
 	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el par�metro: %s\n",
@@ -622,9 +628,9 @@ int deleteClientes(int id_cl) {
 	sqlite3_finalize(stmt);
 
 	if (result != SQLITE_DONE) {
-		printf("Insert error: %s\n", sqlite3_errmsg(db));
+		printf("Delete error: %s\n", sqlite3_errmsg(db));
 	} else {
-		printf("Insert successful\n");
+		printf("Delete successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
@@ -717,9 +723,9 @@ int updateClientes(int id_cl, char *nombre, char *email, int telefono,
 	sqlite3_finalize(stmt);
 
 	if (result != SQLITE_DONE) {
-		printf("Insert error: %s\n", sqlite3_errmsg(db));
+		printf("Update error: %s\n", sqlite3_errmsg(db));
 	} else {
-		printf("Insert successful\n");
+		printf("Update successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
@@ -1054,7 +1060,7 @@ int obtenerProductos() {
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_PR, NOMBRE,PRECIO,TIPO FROM Producto";
+	char *sql = "SELECT ID_PR, NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
@@ -1070,8 +1076,10 @@ int obtenerProductos() {
 		char *nombre = (char*) sqlite3_column_text(stmt, 1);
 		float precio = (int) sqlite3_column_int(stmt, 2);
 		char *tipo = (char*) sqlite3_column_text(stmt, 3);
+		char *tamanio = (char*) sqlite3_column_text(stmt, 4);
+		char *alergenos = (char*) sqlite3_column_text(stmt, 5);
 
-		printf("%i.%s.%f.%s\n", id_pr, nombre, precio, tipo);
+		printf("%i.%s.%f.%s\n", id_pr, nombre, precio, tipo, tamanio, alergenos);
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
@@ -1087,7 +1095,7 @@ int obtenerProductos() {
 	return SQLITE_OK;
 }
 
-int guardarPedidos(int domic, char *fchEntrega, char *fchPedido) {
+int guardarPedidos(int domic) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
@@ -1103,7 +1111,7 @@ int guardarPedidos(int domic, char *fchEntrega, char *fchPedido) {
 
 	// Preparar la consulta SQL para insertar un nuevo pedido
 	char *sql =
-			"INSERT INTO Pedido (FCHA_ENTREGA, FCHA_PEDIDO, DOMICILIO, ID_CL, ID_RES) VALUES (?, ?, ?, ?, ?)";
+			"INSERT INTO Pedido (DOMICILIO, ID_CL, ID_RES) VALUES ( ?, ?, ?)";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
@@ -1113,14 +1121,12 @@ int guardarPedidos(int domic, char *fchEntrega, char *fchPedido) {
 	}
 
 	// Convertir domic (0 o 1) a cadena
-	const char *domic_str = domic ? "Sí" : "No";
+	const char *domic_str = domic ? "Si�" : "No";
 
 	// Bind de los valores a la consulta
-	sqlite3_bind_text(stmt, 1, fchEntrega, -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 2, fchPedido, -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 3, domic_str, -1, SQLITE_STATIC);
-	sqlite3_bind_int(stmt, 4, 1); // TODO id_cl valor
-	sqlite3_bind_int(stmt, 5, 1); // TODO id_res calor
+	sqlite3_bind_text(stmt, 1, domic_str, -1, SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 2, 1); // TODO id_cl valor
+	sqlite3_bind_int(stmt, 3, 1); // TODO id_res calor
 
 	// Ejecutar la consulta
 	rc = sqlite3_step(stmt);
@@ -1223,7 +1229,7 @@ int getPedidos() {
 
 	// Preparar la consulta SQL
 	char *sql =
-			"SELECT ID_PED, FCHA_ENTREGA, FCHA_PEDIDO, DOMICILIO, ID_CL, ID_RES FROM Pedido";
+			"SELECT ID_PED, DOMICILIO, ID_CL, ID_RES FROM Pedido";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
@@ -1235,15 +1241,13 @@ int getPedidos() {
 	// Ejecutar la consulta y procesar los resultados
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		int id_ped = sqlite3_column_int(stmt, 0);
-		char *fchEntrega = (char*) sqlite3_column_text(stmt, 1);
-		char *fchPedido = (char*) sqlite3_column_text(stmt, 2);
-		int domic = sqlite3_column_int(stmt, 3);
-		int id_cl = sqlite3_column_int(stmt, 4);
-		int id_res = sqlite3_column_int(stmt, 5);
+		int domic = sqlite3_column_int(stmt, 1);
+		int id_cl = sqlite3_column_int(stmt, 2);
+		int id_res = sqlite3_column_int(stmt, 3);
 
 		printf(
-				"ID Pedido: %d\nFecha Entrerga: %s\nFecha Pedido: %s\nDomicilio: %d\nID Cliente: %d\nID Restaurante: %d\n\n",
-				id_ped, fchEntrega, fchPedido, domic, id_cl, id_res);
+				"ID Pedido: %d\nDomicilio: %d\nID Cliente: %d\nID Restaurante: %d\n\n",
+				id_ped, domic, id_cl, id_res);
 	}
 
 	// Verificar si ocurrió algún error durante la consulta

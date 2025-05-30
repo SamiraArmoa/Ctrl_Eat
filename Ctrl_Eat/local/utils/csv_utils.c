@@ -78,15 +78,19 @@ int cargar_productos() {
 	fgets(line, sizeof(line), file);
 
 	while (fgets(line, sizeof(line), file)) {
-		char *id, *nombre, *ingredientes, *tipo, *precio; //puntero para cada apartado
+		char *id, *nombre, *ingredientes, *tipo, *precio,*extra;//puntero para cada apartado
+		char *tamanio=NULL, *alergenos=NULL;
 
 		id = strtok(line, ",");
 		nombre = strtok(NULL, ",");
 		ingredientes = strtok(NULL, ",");
 		tipo = strtok(NULL, ",");
-		precio = strtok(NULL, "\n");
+		precio = strtok(NULL, ",");
 
-		if (id && nombre && ingredientes && tipo && precio) {
+		extra=strtok(NULL,"\n");
+
+
+		if (id && nombre && ingredientes && tipo && precio && extra) {
 			//eliminar espacion en blanco al inicio o al final del nombre
 			char *trimmed_precio = precio;
 			while (*trimmed_precio == ' ')
@@ -103,8 +107,17 @@ int cargar_productos() {
 
 			float precio_parseado = atof(trimmed_precio);
 			int id_casteado = atoi(id);
+
+			if (strcmp(tipo, "Bebida") == 0) {
+				tamanio = extra;
+				alergenos = NULL;
+			} else if (strcmp(tipo, "Plato") == 0) {
+				alergenos = extra;
+				tamanio = NULL;
+			}
+
 			guardar_productos(id_casteado, nombre, tipo,
-					precio_parseado);
+					precio_parseado,tamanio,alergenos);
 			guardar_productoIngredientes(id_casteado, ingredientes);
 //			printf("%s,%s,%s,%s \n", id, nombre, ingredientes, tipo);
 		} else {

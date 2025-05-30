@@ -1,41 +1,41 @@
-id,nombre,ingredientes,Tipo,precio
-1,Spaghetti Carbonara,87;63;107;85;94,Plato,12.95
-2,Paella Valenciana,11;101;45;68;57;122;1;14,Plato,18.50
-3,Tacos al Pastor,123;35;99;42;32;115,Plato,10.95
-4,Sushi Roll,11;8;111;4;105;119,Plato,14.50
-5,Lasagna,100;28;112;117;106,Plato,13.75
-6,Ceviche,92;75;33;6;42;110,Plato,15.25
-7,Moussaka,17;28;122;16;103;1,Plato,14.95
-8,Hamburguesa,83;30;73;122;104;32;79,Plato,11.50
-9,Ratatouille,17;23;96;97;122;1;5,Plato,12.25
-10,Ramen,50;25;64;34;8;36,Plato,11.95
-11,Chili con Carne,28;53;122;32;39;44,Plato,10.50
-12,Pizza Margarita,77;122;106;7;1,Plato,9.95
-13,Bobotie,28;81;63;48;86;72,Plato,13.50
-14,Coq au Vin,101;126;38;130;32;5,Plato,16.75
-15,Bibimbap,11;125;66;30;88,Plato,13.95
-16,Pad Thai,51;26;20;19;63;120,Plato,12.75
-17,Falafel,56;5;91;44;42;84,Plato,9.50
-18,Gazpacho,122;90;95;81;5;1,Plato,8.95
-19,Chow Mein,52;101;108;130;32;116,Plato,11.25
-20,Biryani,12;101;129;49;32;14,Plato,14.50
-21,Tortilla Espanola,63;89;32;1;110,Plato,9.25
-22,Pulpo a la Gallega,102;89;93;1;110,Plato,17.95
-23,Calamares a la Romana,24;60;63;1;110,Plato,12.50
-24,Cocido Madrileno,56;29;80;40;124;50,Plato,15.95
-25,Fabada Asturiana,9;40;80;121;71,Plato,14.25
-26,Pisto Manchego,122;95;17;23;32;1,Plato,11.50
-27,Migas,82;40;85;5;1,Plato,8.95
-28,Salmorejo,122;81;5;1;67;65,Plato,9.25
-29,Gambas al Ajillo,55;5;59;1;91,Plato,16.50
-30,Empanada Gallega,76;13;95;32;122,Plato,10.75
-31,Sangria,126;54;15;18;118,Bebida,7.95
-32,Horchata de Chufa,41;2;15;27,Bebida,4.50
-33,Mojito,109;62;15;75;118,Bebida,8.25
-34,Pisco Sour,98;69;15;43;10,Bebida,8.95
-35,Pina Colada,109;46;70;61,Bebida,7.50
-36,Caipirinha,22;15;74;61,Bebida,7.95
-37,Mate,78;3,Bebida,3.75
-38,Michelada,37;69;113;114;110,Bebida,6.50
-39,Baileys Whisky Cream,128;47;21;15,Bebida,9.95
-40,Agua de Valencia,31;131;127;58;15,Bebida,8.50
+id,nombre,ingredientes,Tipo,precio,alergenos/tamaño
+1,Spaghetti Carbonara,87;63;107;85;94,Plato,12.95,"leche"
+2,Paella Valenciana,11;101;45;68;57;122;1;14,Plato,18.5,"apio, gluten"
+3,Tacos al Pastor,123;35;99;42;32;115,Plato,10.95,"sésamo, huevo"
+4,Sushi Roll,11;8;111;4;105;119,Plato,14.5,"gluten, apio, frutos secos"
+5,Lasagna,100;28;112;117;106,Plato,13.75,"soja"
+6,Ceviche,92;75;33;6;42;110,Plato,15.25,"moluscos, frutos secos, apio"
+7,Moussaka,17;28;122;16;103;1,Plato,14.95,"frutos secos, crustáceos, pescado"
+8,Hamburguesa,83;30;73;122;104;32;79,Plato,11.5,"soja"
+9,Ratatouille,17;23;96;97;122;1;5,Plato,12.25,"soja"
+10,Ramen,50;25;64;34;8;36,Plato,11.95,"gluten, sésamo"
+11,Chili con Carne,28;53;122;32;39;44,Plato,10.5,"moluscos, soja"
+12,Pizza Margarita,77;122;106;7;1,Plato,9.95,"pescado"
+13,Bobotie,28;81;63;48;86;72,Plato,13.5,"crustáceos"
+14,Coq au Vin,101;126;38;130;32;5,Plato,16.75,"apio, moluscos"
+15,Bibimbap,11;125;66;30;88,Plato,13.95,"gluten, soja, apio"
+16,Pad Thai,51;26;20;19;63;120,Plato,12.75,"apio"
+17,Falafel,56;5;91;44;42;84,Plato,9.5,"sésamo"
+18,Gazpacho,122;90;95;81;5;1,Plato,8.95,"apio, gluten, moluscos"
+19,Chow Mein,52;101;108;130;32;116,Plato,11.25,"gluten, apio"
+20,Biryani,12;101;129;49;32;14,Plato,14.5,"frutos secos"
+21,Tortilla Espanola,63;89;32;1;110,Plato,9.25,"moluscos"
+22,Pulpo a la Gallega,102;89;93;1;110,Plato,17.95,"sésamo, pescado"
+23,Calamares a la Romana,24;60;63;1;110,Plato,12.5,"sésamo, leche"
+24,Cocido Madrileno,56;29;80;40;124;50,Plato,15.95,"apio, gluten"
+25,Fabada Asturiana,9;40;80;121;71,Plato,14.25,"frutos secos, sésamo"
+26,Pisto Manchego,122;95;17;23;32;1,Plato,11.5,"pescado, frutos secos"
+27,Migas,82;40;85;5;1,Plato,8.95,"gluten"
+28,Salmorejo,122;81;5;1;67;65,Plato,9.25,"apio, frutos secos"
+29,Gambas al Ajillo,55;5;59;1;91,Plato,16.5,"apio"
+30,Empanada Gallega,76;13;95;32;122,Plato,10.75,"huevo"
+31,Sangria,126;54;15;18;118,Bebida,7.95,grande
+32,Horchata de Chufa,41;2;15;27,Bebida,4.5,pequeño
+33,Mojito,109;62;15;75;118,Bebida,8.25,grande
+34,Pisco Sour,98;69;15;43;10,Bebida,8.95,pequeño
+35,Pina Colada,109;46;70;61,Bebida,7.5,grande
+36,Caipirinha,22;15;74;61,Bebida,7.95,pequeño
+37,Mate,78;3,Bebida,3.75,mediano
+38,Michelada,37;69;113;114;110,Bebida,6.5,grande
+39,Baileys Whisky Cream,128;47;21;15,Bebida,9.95,mediano
+40,Agua de Valencia,31;131;127;58;15,Bebida,8.5,grande
