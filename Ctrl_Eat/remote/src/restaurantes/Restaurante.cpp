@@ -59,3 +59,8 @@ void Restaurante::setCiudad(const char *ciudad) {
 	strcpy((char*)this->ciudad, ciudad);
 }
 
+int getNombreRestaurantes(){
+	cout << "TODO" << endl;
+
+	return 0;
+}

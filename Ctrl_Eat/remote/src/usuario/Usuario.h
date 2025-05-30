@@ -35,7 +35,11 @@ public:
 	void setTelefono(int telefono);
 	void setContrasena(const char* contrasena);
 
+
 	std::string verUsuario();
+
+	int iniciarSesion(char* email, char* contrasena);
+	int registrarse();
 
 };
 
