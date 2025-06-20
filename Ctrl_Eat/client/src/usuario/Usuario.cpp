@@ -9,97 +9,87 @@
 #include <iostream>
 using namespace std;
 #include "string.h"
-#include <sstream>
 
 Usuario::Usuario() {
-	id = 0;
-	nombre = "Anonimo";
-	email = "sin_email@ejemplo.com";
-	telefono = 0;
-	contrasena = "";
+	this->id = 0;
+	this->nombre = "";
+	this->email = "";
+	this->telefono = 0;
+	this->contrasena = "";
 }
 
-Usuario::Usuario(int id, const char* nombre, const char* email, int telefono, const char*contrasena){
+Usuario::Usuario(int id, const char *nombre, const char *email, int telefono, const char *contrasena) {
 	this->id = id;
+
+	this->nombre = new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
+
+	this->email = new char[strlen(email)+1];
+	strcpy(this->email, email);
+
 	this->telefono = telefono;
-	setContrasena(contrasena);
-	setNombre(nombre);
-	setEmail(email);
+
+	this->contrasena = new char[strlen(contrasena)+1];
+	strcpy(this->contrasena,contrasena);
 }
+
 Usuario::~Usuario() {
-	delete[] nombre;
-	delete[] email;
-	delete[] contrasena;
+	delete[] this->nombre;
+	delete[] this->email;
+	delete[] this->contrasena;
 }
 
 int Usuario::getId() {
-    return id;
+	return this->id;
 }
 
 const char* Usuario::getNombre() {
-	return nombre;
+	return this->nombre;
 }
 
 const char* Usuario::getEmail() {
-	return email;
+	return this->email;
 }
 
 int Usuario::getTelefono() {
-	return telefono;
+	return this->telefono;
 }
 
 const char* Usuario::getContrasena() {
-	return contrasena;
+	return this->contrasena;
 }
 
-
 void Usuario::setId(int id) {
-    this->id = id;
+	this->id;
 }
 
 void Usuario::setNombre(const char *nombre) {
 	delete[] this->nombre;
-	this->nombre = new char[strlen(nombre) + 1];
-	strcpy((char*) this->nombre, nombre);
+	this->nombre = new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
 }
 
 void Usuario::setEmail(const char *email) {
 	delete[] this->email;
-	this->email = new char[strlen(email) + 1];
-	strcpy((char*) this->email, email);
+	this->email = new char[strlen(email)+1];
+	strcpy(this->email, email);
+
 }
 
 void Usuario::setTelefono(int telefono) {
-	this->telefono = telefono;
+	this->telefono;
 }
 
 void Usuario::setContrasena(const char *contrasena) {
 	delete[] this->contrasena;
-	this->contrasena = new char[strlen(contrasena) + 1];
-	strcpy((char*) this->contrasena, contrasena);
+	this->contrasena = new char[strlen(contrasena)+1];
+	strcpy(this->contrasena,contrasena);
 }
 
-
-std::string Usuario::verUsuario() {
-    std::ostringstream oss;
-    oss << "ID: " << id << "\n"
-        << "Nombre: " << nombre << "\n"
-        << "Email: " << email << "\n"
-        << "Telefono: " << telefono <<"\n"
-		<< "Contrasena" << contrasena <<"\n";
-
-    return oss.str();
+const char* Usuario::verUsuario() {
+	cout<< "ID: " << this->id <<endl;
+	cout<< "Nombre: " << this-> nombre <<endl;
+	cout<< "Email: " << this->email <<endl;
+	cout<< "Telefono: " << this->telefono << endl;
+	cout<< "Contraseña: " << this-> contrasena << endl;
 }
-
-int Usuario:: iniciarSesion(char* email, char* contrasena) {
-	cout << "TODO";
-
-	return 0;
-}
-
-int Usuario:: registrarse() {
-	cout << "TODO";
-
-	return 0;
-}
-

@@ -11,15 +11,15 @@
 class Pedidos {
 private:
 	int id;
-	const char* fechaEntrega;
-	const char* fechaPedido;
-	const char* domicilio;
+	char* fechaEntrega;
+	char* fechaPedido;
+	char* domicilio;
 	int idCliente;
 	int idRestaurante;
 public:
 	Pedidos();
 	Pedidos(int id, const char* fechaEntrega, const char* fechaPedido, const char* domicilio, int idCliente, int idRestaurante);
-	virtual ~Pedidos();
+	~Pedidos();
 
 	int getId();
 	const char* getFechaEntrega();

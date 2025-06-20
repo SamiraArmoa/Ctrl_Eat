@@ -11,20 +11,25 @@
 using namespace std;
 
 
-// Constructor por defecto
-Bebida::Bebida() : Producto(), tamanio(nullptr) {}
-
-Bebida::Bebida(int id, const char*& nombre, int precio, const char* tamanio)
-    : Producto(id, nombre, precio), tamanio(tamanio) {}
-
-Bebida::~Bebida() {}
-
-const char* Bebida::getTamanio() const {
-    return tamanio;
+Bebida::Bebida():Producto(){
+	this->tamanio = "";
+}
+Bebida::Bebida(int id, const char* nombre, int precio, const char* tamanio):Producto(id, nombre, precio){
+	this->tamanio = new char[strlen(tamanio)+1];
+	strcpy(this->tamanio, tamanio);
+}
+Bebida::~Bebida(){
+	delete[] this->tamanio;
 }
 
-void Bebida::setTamanio(const char*& tamanio) {
-    this->tamanio = tamanio;
+const char* Bebida::getTamanio() const{
+	return this->tamanio;
+}
+
+void Bebida::setTamanio(const char* tamanio){
+	delete[] this->tamanio;
+	this->tamanio = new char[strlen(tamanio)+1];
+	strcpy(this->tamanio, tamanio);
 }
 
 

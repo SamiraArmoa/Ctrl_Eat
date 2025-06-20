@@ -6,24 +6,32 @@
  */
 
 #include "Plato.h"
-#include <cstring>
+#include <string.h>
 #include <iostream>
-using namesapce std;
+#include "../producto/Producto.h"
+using namespace std;
 
-Plato::Plato() : Producto(), alergenos(nullptr) {}
-
-Plato::Plato(int id, const char*& nombre, int precio, const char* alergenos)
-    : Producto(id, nombre, precio),alergenos(alergenos) {}
-
-Plato::~Plato() {}
-
-const char* Plato::getAlergenos() const {
-    return alergenos;
+Plato::Plato():Producto(){
+	this->alergenos = "";
 }
 
-void Plato::setAlergenos(const char* alergenos) {
-    this-> alergenos= alergenos;
+Plato::Plato(int id, const char* nombre, int precio, const char* alergenos):Producto(id, nombre, precio){
+	this->alergenos = new char[strlen(alergenos)+1];
+	strcpy(this->alergenos, alergenos);
 }
 
+Plato::~Plato(){
+	delete[] this->alergenos;
+}
+
+const char* Plato::getAlergenos() const{
+	return this->alergenos;
+}
+
+void Plato::setAlergenos(const char* alergenos){
+	delete[] this->alergenos;
+	this->alergenos = new char[strlen(alergenos)+1];
+	strcpy(this->alergenos, alergenos);
+}
 
 

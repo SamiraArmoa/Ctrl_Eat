@@ -12,15 +12,15 @@
 
 class Bebida : public Producto {
 private:
-    const char* tamanio;
+    char* tamanio;
 
 public:
     Bebida();  // Constructor por defecto
-    Bebida(int id, const char*& nombre, int precio, const char* tamanio);  // Constructor con herencia
+    Bebida(int id, const char* nombre, int precio, const char* tamanio);  // Constructor con herencia
     ~Bebida();
 
     const char* getTamanio() const;
-    void setTamanio(const char*& tamanio);
+    void setTamanio(const char* tamanio);
 };
 
 #endif /* REMOTE_SRC_BEBIDA_BEBIDA_H_ */

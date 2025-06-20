@@ -167,3 +167,9 @@ void hacerPedido(int id_usuario_actual) {
     char *mensage = pedidoSocket(restaurante_escogido, id_usuario_actual, productos);
     enviarSocket(mensage);
 }
+
+int main() {
+    int id_usuario = 1;
+    hacerPedido(id_usuario);
+    return 0;
+}

@@ -10,57 +10,53 @@
 using namespace std;
 #include "string.h"
 
-Restaurante::Restaurante() {
-	id = 999;
-	nombre = "";
-	ciudad = "";
+Restaurante::Restaurante(){
+	this->id = 0;
+	this->nombre = "";
+	this->ciudad = "";
 }
 
-Restaurante::Restaurante(int id, const char *nombre, const char *ciudad) {
-	this->id = id;
-	setNombre(nombre);
-	setCiudad(ciudad);
+Restaurante::Restaurante(int id, const char* nombre, const char* ciudad){
+	this-> id = id;
+
+	this->nombre = new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
+
+	this->ciudad = new char[strlen(ciudad)+1];
+	strcpy(this->ciudad, ciudad);
 }
 
-virtual Restaurante::~Restaurante() {
-	delete[] nombre;
-	delete[] ciudad;
-}
-
-// Getters
-int Restaurante::getId() {
-	return id;
-}
-
-const char* Restaurante::getNombre() {
-	return nombre;
-}
-
-const char* Restaurante::getCiudad() {
-	return ciudad;
-}
-
-// Setters
-void Restaurante::setId(int id) {
-	this->id = id;
-}
-
-void Restaurante::setNombre(const char *nombre) {
-	delete[] this->nombre;
-
-	this->nombre = new char[strlen(nombre) + 1];
-	strcpy((char*)this->nombre, nombre);
-}
-
-void Restaurante::setCiudad(const char *ciudad) {
+Restaurante::~Restaurante(){
 	delete[] this->ciudad;
 
-	this->ciudad = new char[strlen(ciudad) + 1];
-	strcpy((char*)this->ciudad, ciudad);
+	delete[] this->nombre;
 }
 
-int getNombreRestaurantes(){
-	cout << "TODO" << endl;
+int Restaurante::getId(){
+	return this->id;
+}
 
-	return 0;
+const char* Restaurante::getNombre(){
+	return this->nombre;
+}
+
+const char* Restaurante::getCiudad(){
+	return this->ciudad;
+}
+
+void Restaurante::setId(int id){
+	this->id;
+}
+
+void Restaurante::setNombre(const char* nombre){
+	delete[] this-> nombre;
+	this->nombre = new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
+
+}
+
+void Restaurante::setCiudad(const char* ciudad){
+	delete[] this->ciudad;
+	this->ciudad = new char[strlen(ciudad)+1];
+	strcpy(this->ciudad, ciudad);
 }

@@ -1,61 +1,60 @@
 /*
  * Producto.cpp
  *
- *  Created on: 30 may 2025
- *      Author: oier.artabe
+ *  Created on: 20 jun 2025
+ *      Author: aroa.i.m
  */
 
 #include "Producto.h"
 #include <iostream>
-#include <cstring>
+#include <string.h>
 using namespace std;
 
-
-// Constructor por defecto
-Producto::Producto() : id(0), nombre(""), precio(0) {}
-
-// Constructor con parámetros
-Producto::Producto(int id, const const char*& nombre, int precio){
-this->id = id;
-setNombre(nombre);
-setPrecio(precio);
+Producto::Producto(){
+	this-> id = 0;
+	this-> nombre = "";
+	this->precio = 0.0;
 }
 
-virtual Producto::~Producto() {
-delete[] nombre;
-delete[] precio;
+Producto::Producto(int id, const char* nombre, int precio){
+	this->id = id;
+	this->nombre = new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
+	this -> precio = precio;
 }
 
-// Destructor
-Producto::~Producto() {}
-
-// Getters
-int Producto::getId(){ // @suppress("Member declaration not found")
-return id;
-}
-const char* Producto::getNombre(){ // @suppress("No return") // @suppress("Member declaration not found")
-delete[] this->nombre;
-}
-int Producto::getPrecio(){ // @suppress("Member declaration not found")
-return precio;
+Producto::~Producto(){
+	delete[] this->nombre;
 }
 
-// Setters
-void Producto::setId(int id) {
-this->id = id;
-}
-void Producto::setNombre(const char* nombre) { // @suppress("Member declaration not found")
-delete[] this->nombre;
-this->nombre = new char[strlen(nombre) + 1];
-strcpy((char*)this->nombre, nombre);
-}
-void Producto::setPrecio(int precio) {
-this->precio = precio;
+int Producto::getId() const{
+	return this->id;
 }
 
-// Método para mostrar la información del producto
-void Producto::mostrar() const {
-    std::cout << "ID: " << id << ", Nombre: " << nombre
-              << ", Precio: " << precio << ", Tipo: " << std::endl;
+const char* Producto::getNombre() const{
+	return this->nombre;
+}
+
+int Producto::getPrecio() const{
+	return this->precio;
+}
+
+void Producto::setId(int id){
+	this->id;
+}
+
+void Producto::setNombre(const char* nombre){
+	delete [] this-> nombre;
+	this->nombre = new char[strlen(nombre)+1];
+	strcpy(this->nombre, nombre);
+}
+
+void Producto::setPrecio(int precio){
+	this->id;
+}
+
+void Producto::mostrar() const{
+	cout<< "ID: " << this-> id << endl;
+	cout<< "Nombre: " << this->nombre<<endl;
 }
 

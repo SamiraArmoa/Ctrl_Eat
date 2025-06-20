@@ -11,12 +11,12 @@
 class Producto {
 private:
     int id;
-    const char* nombre;
+    char* nombre;
     int precio;
 
 public:
     Producto();
-    Producto(int id, const char*& nombre, int precio);
+    Producto(int id, const char* nombre, int precio);
     ~Producto();
 
     int getId() const;
@@ -24,7 +24,7 @@ public:
     int getPrecio() const;
 
     void setId(int id);
-    void setNombre(const char*& nombre);
+    void setNombre(const char* nombre);
     void setPrecio(int precio);
     void mostrar() const;
 };

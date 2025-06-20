@@ -12,12 +12,12 @@
 class Restaurante {
 private:
 	int id;
-	const char* nombre;
-	const char* ciudad;
+	char* nombre;
+	char* ciudad;
 public:
 	Restaurante();
 	Restaurante(int id, const char* nombre, const char* ciudad);
-	virtual ~Restaurante();
+	~Restaurante();
 
 
 	int getId();

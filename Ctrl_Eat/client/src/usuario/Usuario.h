@@ -11,14 +11,14 @@
 class Usuario {
 private:
     int id;
-    const char* nombre;
-    const char* email;
+    char* nombre;
+    char* email;
     int telefono;
-    const char* contrasena;
+    char* contrasena;
 public:
 	Usuario();
 	Usuario(int id, const char* nombre, const char* email, int telefono, const char* contrasena);
-	virtual ~Usuario();
+	~Usuario();
 
 
 	int getId();
@@ -35,7 +35,7 @@ public:
 	void setContrasena(const char* contrasena);
 
 
-	std::string verUsuario();
+	const char* verUsuario();
 
 	int iniciarSesion(char* email, char* contrasena);
 	int registrarse();
