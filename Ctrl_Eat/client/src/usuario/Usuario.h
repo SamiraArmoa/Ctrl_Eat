@@ -18,6 +18,7 @@ private:
 public:
 	Usuario();
 	Usuario(int id, const char* nombre, const char* email, int telefono, const char* contrasena);
+	Usuario(const char* nombre, const char* contrasena);
 	~Usuario();
 
 

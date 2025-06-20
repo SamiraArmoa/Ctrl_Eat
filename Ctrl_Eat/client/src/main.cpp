@@ -5,13 +5,14 @@
  *      Author: aroa.i.m
  */
 #include <iostream>
-#include "../src/usuario/Usuario.h"
+#include "usuario/Usuario.h"
 #include "clientSocket.h"
 #include "../src/producto/producto.h"
 #include "../src/pedidos/Pedidos.h"
 #include "../src/restaurantes/Restaurante.h"
 #include "clientSocket.h"
-
+#include "controlador.h"
+#include <string.h>
 using namespace std;
 static Usuario usuario;
 
@@ -86,16 +87,20 @@ void iniciarSesion() {
 	cin >> contrasena;
 	cout << "Pulsa enter para continuar";
 
-	char *login = loginSocket(usuario, contrasena);
+	Usuario u = Usuario(usuario, contrasena);
+	int id = controlador::iniciarSesionControlador(u);
+	cout << "Id: " << id << endl;
+
+//	char *login = loginSocket(usuario, contrasena);
 	// int id = enviarSocket(login);
-	/*
-	if (id > 100) {
-		pantallaInicio();
-	} else {
-		cout << "Usuario/Paasword no es valido" << endl;
-		iniciarSesion();
-	}
-	*/
+
+//	 if (id > 100) {
+//	 pantallaInicio();
+//	 } else {
+//	 cout << "Usuario/Paasword no es valido" << endl;
+//	 iniciarSesion();
+//	 }
+
 }
 
 void registrarse() {
@@ -116,17 +121,22 @@ void registrarse() {
 	cin >> confirmacionContrasena;
 
 	// TODO: añadir comprobacion de contrasena
+	if (strcmp(contrasena, confirmacionContrasena) != 0) {
+		printf("La contrasena no es la misma, vuelve a intentarlo");
+		return;
+	}
 
 	cout << "Telefono: ";
 	cin >> telefono;
-	cout << "Pulsa enter para continuar";
-	char *registrar = registerSocket(nombre, contrasena, email, telefono);
-	enviarSocket(registrar);
+	cout << "Pulsa enter para continuar" << endl;
+
+	Usuario u = Usuario(1, nombre, email, telefono, contrasena);
+	controlador::registrarseControlador(u);
 }
 
 int bienvenida() {
 	int opcion;
-	cout << "BIENVENIDO";
+	cout << "BIENVENIDO" << endl;
 	cout << "Elije una opcion: " << endl;
 	cout << "1. Iniciar Sesion" << endl;
 	cout << "2. Registrarse" << endl;
@@ -154,7 +164,7 @@ void cerrarSesion() {
 
 int pantallaInicio() {
 	int opcion;
-	cout << "Hola";
+	cout << "Hola" << endl;
 	cout << "Elige una opcion: " << endl;
 	cout << "1. Hacer pedido" << endl;
 	cout << "2. Editar perfil" << endl;
