@@ -112,7 +112,9 @@ int escogerOpcion(int *opcion) {
 	case 20:
 		actualizarCliente();
 		break;
-
+	case 21:
+		printf("Saliendo....");
+		break;
 	default:
 		printf("No existe esa opcion\n");
 		break;
@@ -121,30 +123,33 @@ int escogerOpcion(int *opcion) {
 
 int main(int argc, char **argv) {
 
-
+	int opcionSocket = 0;
 	int opcion = 0;
 	printf("Que quieres hacer?\n");
- 	printf("0. Entrar como administrador\n");
+	printf("0. Entrar como administrador\n");
 	printf("1. Escuchar conexiones de clientes\n");
-	
-	scanf("%d", &opcion);
 
-	if (opcion == 0) {
-		int opcionAdmin = 0;
-	while (opcionAdmin != 21) {
-		imprimirMenu(&opcion);
-		escogerOpcion(&opcion);
-	}
-	} else if (opcion == 1) {
+	scanf("%d", &opcionSocket);
+
+	if (opcionSocket == 0) {
+//		Abro el menu
+		while (1) {
+			imprimirMenu(&opcion);
+			escogerOpcion(&opcion);
+			if (opcion == 21) {
+				break;
+			}
+		}
+	} else if (opcionSocket == 1) {
+//		Pongo el socket en escucha
 		printf("Escuchando...\n");
-		for(;;) {
+		for (;;) {
 			escuchar();
 		}
 	} else {
-		printf("Opción inválida\n");
+//		break;
 	}
 
-	
 	return 0;
 }
 
