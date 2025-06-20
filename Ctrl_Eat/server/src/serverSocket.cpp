@@ -112,8 +112,8 @@ int escuchar() {
         std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
 
         int result;
-        char* productos;
-        char* restaurantes;
+        const char* productos;
+        const char* restaurantes;
         switch (receiveBuffer[0]) {
             case '0':
                 result = receive_login(receiveBuffer);
