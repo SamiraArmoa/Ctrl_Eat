@@ -22,7 +22,7 @@ int obtenerUltimoIdEmpleados(int *id, const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT MAX(ID_EM) FROM Empleado";
+	const char *sql = "SELECT MAX(ID_EM) FROM Empleado";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -67,7 +67,7 @@ int insertarEmpleado(char *nombre, char *cargo, char *cuentaBancaria, int id_res
 		return 1;
 	}
 
-	char *insert_sql =
+	const char *insert_sql =
 		"INSERT INTO Empleado(ID_EM, NOMBRE,CARGO,CUENTA_BAN,ID_RES) VALUES (?, ?, ?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
@@ -105,7 +105,7 @@ int deleteEmpleado(int id_em, const char *path)
 		return 1;
 	}
 
-	char *insert_sql = "DELETE FROM Empleado WHERE ID_EM = ?";
+	const char *insert_sql = "DELETE FROM Empleado WHERE ID_EM = ?";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	// Vincular el par�metro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt, 1, id_em); // 1 es el �ndice del primer `?`
@@ -151,7 +151,7 @@ int imprimirEmpleados(const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT * FROM Empleado";
+	const char *sql = "SELECT * FROM Empleado";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -206,7 +206,7 @@ int updateEmpleados(int id_em, char *nombre, char *cargo, char *cuentaBancaria, 
 	}
 
 	// Preparar la consulta SQL
-	char *sql =
+	const char *sql =
 		"UPDATE Empleado SET NOMBRE = ?, CARGO = ?, CUENTA_BAN = ?, ID_RES = ? WHERE ID_EM = ?";
 	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
 	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
@@ -253,7 +253,7 @@ int guardar_productoIngrediente(int id_pr, int id_in, const char *path)
 		return 1;
 	}
 
-	char *insert_sql =
+	const char *insert_sql =
 		"INSERT INTO PRODUCTO_INGREDIENTE(id_pr, id_in) VALUES (?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id_pr);
@@ -290,7 +290,7 @@ int guardar_productos(int id, char *nombre, char *tipo, float precio, char *tama
 		return 1;
 	}
 
-	char *insert_sql =
+	const char *insert_sql =
 		"INSERT INTO Producto(ID_PR, NOMBRE,PRECIO,TIPO, TAMANIO, ALERGENOS) VALUES (?, ?, ?, ?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
@@ -333,7 +333,7 @@ int obtenerUltimoIdProductos(int *id, const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT MAX(ID_PR) FROM Producto";
+	const char *sql = "SELECT MAX(ID_PR) FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -375,7 +375,7 @@ int guardar_ingredientes(int id, char *nombre, const char *path)
 		return 1;
 	}
 
-	char *insert_sql = "INSERT INTO Ingrediente(ID_IN, NOMBRE) VALUES (?, ?)";
+	const char *insert_sql = "INSERT INTO Ingrediente(ID_IN, NOMBRE) VALUES (?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
 	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
@@ -413,7 +413,7 @@ int obtenerIngredientes(const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_IN, NOMBRE FROM Ingrediente";
+	const char *sql = "SELECT ID_IN, NOMBRE FROM Ingrediente";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -447,7 +447,7 @@ int obtenerIngredientes(const char *path)
 	return SQLITE_OK;
 }
 
-char* imprimirProductos(const char *path)
+const char* imprimirProductos(const char *path)
 {
 	char *result = (char *)malloc(8000 * sizeof(char));
 
@@ -466,7 +466,7 @@ char* imprimirProductos(const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_PR,NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
+	const char *sql = "SELECT ID_PR,NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -525,7 +525,7 @@ int deleteProductos(int id_pr, const char *path)
 		return 1;
 	}
 
-	char *insert_sql = "DELETE FROM Producto WHERE ID_PR = ?";
+	const char *insert_sql = "DELETE FROM Producto WHERE ID_PR = ?";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	// Vincular el parametro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt, 1, id_pr); // 1 es el indice del primer `?`
@@ -550,7 +550,7 @@ int deleteProductos(int id_pr, const char *path)
 	}
 
 	sqlite3_stmt *stmt2;
-	char *insert_sql2 = "DELETE FROM PRODUCTO_INGREDIENTE WHERE id_pr = ?";
+	const char *insert_sql2 = "DELETE FROM PRODUCTO_INGREDIENTE WHERE id_pr = ?";
 	sqlite3_prepare_v2(db, insert_sql2, strlen(insert_sql2) + 1, &stmt2, NULL);
 	// Vincular el parametro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt2, 1, id_pr); // 1 es el indice del primer `?`
@@ -595,7 +595,7 @@ int updateProductos(int id_pr, char *nombre, float precio, char *tipo, char *tam
 	}
 
 	// Preparar la consulta SQL
-	char *sql =
+	const char *sql =
 		"UPDATE Producto SET NOMBRE = ?, PRECIO = ?, TIPO = ?, TAMANIO=?, ALERGENOS=? WHERE ID_PR = ?";
 	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
 	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
@@ -645,7 +645,7 @@ int obtenerUltimoIdClientes(int *id, const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT MAX(ID_CL) FROM Cliente";
+	const char *sql = "SELECT MAX(ID_CL) FROM Cliente";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -691,7 +691,7 @@ int insertarClientes(char *nombre, char *email, int telefono, char *contrasena, 
 		return 1;
 	}
 
-	char *insert_sql =
+	const char *insert_sql =
 		"INSERT INTO Cliente(ID_CL, NOMBRE,EMAIL,TLF,CONTRASENA) VALUES (?, ?, ?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
@@ -733,7 +733,7 @@ int deleteClientes(int id_cl, const char *path)
 		return 1;
 	}
 
-	char *insert_sql = "DELETE FROM Cliente WHERE ID_CL = ?";
+	const char *insert_sql = "DELETE FROM Cliente WHERE ID_CL = ?";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	// Vincular el par�metro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt, 1, id_cl); // 1 es el �ndice del primer `?`
@@ -777,7 +777,7 @@ int verClientes(const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_CL,NOMBRE,EMAIL,TLF, CONTRASENA FROM Cliente";
+	const char *sql = "SELECT ID_CL,NOMBRE,EMAIL,TLF, CONTRASENA FROM Cliente";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -833,7 +833,7 @@ int updateClientes(int id_cl, char *nombre, char *email, int telefono, char *con
 	}
 
 	// Preparar la consulta SQL
-	char *sql =
+	const char *sql =
 		"UPDATE CLIENTE SET NOMBRE = ?, EMAIL = ?, TLF = ?, CONTRASENA=? WHERE ID_CL = ?";
 	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
 	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
@@ -883,7 +883,7 @@ int obtenerIDCliente(char* nombre, const char *path) {
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_CL FROM Cliente WHERE NOMBRE = ?";
+	const char *sql = "SELECT ID_CL FROM Cliente WHERE NOMBRE = ?";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -1055,7 +1055,7 @@ int guardar_restaurantes(char *id, char *nombre, char *ciudad, const char *path)
 		return 1;
 	}
 
-	char *insert_sql =
+	const char *insert_sql =
 		"INSERT INTO Restaurante(ID_RES, NOMBRE, CIUDAD) VALUES (?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_text(stmt, 1, id, strlen(id), SQLITE_STATIC);
@@ -1094,7 +1094,7 @@ int obtenerUltimoIdRestaurante(int *id, const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT MAX(ID_RES) FROM Restaurante";
+	const char *sql = "SELECT MAX(ID_RES) FROM Restaurante";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -1138,7 +1138,7 @@ int updateRestaurante(int id, char *nombre, char *ciudad, const char *path)
 	}
 
 	// Preparar la consulta SQL para actualizar el restaurante
-	char *sql = "UPDATE Restaurante SET NOMBRE = ?, CIUDAD = ? WHERE ID_RES = ?";
+	const char *sql = "UPDATE Restaurante SET NOMBRE = ?, CIUDAD = ? WHERE ID_RES = ?";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -1189,7 +1189,7 @@ int insertarRestaurante(char *nombre, char *ciudad, const char *path)
 	}
 
 	// Preparar la consulta SQL para insertar un nuevo restaurante
-	char *sql =
+	const char *sql =
 		"INSERT INTO Restaurante (ID_RES,NOMBRE, CIUDAD) VALUES (?, ?, ?)";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
@@ -1220,7 +1220,7 @@ int insertarRestaurante(char *nombre, char *ciudad, const char *path)
 	return SQLITE_OK;
 }
 
-char* imprimirRestaurante(const char *path)
+const char* imprimirRestaurante(const char *path)
 {
 
 	char *result = (char *)malloc(8000 * sizeof(char));
@@ -1239,7 +1239,7 @@ char* imprimirRestaurante(const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_RES,NOMBRE,CIUDAD FROM Restaurante";
+	const char *sql = "SELECT ID_RES,NOMBRE,CIUDAD FROM Restaurante";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -1296,7 +1296,7 @@ int obtenerIDRestaurante(char *nombre, const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_RES FROM Restaurante WHERE NOMBRE = ?";
+	const char *sql = "SELECT ID_RES FROM Restaurante WHERE NOMBRE = ?";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -1343,7 +1343,7 @@ int obtenerProductos(const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT ID_PR, NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
+	const char *sql = "SELECT ID_PR, NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -1398,7 +1398,7 @@ int guardarPedidos(int domic, int id_cl, int id_res, const char *path)
 	}
 
 	// Preparar la consulta SQL para insertar un nuevo pedido
-	char *sql =
+	const char *sql =
 		"INSERT INTO Pedido (DOMICILIO, ID_CL, ID_RES) VALUES (?, ?, ?)";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
@@ -1449,7 +1449,7 @@ int guardar_productoPedido(int id_ped, int id_pr, const char *path)
 		return 1;
 	}
 
-	char *insert_sql =
+	const char *insert_sql =
 		"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_producto) VALUES (?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id_ped);
@@ -1487,7 +1487,7 @@ int obtenerUltimoIdPedido(int *id, const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql = "SELECT MAX(ID_PED) FROM Pedido";
+	const char *sql = "SELECT MAX(ID_PED) FROM Pedido";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
 	{
@@ -1533,7 +1533,7 @@ int getPedidos(const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql =
+	const char *sql =
 		"SELECT ID_PED, DOMICILIO, ID_CL, ID_RES FROM Pedido";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (rc != SQLITE_OK)
@@ -1589,7 +1589,7 @@ int esUsuarioValido(char *nombre, char *contrasena, const char *path)
 	}
 
 	// Preparar la consulta SQL
-	char *sql =
+	const char *sql =
 		"SELECT ID_CL FROM Cliente where NOMBRE = ? and CONTRASENA = ? ";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);

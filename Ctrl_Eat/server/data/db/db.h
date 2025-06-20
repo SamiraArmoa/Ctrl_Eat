@@ -14,7 +14,7 @@ extern "C"
     int guardar_productoIngrediente(int id_pr, int id_in, const char *path);
     int guardar_productos(int id, char *nombre, char *tipo, float precio, char *tamanio, char *alergenos, const char *path);
     int obtenerUltimoIdProductos(int *id, const char *path);
-    char* imprimirProductos(const char *path);
+    const char* imprimirProductos(const char *path);
     int obtenerIngredientes(const char *path);
     int deleteProductos(int id_pr, const char *path);
     int updateProductos(int id_pr, char *nombre, float precio, char *tipo, char *tamanio, char *alergenos, const char *path);
@@ -34,7 +34,7 @@ extern "C"
     int obtenerUltimoIdRestaurante(int *id, const char *path);
     int updateRestaurante(int id, char *nombre, char *ciudad, const char *path);
     int insertarRestaurante(char *nombre, char *ciudad, const char *path);
-    char* imprimirRestaurante(const char *path);
+    const char* imprimirRestaurante(const char *path);
     int obtenerIDRestaurante(char *nombre, const char *path);
 
     int obtenerProductos(const char *path);
