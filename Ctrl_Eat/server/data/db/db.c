@@ -1571,7 +1571,7 @@ int getPedidos(const char *path)
 	return SQLITE_OK;
 }
 
-int esUsuarioValido(char *nombre, char *contrasena, const char *path)
+int esUsuarioValido(char *email, char *contrasena, const char *path)
 {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
@@ -1590,9 +1590,9 @@ int esUsuarioValido(char *nombre, char *contrasena, const char *path)
 
 	// Preparar la consulta SQL
 	const char *sql =
-		"SELECT ID_CL FROM Cliente where NOMBRE = ? and CONTRASENA = ? ";
+		"SELECT ID_CL FROM Cliente where EMAIL = ? and CONTRASENA = ? ";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 1, email, strlen(email), SQLITE_STATIC);
  	sqlite3_bind_text(stmt, 2, contrasena, strlen(contrasena), SQLITE_STATIC);
 
 	if (rc != SQLITE_OK)
@@ -1614,7 +1614,7 @@ int esUsuarioValido(char *nombre, char *contrasena, const char *path)
 	fflush(stdout);
 	if (id == 0)
 	{
-		return 0; // false
+		return 1; // false
 	}
-	return id + 100; // true
+	return id*(-1); // true
 }

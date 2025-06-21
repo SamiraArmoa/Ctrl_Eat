@@ -8,20 +8,21 @@
 #include "usuario/Usuario.h"
 #include "clientSocket.h"
 #include "../src/producto/producto.h"
-#include "../src/pedidos/Pedidos.h"
 #include "../src/restaurantes/Restaurante.h"
 #include "clientSocket.h"
 #include "controlador.h"
 #include <string.h>
-using namespace std;
-static Usuario usuario;
 
+#include "../src/pedido/Pedido.h"
+using namespace std;
+
+static Usuario usuario;
 int id_usuario_actual = 0;
 
 void datosPedido();
-int pagarPedido(Pedidos &pedido);
-int hacerPedido(Pedidos &pedido);
-int elegirRestaurante();
+int pagarPedido(Pedido &pedido);
+int hacerPedido(Pedido &pedido);
+void elegirRestaurante(int &idRes);
 void editarPerfil();
 void historialDePedido();
 void registrarse();
@@ -31,7 +32,7 @@ int pantallaInicio();
 int pedido();
 int pagarPedido();
 
-int pagarPedido(Pedidos &pedido) {
+int pagarPedido(Pedido &pedido) {
 	int opcion;
 	cout << "El importe total es de : " << endl;
 	cout << "Elige una opcion:" << endl;
@@ -42,20 +43,18 @@ int pagarPedido(Pedidos &pedido) {
 	return opcion;
 }
 
-int hacerPedido(Pedidos &pedido) {
+int hacerPedido() {
+	int idRes = 0;
+	elegirRestaurante(idRes);
 	int getProductos();
-	pagarPedido(pedido);
+//	pagarPedido(pedido);
 	cout << "";
 }
 
-int elegirRestaurante() {
-	int getNombreRestaurantes();
-	Pedidos pedido = Pedidos();
-
-	int restaurante = 0;
-	pedido.setIdRestaurante(restaurante);
-	hacerPedido(pedido);
-	return 0;
+void elegirRestaurante(int &idRes) {
+//	imprimir restaurantes
+	const char* res = controlador::obtenerRestauranteControlador();
+//  Pedir id y asignarselo al parámetro por referencia
 }
 
 void editarPerfil() {
@@ -85,22 +84,18 @@ void iniciarSesion() {
 	cin >> usuario;
 	cout << "Contrasena: ";
 	cin >> contrasena;
-	cout << "Pulsa enter para continuar";
 
 	Usuario u = Usuario(usuario, contrasena);
 	int id = controlador::iniciarSesionControlador(u);
 	cout << "Id: " << id << endl;
 
-//	char *login = loginSocket(usuario, contrasena);
-	// int id = enviarSocket(login);
-
-//	 if (id > 100) {
-//	 pantallaInicio();
-//	 } else {
-//	 cout << "Usuario/Paasword no es valido" << endl;
-//	 iniciarSesion();
-//	 }
-
+	 if (id != 0) {
+		 id_usuario_actual = id;
+		 pantallaInicio();
+	 } else {
+		 cout << "Usuario/Password no es valido" << endl;
+		 iniciarSesion();
+	 }
 }
 
 void registrarse() {
@@ -120,18 +115,26 @@ void registrarse() {
 	cout << "Confirmar contrasena: ";
 	cin >> confirmacionContrasena;
 
-	// TODO: añadir comprobacion de contrasena
-	if (strcmp(contrasena, confirmacionContrasena) != 0) {
-		printf("La contrasena no es la misma, vuelve a intentarlo");
-		return;
+	while (strcmp(contrasena, confirmacionContrasena) != 0) {
+		cout << "La contrasena no es la misma, vuelve a intentarlo" << endl;
+		cout << "Confirmar contrasena: ";
+		cin >> confirmacionContrasena;
 	}
 
 	cout << "Telefono: ";
 	cin >> telefono;
-	cout << "Pulsa enter para continuar" << endl;
 
 	Usuario u = Usuario(1, nombre, email, telefono, contrasena);
-	controlador::registrarseControlador(u);
+
+	int id = controlador::registrarseControlador(u);
+	cout << "Id Main: " << id << endl;
+	if (id == 0) {
+		cout << "Error al crear el usuario" << endl;
+		registrarse();
+	} else {
+		id_usuario_actual = id;
+		pantallaInicio();
+	}
 }
 
 int bienvenida() {
@@ -151,6 +154,7 @@ int bienvenida() {
 		registrarse();
 		break;
 	default:
+		id_usuario_actual = 0;
 		break;
 	}
 
@@ -164,7 +168,6 @@ void cerrarSesion() {
 
 int pantallaInicio() {
 	int opcion;
-	cout << "Hola" << endl;
 	cout << "Elige una opcion: " << endl;
 	cout << "1. Hacer pedido" << endl;
 	cout << "2. Editar perfil" << endl;
@@ -174,7 +177,7 @@ int pantallaInicio() {
 
 	switch (opcion) {
 	case 1:
-		elegirRestaurante();
+		hacerPedido();
 		break;
 	case 2:
 		editarPerfil();
@@ -220,11 +223,11 @@ int pagarPedido() {
 }
 
 void datosPedido() {
-//TODO:
+	//TODO:
 }
 
 void historialDePedido() {
-//TODO:
+	//TODO:
 }
 
 int main() {

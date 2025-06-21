@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "pedidos/pedidos.h"
 #include "productos/productos.h"
 #include "empleados/empleados.h"
 #include "../utils/csv_utils.h"
@@ -10,6 +9,8 @@
 #include "ingredientes/ingredientes.h"
 #include "cliente/cliente.h"
 #include <time.h>
+
+#include "pedidos/pedido.h"
 #include "serverSocket.h"
 
 int imprimirMenu(int *opcion) {

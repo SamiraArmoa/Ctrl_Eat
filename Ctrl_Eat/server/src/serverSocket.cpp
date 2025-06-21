@@ -146,10 +146,10 @@ int escuchar() {
             strcpy(buffer, productos); // Productos
         } else if (result == 3) {
             strcpy(buffer, restaurantes); // Restaurantes
-        } else if (result >= 100){
+        } else if (result < 0){
             sprintf(buffer, "%d", result);
         } else {
-            strcpy(buffer, "-1");
+
         }
           
 

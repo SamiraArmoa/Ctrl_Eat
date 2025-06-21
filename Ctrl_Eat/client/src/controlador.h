@@ -6,7 +6,8 @@
  */
 
 #include <iostream>
-#include "pedidos/Pedidos.h"
+
+#include "pedido/Pedido.h"
 #include "usuario/Usuario.h"
 #include "producto/Producto.h"
 #include "restaurantes/Restaurante.h"
@@ -14,16 +15,16 @@
 class controlador {
 public:
 	void datosPedido();
-	int pagarPedido(Pedidos &pedido);
-	int hacerPedido(Pedidos &pedido);
+	int pagarPedido(Pedido &pedido);
+	int hacerPedido(Pedido &pedido);
 	void historialDePedido();
-	int elegirRestaurante();
+
 	int pedido();
 
 	void editarPerfil();
-	static void registrarseControlador(Usuario &u);
+	static int registrarseControlador(Usuario &u);
 	static int iniciarSesionControlador(Usuario &u);
-
+	static const char* obtenerRestauranteControlador();
 };
 
 

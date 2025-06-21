@@ -5,10 +5,10 @@
  *      Author: s.armoa
  */
 
-#ifndef REMOTE_SRC_PEDIDOS_PEDIDOS_H_
-#define REMOTE_SRC_PEDIDOS_PEDIDOS_H_
+#ifndef REMOTE_SRC_PEDIDO_PEDIDOS_H_
+#define REMOTE_SRC_PEDIDO_PEDIDOS_H_
 
-class Pedidos {
+class Pedido {
 private:
 	int id;
 	char* fechaEntrega;
@@ -17,9 +17,9 @@ private:
 	int idCliente;
 	int idRestaurante;
 public:
-	Pedidos();
-	Pedidos(int id, const char* fechaEntrega, const char* fechaPedido, const char* domicilio, int idCliente, int idRestaurante);
-	~Pedidos();
+	Pedido();
+	Pedido(int id, const char* fechaEntrega, const char* fechaPedido, const char* domicilio, int idCliente, int idRestaurante);
+	~Pedido();
 
 	int getId();
 	const char* getFechaEntrega();
@@ -36,4 +36,4 @@ public:
 	void setIdRestaurante(int idRestaurante);
 };
 
-#endif /* REMOTE_SRC_PEDIDOS_PEDIDOS_H_ */
+#endif /* REMOTE_SRC_PEDIDO_PEDIDOS_H_ */

@@ -123,7 +123,7 @@ int enviarSocket(const char *message)
     }
     else
     {
-        std::cout << "Mensaje enviado" << std::endl;
+        std::cout << "Mensaje enviado: " << message << std::endl;
     }
 
     // Receiving data from the server
@@ -136,7 +136,14 @@ int enviarSocket(const char *message)
     }
     else
     {
+//    	std::cout << "Código estado: " << message << std::endl;
         std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
+//    	if (strcp) { message == "4"; en message copias el receiveBuffer
+
+//		} else {
+//
+//		}
+        return atoi(receiveBuffer);
     }
 }
 

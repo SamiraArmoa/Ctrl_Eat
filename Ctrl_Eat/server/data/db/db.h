@@ -43,7 +43,7 @@ extern "C"
     int obtenerUltimoIdPedido(int *id, const char *path);
     int getPedidos(const char *path);
 
-    int esUsuarioValido(char *nombre, char *contrasena, const char *path);
+    int esUsuarioValido(char *email, char *contrasena, const char *path);
 
 #ifdef __cplusplus
 }
