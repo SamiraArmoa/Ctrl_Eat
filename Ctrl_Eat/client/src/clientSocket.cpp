@@ -127,26 +127,21 @@ const char *enviarSocket(const char *message)
     }
 
     // Receiving data from the server
-    static char receiveBuffer[8000] = {0};
-    memset(receiveBuffer, 0, sizeof(receiveBuffer)); // Limpia buffer antes de usar
-    int rbyteCount = recv(clientSocket, receiveBuffer, sizeof(receiveBuffer), 0);
+        static char receiveBuffer[8000];
+        memset(receiveBuffer, 0, sizeof(receiveBuffer));
 
-    if (rbyteCount < 0)
-    {
-        std::cout << "Error al recibir datos: " << WSAGetLastError() << std::endl;
-        return "0";
-    }
-    else
-    {
-        //    	std::cout << "Código estado: " << message << std::endl;
-        std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
-        //    	if (strcp) { message == "4"; en message copias el receiveBuffer
+        int rbyteCount = recv(clientSocket, receiveBuffer, sizeof(receiveBuffer) - 1, 0);
+        if (rbyteCount < 0)
+        {
+            std::cout << "Error al recibir datos: " << WSAGetLastError() << std::endl;
+            return "0";
+        }
 
-        //		} else {
-        //
-        //		}
+        receiveBuffer[rbyteCount] = '\0';
+
+//        std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
+
         return receiveBuffer;
-    }
 }
 
 void hacerPedido(int id_usuario_actual) {

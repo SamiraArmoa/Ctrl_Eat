@@ -35,7 +35,7 @@ const char* controlador::obtenerRestauranteControlador() {
 	char *restaurantes;
 	restaurantes = restaurantesSocket();
 	const char* res = enviarSocket(restaurantes);
-	cout << "Restaurantes controlador: " << res <<endl;
+	cout << res <<endl;
 
 	return "";
 
