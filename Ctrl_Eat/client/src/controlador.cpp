@@ -13,7 +13,7 @@ int controlador::registrarseControlador(Usuario &u) {
 	char *registrar;
 	registrar = registerSocket(u.getNombre(), u.getContrasena(), u.getEmail(),
 			u.getTelefono());
-	int res = enviarSocket(registrar);
+	int res = atoi(enviarSocket(registrar));
 
 	cout << "Respuesta desde el controlador: " << res << endl;
 
@@ -25,7 +25,7 @@ int controlador::registrarseControlador(Usuario &u) {
 int controlador::iniciarSesionControlador(Usuario &u) {
 	char *login;
 	login = loginSocket(u.getNombre(), u.getContrasena());
-	int res = enviarSocket(login);
+	int res = atoi(enviarSocket(login));
 
 	cout << "Respuesta desde el controladora: " << res << endl;
 	return (res * -1); // Si no es 0, existe
@@ -34,8 +34,8 @@ int controlador::iniciarSesionControlador(Usuario &u) {
 const char* controlador::obtenerRestauranteControlador() {
 	char *restaurantes;
 	restaurantes = restaurantesSocket();
-	int res = enviarSocket(restaurantes);
-	cout << "Restaurantes: " << res;
+	const char* res = enviarSocket(restaurantes);
+	cout << "Restaurantes controlador: " << res <<endl;
 
 	return "";
 

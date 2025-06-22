@@ -78,7 +78,7 @@ char* restaurantesSocket() {
     return message;
 }
 
-int enviarSocket(const char *message)
+const char *enviarSocket(const char *message)
 {
     WSADATA wsaData;
     int wserr;
@@ -87,7 +87,7 @@ int enviarSocket(const char *message)
 
     if (wserr != 0)
     {
-        return 0;
+        return "0";
     }
 
     SOCKET clientSocket;
@@ -98,7 +98,7 @@ int enviarSocket(const char *message)
     {
         std::cout << "Error con el socket" << std::endl;
         WSACleanup();
-        return 0;
+        return "0";
     }
 
     // Connect to the server
@@ -112,14 +112,14 @@ int enviarSocket(const char *message)
     {
         std::cout << "Conexión fallida" << WSAGetLastError() << std::endl;
         WSACleanup();
-        return 0;
+        return "0";
     }
 
     int sbyteCount = send(clientSocket, message, 200, 0);
     if (sbyteCount == SOCKET_ERROR)
     {
         std::cout << "Error al enviar: " << WSAGetLastError() << std::endl;
-        return -1;
+        return "-1";
     }
     else
     {
@@ -127,23 +127,25 @@ int enviarSocket(const char *message)
     }
 
     // Receiving data from the server
-    char receiveBuffer[8000] = {0};
-    int rbyteCount = recv(clientSocket, receiveBuffer, 8000, 0);
+    static char receiveBuffer[8000] = {0};
+    memset(receiveBuffer, 0, sizeof(receiveBuffer)); // Limpia buffer antes de usar
+    int rbyteCount = recv(clientSocket, receiveBuffer, sizeof(receiveBuffer), 0);
+
     if (rbyteCount < 0)
     {
         std::cout << "Error al recibir datos: " << WSAGetLastError() << std::endl;
-        return 0;
+        return "0";
     }
     else
     {
-//    	std::cout << "Código estado: " << message << std::endl;
+        //    	std::cout << "Código estado: " << message << std::endl;
         std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
-//    	if (strcp) { message == "4"; en message copias el receiveBuffer
+        //    	if (strcp) { message == "4"; en message copias el receiveBuffer
 
-//		} else {
-//
-//		}
-        return atoi(receiveBuffer);
+        //		} else {
+        //
+        //		}
+        return receiveBuffer;
     }
 }
 

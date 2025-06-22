@@ -23,6 +23,7 @@ void datosPedido();
 int pagarPedido(Pedido &pedido);
 int hacerPedido(Pedido &pedido);
 void elegirRestaurante(int &idRes);
+void elegirProductos();
 void editarPerfil();
 void historialDePedido();
 void registrarse();
@@ -46,15 +47,24 @@ int pagarPedido(Pedido &pedido) {
 int hacerPedido() {
 	int idRes = 0;
 	elegirRestaurante(idRes);
-	int getProductos();
+	elegirProductos();
+
 //	pagarPedido(pedido);
-	cout << "";
 }
 
 void elegirRestaurante(int &idRes) {
 //	imprimir restaurantes
 	const char* res = controlador::obtenerRestauranteControlador();
 //  Pedir id y asignarselo al parámetro por referencia
+	cout << "Introduce el id del restaurante: ";
+	cin>> idRes;
+}
+
+void elegirProductos() {
+	int* idProductos;
+	cout << "Selecciona un producto:" << endl;
+	cout << "Introduce el id del producto: ";
+	cin >> idProductos;
 }
 
 void editarPerfil() {
