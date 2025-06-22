@@ -45,6 +45,20 @@ int pagarPedido(Pedido &pedido)
 	return opcion;
 }
 
+void anadirProductos(int nuevoID, const char* nombre, int precio, Producto**& productos, int& numElementos) {
+    Producto** productosCopia = new Producto*[numElementos + 1];
+
+    for (int i = 0; i < numElementos; ++i) {
+        productosCopia[i] = productos[i];
+    }
+
+    productosCopia[numElementos] = new Producto(nuevoID, nombre, precio);
+    numElementos++;
+
+    delete[] productos;
+    productos = productosCopia;
+}
+
 int hacerPedido()
 {
 //	cout << "DEBUG: Iniciando hacerPedido()" << endl;
