@@ -10,7 +10,7 @@
 #include "cliente/cliente.h"
 #include <time.h>
 
-#include "pedidos/pedido.h"
+#include "pedidos/pedidos.h"
 #include "serverSocket.h"
 
 int imprimirMenu(int *opcion) {
