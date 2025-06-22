@@ -22,7 +22,7 @@ public:
 
 	int pedido();
 
-	void editarPerfil();
+	static int editarPerfilControlador(Usuario &u);
 	static int registrarseControlador(Usuario &u);
 	static int iniciarSesionControlador(Usuario &u);
 	static const char *obtenerRestaurantesControlador();

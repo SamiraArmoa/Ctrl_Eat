@@ -33,13 +33,13 @@ Usuario::Usuario(int id, const char *nombre, const char *email, int telefono, co
 	strcpy(this->contrasena,contrasena);
 }
 
-Usuario::Usuario(const char* nombre, const char* contrasena){
+Usuario::Usuario(const char* email, const char* contrasena){
 	this->id = 0;
-	this->email = "";
+	this->nombre = "";
 	this->telefono = 0;
 
-	this->nombre = new char[strlen(nombre)+1];
-	strcpy(this->nombre, nombre);
+	this->email = new char[strlen(email)+1];
+	strcpy(this->email, email);
 
 	this->contrasena = new char[strlen(contrasena)+1];
 	strcpy(this->contrasena,contrasena);

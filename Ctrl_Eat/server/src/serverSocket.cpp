@@ -49,6 +49,21 @@ int receive_pedidos(char *response)
     }
     return 0;
 }
+
+int receive_usuario_actualizado(char *response)
+{
+    std::strtok(response, " ");
+    char *idUsuario = std::strtok(nullptr, " ");
+    int id = atoi((const char *)idUsuario);
+    char *username = std::strtok(nullptr, " ");
+    char *password = std::strtok(nullptr, " ");
+    char *email = std::strtok(nullptr, " ");
+    char *telefono = std::strtok(nullptr, " ");
+    int tlf = atoi((const char *)telefono);
+
+    return updateClientes(id, username, email, tlf, password, CLIENT_DB_PATH);
+}
+
 int escuchar() {
     WSADATA wsaData;
     int wsaerr;
@@ -131,6 +146,9 @@ int escuchar() {
             case '4':
                 result = 3;
                 restaurantes = imprimirRestaurante(CLIENT_DB_PATH);
+                break;
+            case '5':
+                result = receive_usuario_actualizado(receiveBuffer);
                 break;
             default:
                 result = -1;

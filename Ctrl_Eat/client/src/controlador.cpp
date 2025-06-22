@@ -28,11 +28,20 @@ int controlador::registrarseControlador(Usuario &u)
 int controlador::iniciarSesionControlador(Usuario &u)
 {
 	char *login;
-	login = loginSocket(u.getNombre(), u.getContrasena());
+	login = loginSocket(u.getEmail(), u.getContrasena());
 	int res = atoi(enviarSocket(login));
 
 	cout << "Respuesta desde el controladora: " << res << endl;
 	return (res * -1); // Si no es 0, existe
+}
+
+int controlador::editarPerfilControlador(Usuario &u){
+	char* update;
+	update = updateUsuarioSocket(u.getId(),u.getNombre(), u.getContrasena(), u.getEmail(), u.getTelefono());
+	int res = atoi(enviarSocket(update));
+
+	cout<< "Respuesta desde el controlador" << res << endl;
+	return res; // Si res == 1, actualizado correctamente
 }
 
 const char *controlador::obtenerRestaurantesControlador()

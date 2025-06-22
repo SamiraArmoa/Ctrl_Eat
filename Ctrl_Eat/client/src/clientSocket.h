@@ -3,6 +3,7 @@
 
 char *loginSocket(const char *username, const char *password);
 char *registerSocket(const char *username, const char *password, const char *email, int tlf);
+char *updateUsuarioSocket(int id, const char *username, const char *password, const char *email, int tlf);
 char* menuSocket();
 char* restaurantesSocket();
 const char *enviarSocket(const char *message);
