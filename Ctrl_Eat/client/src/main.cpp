@@ -33,7 +33,8 @@ int pantallaInicio();
 int pedido();
 int pagarPedido();
 
-int pagarPedido(Pedido &pedido) {
+int pagarPedido(Pedido &pedido)
+{
 	int opcion;
 	cout << "El importe total es de : " << endl;
 	cout << "Elige una opcion:" << endl;
@@ -44,30 +45,60 @@ int pagarPedido(Pedido &pedido) {
 	return opcion;
 }
 
-int hacerPedido() {
+int hacerPedido()
+{
+//	cout << "DEBUG: Iniciando hacerPedido()" << endl;
 	int idRes = 0;
 	elegirRestaurante(idRes);
-	elegirProductos();
+	// elegirProductos();
 
-//	pagarPedido(pedido);
+	//	pagarPedido(pedido);
 }
 
-void elegirRestaurante(int &idRes) {
-//	imprimir restaurantes
-	const char* res = controlador::obtenerRestauranteControlador();
-//  Pedir id y asignarselo al parámetro por referencia
-	cout << "Introduce el id del restaurante: ";
-	cin>> idRes;
+void elegirRestaurante(int &idRes)
+{
+//	cout << "DEBUG: Iniciando elegirRestaurante()" << endl;
+	// Obtener lista de restaurantes como array dinámico
+	int numRestaurantes = 0;
+	Restaurante **listaRestaurantes = controlador::obtenerListaRestaurantesControlador(numRestaurantes);
+//	cout << "DEBUG: Lista obtenida, tamaño: " << numRestaurantes << endl;
+
+	if (listaRestaurantes == nullptr || numRestaurantes == 0)
+	{
+		cout << "No hay restaurantes disponibles." << endl;
+		return;
+	}
+
+	// Mostrar los restaurantes
+	cout << "\nRestaurantes disponibles:" << endl;
+	for (int i = 0; i < numRestaurantes; i++)
+	{
+		cout << listaRestaurantes[i]->getId() << ". " << listaRestaurantes[i]->getNombre()
+			 << " - " << listaRestaurantes[i]->getCiudad() << endl;
+	}
+
+	//  Pedir id y asignarselo al parámetro por referencia
+	cout << "\nIntroduce el id del restaurante: ";
+	cin >> idRes;
+
+	// Liberar memoria del array
+	for (int i = 0; i < numRestaurantes; i++)
+	{
+		delete listaRestaurantes[i];
+	}
+	delete[] listaRestaurantes;
 }
 
-void elegirProductos() {
-	int* idProductos;
+void elegirProductos()
+{
+	int *idProductos;
 	cout << "Selecciona un producto:" << endl;
 	cout << "Introduce el id del producto: ";
-	cin >> idProductos;
+	// cin >> idProductos;
 }
 
-void editarPerfil() {
+void editarPerfil()
+{
 	char nombre[30];
 	char email[30];
 	char contrasena[30];
@@ -85,7 +116,8 @@ void editarPerfil() {
 	cout << "Pulsa enter para continuar";
 }
 
-void iniciarSesion() {
+void iniciarSesion()
+{
 	char usuario[30];
 	char contrasena[30];
 
@@ -99,16 +131,20 @@ void iniciarSesion() {
 	int id = controlador::iniciarSesionControlador(u);
 	cout << "Id: " << id << endl;
 
-	 if (id != 0) {
-		 id_usuario_actual = id;
-		 pantallaInicio();
-	 } else {
-		 cout << "Usuario/Password no es valido" << endl;
-		 iniciarSesion();
-	 }
+	if (id != 0)
+	{
+		id_usuario_actual = id;
+		pantallaInicio();
+	}
+	else
+	{
+		cout << "Usuario/Password no es valido" << endl;
+		iniciarSesion();
+	}
 }
 
-void registrarse() {
+void registrarse()
+{
 	char nombre[30];
 	char email[30];
 	char contrasena[30];
@@ -125,7 +161,8 @@ void registrarse() {
 	cout << "Confirmar contrasena: ";
 	cin >> confirmacionContrasena;
 
-	while (strcmp(contrasena, confirmacionContrasena) != 0) {
+	while (strcmp(contrasena, confirmacionContrasena) != 0)
+	{
 		cout << "La contrasena no es la misma, vuelve a intentarlo" << endl;
 		cout << "Confirmar contrasena: ";
 		cin >> confirmacionContrasena;
@@ -138,16 +175,20 @@ void registrarse() {
 
 	int id = controlador::registrarseControlador(u);
 	cout << "Id Main: " << id << endl;
-	if (id == 0) {
+	if (id == 0)
+	{
 		cout << "Error al crear el usuario" << endl;
 		registrarse();
-	} else {
+	}
+	else
+	{
 		id_usuario_actual = id;
 		pantallaInicio();
 	}
 }
 
-int bienvenida() {
+int bienvenida()
+{
 	int opcion;
 	cout << "BIENVENIDO" << endl;
 	cout << "Elije una opcion: " << endl;
@@ -156,7 +197,8 @@ int bienvenida() {
 	cout << "3. Salir" << endl;
 	cin >> opcion;
 
-	switch (opcion) {
+	switch (opcion)
+	{
 	case 1:
 		iniciarSesion();
 		break;
@@ -171,12 +213,14 @@ int bienvenida() {
 	return 0;
 }
 
-void cerrarSesion() {
+void cerrarSesion()
+{
 	id_usuario_actual = 0;
 	bienvenida();
 }
 
-int pantallaInicio() {
+int pantallaInicio()
+{
 	int opcion;
 	cout << "Elige una opcion: " << endl;
 	cout << "1. Hacer pedido" << endl;
@@ -185,7 +229,8 @@ int pantallaInicio() {
 	cout << "4. Cerrar sesion" << endl;
 	cin >> opcion;
 
-	switch (opcion) {
+	switch (opcion)
+	{
 	case 1:
 		hacerPedido();
 		break;
@@ -205,7 +250,8 @@ int pantallaInicio() {
 	return 0;
 }
 
-int pedido() {
+int pedido()
+{
 	int opcion;
 	cout << "Pedido" << endl;
 	cout << "1. Ensalada cesar" << endl;
@@ -220,7 +266,8 @@ int pedido() {
 	return 0;
 }
 
-int pagarPedido() {
+int pagarPedido()
+{
 	int opcion;
 	cout << "El importe total es de : " << endl;
 	cout << "Elige una opcion:" << endl;
@@ -232,15 +279,18 @@ int pagarPedido() {
 	return 0;
 }
 
-void datosPedido() {
-	//TODO:
+void datosPedido()
+{
+	// TODO:
 }
 
-void historialDePedido() {
-	//TODO:
+void historialDePedido()
+{
+	// TODO:
 }
 
-int main() {
+int main()
+{
 	id_usuario_actual = 0;
 	bienvenida();
 }

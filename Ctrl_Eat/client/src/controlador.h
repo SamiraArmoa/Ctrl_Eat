@@ -12,7 +12,8 @@
 #include "producto/Producto.h"
 #include "restaurantes/Restaurante.h"
 
-class controlador {
+class controlador
+{
 public:
 	void datosPedido();
 	int pagarPedido(Pedido &pedido);
@@ -24,9 +25,7 @@ public:
 	void editarPerfil();
 	static int registrarseControlador(Usuario &u);
 	static int iniciarSesionControlador(Usuario &u);
-	static const char* obtenerRestauranteControlador();
+	static const char *obtenerRestaurantesControlador();
+	static Restaurante **obtenerListaRestaurantesControlador(int &numRestaurantes);
+	static Restaurante obtenerRestaurantePorId(int id);
 };
-
-
-
-
