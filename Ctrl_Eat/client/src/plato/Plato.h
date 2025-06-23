@@ -21,6 +21,7 @@ public:
 
     const char* getAlergenos() const;
     void setAlergenos(const char* alergenos);
+    void mostrar() const;
 
 };
 

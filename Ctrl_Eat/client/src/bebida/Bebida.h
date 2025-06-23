@@ -21,6 +21,7 @@ public:
 
     const char* getTamanio() const;
     void setTamanio(const char* tamanio);
+    void mostrar() const;
 };
 
 #endif /* REMOTE_SRC_BEBIDA_BEBIDA_H_ */

@@ -103,7 +103,7 @@ char* historialPedidoSocket(int id_c) {
 char* obtenerProductosPedidoSocket(int id_ped){
 	char pedido[10];
 	sprintf(pedido, "%d", id_ped);
-	printf("%s\n", pedido);
+	// printf("%s\n", pedido);
 	char *message = new char[512];
 	strcpy(message, "7");
 	strcat(message, " ");
@@ -163,7 +163,7 @@ const char* enviarSocket(const char *message) {
 		std::cout << "Error al enviar: " << WSAGetLastError() << std::endl;
 		return "-1";
 	} else {
-		std::cout << "Mensaje enviado: " << message << std::endl;
+		// std::cout << "Mensaje enviado: " << message << std::endl;
 	}
 
 	// Receiving data from the server
@@ -180,7 +180,7 @@ const char* enviarSocket(const char *message) {
 
 	receiveBuffer[rbyteCount] = '\0';
 
-        std::cout << "Datos recibidos client socket: " << receiveBuffer << std::endl;
+        // std::cout << "Datos recibidos client socket: " << receiveBuffer << std::endl;
 
 	return receiveBuffer;
 }

@@ -54,7 +54,5 @@ void Producto::setPrecio(int precio){
 }
 
 void Producto::mostrar() const{
-	cout<< "ID: " << this-> id << endl;
-	cout<< "Nombre: " << this->nombre<<endl;
+	cout<< "ID: " << this-> id << ", Nombre: " << this->nombre << ", Precio: " << this->precio << "$";
 }
-

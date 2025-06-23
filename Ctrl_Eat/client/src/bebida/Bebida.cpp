@@ -32,4 +32,7 @@ void Bebida::setTamanio(const char* tamanio){
 	strcpy(this->tamanio, tamanio);
 }
 
-
+void Bebida::mostrar() const{
+	Producto::mostrar();
+	cout<< ", Tamanio: " << this->tamanio <<endl;
+}

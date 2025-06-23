@@ -18,55 +18,80 @@ using namespace std;
 
 static Usuario usuario_actual;
 int id_usuario_actual = 0;
+Producto** productos = nullptr;
+int num_productos = 0;
 
-void datosPedido();
-int pagarPedido(Pedido &pedido);
-int hacerPedido(Pedido &pedido);
 void elegirRestaurante(int &idRes);
-void elegirProductos();
 void editarPerfil();
 void historialDePedido();
 void registrarse();
 int bienvenida();
 void cerrarSesion();
 int pantallaInicio();
-int pedido();
-int pagarPedido();
+int pagarPedido(Producto** productosRecibidos, int num_productos);
+void cargarProductos ();
 
-int pagarPedido(Pedido &pedido) {
-	int opcion;
-	cout << "El importe total es de : " << endl;
-	cout << "Elige una opcion:" << endl;
-	cout << "1. Pagar" << endl;
-	cout << "2. Cancelar" << endl;
-	cin >> opcion;
-
-	return opcion;
-}
-
-void anadirProductos(int nuevoID, const char *nombre, int precio,
-		Producto **&productos, int &numElementos) {
-	Producto **productosCopia = new Producto*[numElementos + 1];
-
+void anadirProductos(Producto **&productos, int &numElementos, Producto &p) {
+	Producto **nuevosProductos = new Producto*[numElementos + 1];
 	for (int i = 0; i < numElementos; ++i) {
-		productosCopia[i] = productos[i];
+		nuevosProductos[i] = productos[i];
 	}
-
-	productosCopia[numElementos] = new Producto(nuevoID, nombre, precio);
+	nuevosProductos[numElementos] = new Producto(p); // Copia del producto
 	numElementos++;
-
-	delete[] productos;
-	productos = productosCopia;
+	delete[] productos; // Liberar memoria del array antiguo
+	productos = nuevosProductos; // Asignar el nuevo array
+	cout << "Producto añadido: " << p.getNombre() << endl;
 }
 
 int hacerPedido() {
 //	cout << "DEBUG: Iniciando hacerPedido()" << endl;
 	int idRes = 0;
 	elegirRestaurante(idRes);
-	// elegirProductos();
+	cargarProductos();
+	Producto** listaProductos = nullptr;
+	int numProductos = 0;
 
-	//	pagarPedido(pedido);
+	cout << "Imprimiendo productos" << endl;
+	int idProducto = 0;
+	while (idProducto != -1) {
+		for (int i = 0; i < num_productos; ++i) {
+		productos[i]->mostrar();
+	}
+		cout << "Selecciona un producto (0 para salir): ";
+		cin >> idProducto;
+
+		if (idProducto == 0) {
+			break;
+		}
+		Producto p = controlador::obtenerProductoPorId(idProducto);
+		// cout << "DEBUG: Producto obtenido con ID " << p.getId() << ", " << p.getNombre() << endl;
+		if (p.getId() != 0) { // Si el producto existe
+			anadirProductos(listaProductos, numProductos, p);
+		} else {
+			cout << "Producto no encontrado." << endl;
+		}
+	}
+	// Productos seleccionados
+	cout << "\nProductos seleccionados:" << endl;
+	for (int i = 0; i < numProductos; ++i) {
+		listaProductos[i]->mostrar();
+		cout << endl;
+	}
+
+	int respuesta = pagarPedido(listaProductos, numProductos);
+	if (respuesta == 1) {
+		cout << "Pedido pagado correctamente." << endl;
+		Pedido pedido = Pedido(0, "Domicilio de prueba", id_usuario_actual, idRes);
+		controlador::hacerPedidoControlador(pedido, listaProductos, numProductos);
+		// Aquí se podría guardar el pedido en la base de datos
+	} else if (respuesta == 2) {
+		cout << "Pedido cancelado." << endl;
+	} else {
+		cout << "Opción no válida." << endl;
+	}
+	pantallaInicio(); // Volver a la pantalla de inicio
 }
+
 
 void elegirRestaurante(int &idRes) {
 //	cout << "DEBUG: Iniciando elegirRestaurante()" << endl;
@@ -100,12 +125,8 @@ void elegirRestaurante(int &idRes) {
 	delete[] listaRestaurantes;
 }
 
-void elegirProductos() {
-	int *idProductos;
-	cout << "Selecciona un producto:" << endl;
-	cout << "Introduce el id del producto: ";
-	// cin >> idProductos;
-
+void cargarProductos () {
+	productos = controlador::obtenerListaProductosControlador(num_productos);
 }
 
 void editarPerfil() {
@@ -220,6 +241,7 @@ int bienvenida() {
 		registrarse();
 		break;
 	default:
+		cout << "Saliendo del programa..." << endl;
 		id_usuario_actual = 0;
 		break;
 	}
@@ -262,73 +284,76 @@ int pantallaInicio() {
 	return 0;
 }
 
-int pedido() {
-	int opcion;
-	cout << "Pedido" << endl;
-	cout << "1. Ensalada cesar" << endl;
-	cout << "2. Pollo a la brasa" << endl;
-	cout << "3. Tacos al paston" << endl;
-	cout << "4. Jugo natural" << endl;
-	cout << "5. Sopa de cebolla" << endl;
-	cout << "6. Continuar" << endl;
-	cin >> opcion;
-	cout << "Respuesta: " << opcion;
+int pagarPedido(Producto** productosRecibidos, int num_productos) {
+//	cout << "DEBUG: Iniciando pagarPedido()" << endl;
+	// Calcular el importe total
+	int total = 0;
+	for (int i = 0; i < num_productos; ++i) {
+		total += productosRecibidos[i]->getPrecio();
+	}
 
-	return 0;
-}
-
-int pagarPedido() {
 	int opcion;
-	cout << "El importe total es de : " << endl;
+	cout << "El importe total es de : " << total << "$" << endl;
 	cout << "Elige una opcion:" << endl;
 	cout << "1. Pagar" << endl;
 	cout << "2. Cancelar" << endl;
 	cin >> opcion;
-	cout << "Respuesta" << opcion;
+	// cout << "Respuesta" << opcion << endl;
+
+	if (opcion == 1) {
+		cout << "Pedido pagado correctamente." << endl;
+		return 1; // Pedido pagado
+	} else if (opcion == 2) {
+		cout << "Pedido cancelado." << endl;
+	}	
 
 	return 0;
 }
 
-void datosPedido() {
-	// TODO:
-}
-
 void historialDePedido() {
-	// TODO:
-//	int numPedidos = 0;
-//	Pedido **listaPedidos = controlador::obtenerHistorialPedidosControlador(
-//			id_usuario_actual, numPedidos);
-//	cout << "Imprimir pedidos main" << endl;
-//
-//	for (int i = 0; i < numPedidos; ++i) {
-//		listaPedidos[i]->mostrar();
-//	}
-
-//	int numIds = 0;
-//	int **listaIdsProducto = controlador::obtenerIdsProductosPedido(4, numIds);
-//
-//	cout << "Ids productos: " <<endl;
-//	for (int i = 0; i < numIds; ++i) {
-//		cout << *listaIdsProducto[i];
-//	}
-
-	int numProductos = 0;
-	Producto **listaProducto = controlador::obtenerListaProductosControlador(numProductos);
-
-	for (int i = 0; i < numProductos; ++i) {
-		listaProducto[i] -> mostrar();
+	Pedido **listaPedidos = nullptr;
+	int numPedidos = 0;
+	listaPedidos = controlador::obtenerHistorialPedidosControlador(id_usuario_actual, numPedidos);
+	if (listaPedidos == nullptr || numPedidos == 0) {
+		cout << "No hay pedidos en el historial." << endl;
+		return;
 	}
+	cout << "Historial de pedidos:" << endl;
+	for (int i = 0; i < numPedidos; i++) {
+		cout << "Pedido " << listaPedidos[i]->getId() << ": Domicilio: " << listaPedidos[i]->getDomicilio()
+				<< ", Restaurante: " << controlador::obtenerRestaurantePorId(listaPedidos[i]->getIdRestaurante()).getNombre() << endl;
 
+		int numIdsProducto = 0;
+		int **idsProductos = controlador::obtenerIdsProductosPedido(listaPedidos[i]->getId(), numIdsProducto);
 
-//	cout << "Ids productos: " <<endl;
-//	for (int i = 0; i < numIds; ++i) {
-//		cout << *listaIdsProducto[i];
-//	}
+		if (idsProductos == nullptr || numIdsProducto == 0) {
+			cout << "No hay productos en este pedido." << endl;
+			continue;
+		}
+
+		cout << "\t- Productos en el pedido:" << endl;
+		for (int j = 0; j < numIdsProducto; j++) {
+			Producto p = controlador::obtenerProductoPorId(*idsProductos[j]);
+			if (p.getId() != 0) { // Si el producto existe
+				cout << "\t\t- "  << p.getNombre() << ", Precio: " << p.getPrecio() << "$" << endl;
+			} else {
+				cout << "Producto con ID " << *idsProductos[j] << " no encontrado." << endl;
+			}
+		}
+		// Liberar memoria de los ids de productos
+		for (int j = 0; j < numIdsProducto; j++) {
+			delete idsProductos[j];
+		}
+		delete[] idsProductos;
+		cout << endl;
+	}
+	// Liberar memoria del array
+	for (int i = 0; i < numPedidos; i++) {
+		delete listaPedidos[i];
+	}
+	delete[] listaPedidos;
 }
 
 int main() {
-//	id_usuario_actual = 0;
-//	bienvenida();
-	historialDePedido();
-
+	bienvenida();
 }

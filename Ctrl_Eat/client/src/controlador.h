@@ -16,11 +16,8 @@ class controlador
 {
 public:
 	void datosPedido();
-	int pagarPedido(Pedido &pedido);
-	int hacerPedido(Pedido &pedido);
 
-	int pedido();
-
+	static int hacerPedidoControlador(Pedido &pedido, Producto **productos, int numProductos);
 	static int editarPerfilControlador(Usuario &u);
 	static int registrarseControlador(Usuario &u);
 	static int iniciarSesionControlador(Usuario &u);

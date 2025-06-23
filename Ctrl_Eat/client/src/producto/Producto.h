@@ -26,7 +26,7 @@ public:
     void setId(int id);
     void setNombre(const char* nombre);
     void setPrecio(int precio);
-    void mostrar() const;
+    virtual void mostrar() const;
 };
 
 #endif /* CTRL_EAT_REMOTE_SRC_PRODUCTO_PRODUCTO_H_ */

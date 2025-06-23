@@ -21,7 +21,7 @@ int controlador::registrarseControlador(Usuario &u) {
 			u.getTelefono());
 	int res = atoi(enviarSocket(registrar));
 
-	cout << "Respuesta desde el controlador: " << res << endl;
+	// cout << "Respuesta desde el controlador: " << res << endl;
 
 	//	Devuelvo el id
 	int id = iniciarSesionControlador(u);
@@ -33,7 +33,7 @@ int controlador::iniciarSesionControlador(Usuario &u) {
 	login = loginSocket(u.getEmail(), u.getContrasena());
 	int res = atoi(enviarSocket(login));
 
-	cout << "Respuesta desde el controladora: " << res << endl;
+	// cout << "Respuesta desde el controladora: " << res << endl;
 	return (res * -1); // Si no es 0, existe
 }
 
@@ -43,7 +43,7 @@ int controlador::editarPerfilControlador(Usuario &u) {
 			u.getEmail(), u.getTelefono());
 	int res = atoi(enviarSocket(update));
 
-	cout << "Respuesta desde el controlador" << res << endl;
+	// cout << "Respuesta desde el controlador" << res << endl;
 	return res; // Si res == 1, actualizado correctamente
 }
 
@@ -298,14 +298,14 @@ Producto** controlador::obtenerListaProductosControlador(int &numProductos) {
 
 Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 		int &numPedidos) {
-	cout << "DEBUG: Iniciando obtenerHistorialPedidosControlador()" << endl;
+	// cout << "DEBUG: Iniciando obtenerHistorialPedidosControlador()" << endl;
 	numPedidos = 0;
 
 	char *pedidos = historialPedidoSocket(idUsuario); // "6"
 	//	std::cout << "DEBUG: Mensaje a enviar: " << restaurantes << std::endl;
 	const char *res = enviarSocket(pedidos);
 
-	cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]"<< endl;
+	// cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]"<< endl;
 
 	if (res == nullptr || strlen(res) == 0) {
 		cerr << "No se recibieron datos del historial de pedidos." << endl;
@@ -324,7 +324,7 @@ Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 		}
 	}
 
-	cout << "DEBUG: Total de pedidos encontrados: " << contador << endl;
+	// cout << "DEBUG: Total de pedidos encontrados: " << contador << endl;
 
 	if (contador == 0) {
 		return nullptr;
@@ -336,7 +336,7 @@ Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 
 	std::istringstream stream2(respuesta);
 	while (std::getline(stream2, linea) && indice < contador) {
-		std::cout << "DEBUG: Procesando línea: [" << linea << "]" << std::endl;
+		// std::cout << "DEBUG: Procesando línea: [" << linea << "]" << std::endl;
 
 		if (linea.empty())
 			continue;
@@ -344,13 +344,13 @@ Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 		size_t pos1 = linea.find(';');
 		size_t pos2 = linea.rfind(';');
 
-		std::cout << "DEBUG: Posiciones - Primer ';': " << pos1
-				<< ", Segundo ';': " << pos2 << std::endl;
+		// std::cout << "DEBUG: Posiciones - Primer ';': " << pos1
+				// << ", Segundo ';': " << pos2 << std::endl;
 
 		if (pos1 == std::string::npos || pos2 == std::string::npos
 				|| pos1 == pos2) {
-			std::cout << "DEBUG: Línea con formato inválido, se omite."
-					<< std::endl;
+			// std::cout << "DEBUG: Línea con formato inválido, se omite."
+					// << std::endl;
 			continue;
 		}
 
@@ -362,22 +362,22 @@ Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 		int idPedido = std::stoi(idStr);
 		int idRestaurante = std::stoi(idResStr);
 
-		std::cout << "DEBUG: Parseando - ID: " << idPedido << ", Domicilio: ["
-				<< domicilioStr << "], ID Restaurante: " << idRestaurante
-				<< std::endl;
+		// std::cout << "DEBUG: Parseando - ID: " << idPedido << ", Domicilio: ["
+		// 		<< domicilioStr << "], ID Restaurante: " << idRestaurante
+		// 		<< std::endl;
 
 		// Crear objeto Pedido
-		std::cout << "DEBUG: Creando objeto Pedido..." << std::endl;
+		// std::cout << "DEBUG: Creando objeto Pedido..." << std::endl;
 		listaPedidos[indice] = new Pedido(idPedido, domicilioStr.c_str(),
 				idUsuario, idRestaurante);
-		std::cout << "DEBUG: Objeto creado y añadido en índice: " << indice
-				<< std::endl;
+		// std::cout << "DEBUG: Objeto creado y añadido en índice: " << indice
+		// 		<< std::endl;
 
 		indice++;
 	}
 
-	std::cout << "DEBUG: Fin del bucle de parsing. Total de pedidos creados: "
-			<< indice << std::endl;
+	// std::cout << "DEBUG: Fin del bucle de parsing. Total de pedidos creados: "
+	// 		<< indice << std::endl;
 
 	// Imprimir lista de pedidos (opcional)
 	/*
@@ -391,17 +391,53 @@ Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 	return listaPedidos;
 }
 
+Producto controlador::obtenerProductoPorId(int id){ // TODO: hola
+	// std::cout << "DEBUG: Iniciando obtenerProductoPorId()" << std::endl;
+
+	int numProductos = 0;
+	Producto **listaProductos = controlador::obtenerListaProductosControlador(numProductos);
+
+	if (listaProductos == nullptr) {
+		std::cerr << "No se recibieron productos." << std::endl;
+		return Producto(); // devolver un producto vacío
+	}
+
+	for (int i = 0; i < numProductos; i++) {
+		if (listaProductos[i]->getId() == id) {
+			Producto resultado = *listaProductos[i]; // copia del producto encontrado
+
+			// Liberar memoria del array
+			for (int j = 0; j < numProductos; j++) {
+				delete listaProductos[j];
+			}
+			delete[] listaProductos;
+
+			return resultado;
+		}
+	}
+
+	// Liberar memoria del array
+	for (int i = 0; i < numProductos; i++) {
+		delete listaProductos[i];
+	}
+	delete[] listaProductos;
+
+	std::cerr << "Producto con ID " << id << " no encontrado." << std::endl;
+	return Producto(); // devolver un producto vacío si no se encuentra
+
+}
+
 int** controlador::obtenerIdsProductosPedido(int idPedido,
 		int &numIdsProducto) {
-	std::cout << "DEBUG: Iniciando obtenerIdsProductosPedido()" << std::endl;
+	// std::cout << "DEBUG: Iniciando obtenerIdsProductosPedido()" << std::endl;
 	numIdsProducto = 0;
 
 	char *idsProducto = obtenerProductosPedidoSocket(idPedido); // "7"
 	//	std::cout << "DEBUG: Mensaje a enviar: " << restaurantes << std::endl;
 	const char *res = enviarSocket(idsProducto);
 
-	std::cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]"
-			<< std::endl;
+	// std::cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]"
+	// 		<< std::endl;
 
 	if (res == nullptr || strlen(res) == 0) {
 		std::cerr << "No se recibieron datos de productos para el pedido."
@@ -421,8 +457,8 @@ int** controlador::obtenerIdsProductosPedido(int idPedido,
 		}
 	}
 
-	std::cout << "DEBUG: Total de productos encontrados: " << contador
-			<< std::endl;
+	// std::cout << "DEBUG: Total de productos encontrados: " << contador
+	// 		<< std::endl;
 
 	if (contador == 0) {
 		return nullptr;
@@ -435,23 +471,52 @@ int** controlador::obtenerIdsProductosPedido(int idPedido,
 
 	std::istringstream stream2(respuesta);
 	while (std::getline(stream2, linea) && indice < contador) {
-		std::cout << "DEBUG: Procesando línea: [" << linea << "]" << std::endl;
+		// std::cout << "DEBUG: Procesando línea: [" << linea << "]" << std::endl;
 
 		if (linea.empty())
 			continue;
 
 		int id = std::stoi(linea);
-		std::cout << "DEBUG: Parseando ID Producto: " << id << std::endl;
+		// std::cout << "DEBUG: Parseando ID Producto: " << id << std::endl;
 
 		listaIds[indice] = new int(id);
-		std::cout << "DEBUG: ID añadido en índice " << indice << std::endl;
+		// std::cout << "DEBUG: ID añadido en índice " << indice << std::endl;
 
 		indice++;
 	}
 
-	std::cout << "DEBUG: Fin del bucle de parsing. Total de IDs creados: "
-			<< indice << std::endl;
+	// std::cout << "DEBUG: Fin del bucle de parsing. Total de IDs creados: "
+	// 		<< indice << std::endl;
 
 	return listaIds;
 }
 
+int controlador::hacerPedidoControlador(Pedido &pedido, Producto **productos, int numProductos) {
+	// std::cout << "DEBUG: Iniciando hacerPedidoControlador()" << std::endl;
+
+	// Convertir los productos a un array de IDs
+	int *idsProductos = new int[numProductos];
+	for (int i = 0; i < numProductos; i++) {
+		idsProductos[i] = productos[i]->getId();
+		// cout << "DEBUG: Producto ID: " << idsProductos[i] << std::endl;
+	}
+    idsProductos[numProductos] = 0; // Añadir 0 al final para marcar el fin
+
+	// Enviar el pedido al servidor
+	char *pedidoSocketStr = pedidoSocket(pedido.getIdRestaurante(), pedido.getIdCliente(), idsProductos);
+	// cout << "DEBUG: Mensaje a enviar: " << pedidoSocketStr << std::endl;
+	// cout << "DEBUG: Antes de enviarSocket" << endl;
+    const char *respuesta = enviarSocket(pedidoSocketStr);
+    // cout << "DEBUG: Después de enviarSocket" << endl;
+
+	if (respuesta == nullptr || strlen(respuesta) == 0) {
+		std::cerr << "Error al enviar el pedido." << std::endl;
+		return -1; // Error al hacer el pedido
+	}
+
+	int codigoRespuesta = atoi(respuesta);
+	// std::cout << "DEBUG: Respuesta del servidor: " << codigoRespuesta << std::endl;
+
+	return codigoRespuesta; // Retornar el código de respuesta del servidor
+
+}

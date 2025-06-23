@@ -35,3 +35,7 @@ void Plato::setAlergenos(const char* alergenos){
 }
 
 
+void Plato::mostrar() const{
+	Producto::mostrar();
+	cout<< ", Alergenos: " << this->alergenos << endl;
+}

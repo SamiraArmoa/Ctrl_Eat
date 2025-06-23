@@ -139,7 +139,7 @@ int escuchar() {
 			continue;
 		}
 
-		std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
+		// std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
 
 		int result;
 		const char *productos;
