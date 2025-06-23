@@ -1,15 +1,13 @@
-#include <stdio.h>
-#include <time.h>
-
-void log_error(const char *mensaje) {
-    FILE *log = fopen("error.log", "a");
+void log_bd(const char *operacion, const char *estado, const char *detalle) {
+    FILE *log = fopen("bd.log", "a");
     if (log != NULL) {
         time_t t = time(NULL);
         struct tm *tm_info = localtime(&t);
         char buffer[26];
         strftime(buffer, 26, "%Y-%m-%d %H:%M:%S", tm_info);
 
-        fprintf(log, "[%s] ERROR: %s\n", buffer, mensaje);
+        fprintf(log, "[%s] %s - %s - %s\n", buffer, operacion, estado, detalle);
         fclose(log);
     }
 }
+
