@@ -6,7 +6,9 @@
 */
 
 #include "Pedido.h"
-#include "string.h"
+#include <iostream>
+#include <string.h>
+using namespace std;
 
 Pedido::Pedido() {
 	this->id = 0;
@@ -62,3 +64,11 @@ void Pedido::setIdCliente(int idCliente) {
 void Pedido::setIdRestaurante(int idRestaurante) {
 	this->idRestaurante = idRestaurante;
 }
+
+void Pedido::mostrar() const{
+	cout<< "ID: " << this-> id << endl;
+	cout<< "Id cliente: " << this->idCliente << endl;
+	cout<< "Domicilio: " << this->domicilio << endl;
+	cout<< "Id Restaurante: " << this->idRestaurante << endl;
+}
+

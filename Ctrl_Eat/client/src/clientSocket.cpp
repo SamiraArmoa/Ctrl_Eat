@@ -14,7 +14,8 @@ char* loginSocket(const char *username, const char *password) {
 	return message;
 }
 
-char* registerSocket(const char *username, const char *password, const char *email, int tlf) {
+char* registerSocket(const char *username, const char *password,
+		const char *email, int tlf) {
 	char telefono[10];
 	sprintf(telefono, "%d", tlf);
 	char *message = new char[512];
@@ -33,7 +34,8 @@ char* registerSocket(const char *username, const char *password, const char *ema
 	return message;
 }
 
-char* updateUsuarioSocket(int id, const char *username, const char *password, const char *email, int tlf) {
+char* updateUsuarioSocket(int id, const char *username, const char *password,
+		const char *email, int tlf) {
 	char telefono[10];
 	sprintf(telefono, "%d", tlf);
 	char idUsuario[3];
@@ -82,6 +84,30 @@ char* pedidoSocket(int id_r, int id_c, int *id_productos) {
 	strcat(message, cliente);
 	strcat(message, " ");
 	strcat(message, productos);
+	strcat(message, "\0");
+	return message;
+}
+
+char* historialPedidoSocket(int id_c) {
+	char cliente[10];
+	sprintf(cliente, "%d", id_c);
+	printf("%s\n", cliente);
+	char *message = new char[512];
+	strcpy(message, "6");
+	strcat(message, " ");
+	strcat(message, cliente);
+	strcat(message, "\0");
+	return message;
+}
+
+char* obtenerProductosPedidoSocket(int id_ped){
+	char pedido[10];
+	sprintf(pedido, "%d", id_ped);
+	printf("%s\n", pedido);
+	char *message = new char[512];
+	strcpy(message, "7");
+	strcat(message, " ");
+	strcat(message, pedido);
 	strcat(message, "\0");
 	return message;
 }
@@ -154,7 +180,7 @@ const char* enviarSocket(const char *message) {
 
 	receiveBuffer[rbyteCount] = '\0';
 
-//        std::cout << "Datos recibidos: " << receiveBuffer << std::endl;
+        std::cout << "Datos recibidos client socket: " << receiveBuffer << std::endl;
 
 	return receiveBuffer;
 }

@@ -113,7 +113,7 @@ void editarPerfil() {
 	char contrasena[30];
 	unsigned int telefono;
 
-	cout << "Editar perfil"<<endl;
+	cout << "Editar perfil" << endl;
 	cout << "Nombre: ";
 	cin >> nombre;
 	cout << "Email: ";
@@ -131,9 +131,9 @@ void editarPerfil() {
 		cout << "Error al actualizar el usuario" << endl;
 		editarPerfil();
 	} else {
-		 cout<< "El usuario se ha actualizado correctamente" << endl;
-		 usuario_actual = u;
-		 pantallaInicio();
+		cout << "El usuario se ha actualizado correctamente" << endl;
+		usuario_actual = u;
+		pantallaInicio();
 	}
 
 }
@@ -294,9 +294,27 @@ void datosPedido() {
 
 void historialDePedido() {
 	// TODO:
+//	int numPedidos = 0;
+//	Pedido **listaPedidos = controlador::obtenerHistorialPedidosControlador(
+//			id_usuario_actual, numPedidos);
+//	cout << "Imprimir pedidos main" << endl;
+//
+//	for (int i = 0; i < numPedidos; ++i) {
+//		listaPedidos[i]->mostrar();
+//	}
+
+	int numIds = 0;
+	int **listaIdsProducto = controlador::obtenerIdsProductosPedido(4, numIds);
+
+	cout << "Ids productos: " <<endl;
+	for (int i = 0; i < numIds; ++i) {
+		cout << *listaIdsProducto[i];
+	}
 }
 
 int main() {
-	id_usuario_actual = 0;
-	bienvenida();
+//	id_usuario_actual = 0;
+//	bienvenida();
+	historialDePedido();
+
 }

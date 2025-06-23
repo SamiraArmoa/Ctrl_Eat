@@ -5,16 +5,14 @@
 #include "db.h"
 #include "../../config.h"
 
-int obtenerUltimoIdEmpleados(int *id, const char *path)
-{
+int obtenerUltimoIdEmpleados(int *id, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -24,8 +22,7 @@ int obtenerUltimoIdEmpleados(int *id, const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT MAX(ID_EM) FROM Empleado";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -33,13 +30,10 @@ int obtenerUltimoIdEmpleados(int *id, const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
 		*id = sqlite3_column_int(stmt, 0);
-	}
-	else
-	{
+	} else {
 		printf("El comando no existe\n");
 	}
 
@@ -51,8 +45,7 @@ int obtenerUltimoIdEmpleados(int *id, const char *path)
 }
 
 int insertarEmpleado(char *nombre, char *cargo, char *cuentaBancaria,
-					 int id_res, const char *path)
-{
+		int id_res, const char *path) {
 	int id;
 	obtenerUltimoIdEmpleados(&id, path);
 	id++;
@@ -61,47 +54,41 @@ int insertarEmpleado(char *nombre, char *cargo, char *cuentaBancaria,
 	sqlite3_stmt *stmt;
 
 	int db_found = sqlite3_open(path, &db);
-	if (db_found != SQLITE_OK)
-	{
+	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
 	}
 
 	const char *insert_sql =
-		"INSERT INTO Empleado(ID_EM, NOMBRE,CARGO,CUENTA_BAN,ID_RES) VALUES (?, ?, ?, ?, ?)";
+			"INSERT INTO Empleado(ID_EM, NOMBRE,CARGO,CUENTA_BAN,ID_RES) VALUES (?, ?, ?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
 	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
 	sqlite3_bind_text(stmt, 3, cargo, strlen(cargo), SQLITE_STATIC);
 	sqlite3_bind_text(stmt, 4, cuentaBancaria, strlen(cuentaBancaria),
-					  SQLITE_STATIC);
+	SQLITE_STATIC);
 	sqlite3_bind_int(stmt, 5, id_res);
 
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Insert successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int deleteEmpleado(int id_em, const char *path)
-{
+int deleteEmpleado(int id_em, const char *path) {
 	int rc;
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	rc = sqlite3_open(path, &db);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
@@ -111,8 +98,7 @@ int deleteEmpleado(int id_em, const char *path)
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	// Vincular el par�metro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt, 1, id_em); // 1 es el �ndice del primer `?`
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el parametro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
@@ -122,30 +108,25 @@ int deleteEmpleado(int id_em, const char *path)
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Delete error: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
-	}
-	else
-	{
+	} else {
 		printf("Delete successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int imprimirEmpleados(const char *path)
-{
+int imprimirEmpleados(const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -155,8 +136,7 @@ int imprimirEmpleados(const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT * FROM Empleado";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -164,23 +144,21 @@ int imprimirEmpleados(const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
-		int id_em = (int)sqlite3_column_int(stmt, 0);
-		char *nombre = (char *)sqlite3_column_text(stmt, 1);
-		char *cargo = (char *)sqlite3_column_text(stmt, 2);
-		char *cuentaBancaria = (char *)sqlite3_column_text(stmt, 3);
-		char *id_res = (char *)sqlite3_column_text(stmt, 4);
+		int id_em = (int) sqlite3_column_int(stmt, 0);
+		char *nombre = (char*) sqlite3_column_text(stmt, 1);
+		char *cargo = (char*) sqlite3_column_text(stmt, 2);
+		char *cuentaBancaria = (char*) sqlite3_column_text(stmt, 3);
+		char *id_res = (char*) sqlite3_column_text(stmt, 4);
 
 		printf(
-			"%i. Nombre: %s Cargo: %s Cuenta bancaria: %s ID del restaurante: %s\n",
-			id_em, nombre, cargo, cuentaBancaria, id_res);
+				"%i. Nombre: %s Cargo: %s Cuenta bancaria: %s ID del restaurante: %s\n",
+				id_em, nombre, cargo, cuentaBancaria, id_res);
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -193,16 +171,14 @@ int imprimirEmpleados(const char *path)
 }
 
 int updateEmpleados(int id_em, char *nombre, char *cargo, char *cuentaBancaria,
-					int id_res, const char *path)
-{
+		int id_res, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -211,17 +187,16 @@ int updateEmpleados(int id_em, char *nombre, char *cargo, char *cuentaBancaria,
 
 	// Preparar la consulta SQL
 	const char *sql =
-		"UPDATE Empleado SET NOMBRE = ?, CARGO = ?, CUENTA_BAN = ?, ID_RES = ? WHERE ID_EM = ?";
+			"UPDATE Empleado SET NOMBRE = ?, CARGO = ?, CUENTA_BAN = ?, ID_RES = ? WHERE ID_EM = ?";
 	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
 	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
 	rc += sqlite3_bind_text(stmt, 2, cargo, strlen(cargo), SQLITE_STATIC);
 	rc += sqlite3_bind_text(stmt, 3, cuentaBancaria, strlen(cuentaBancaria),
-							SQLITE_STATIC);
+	SQLITE_STATIC);
 	rc += sqlite3_bind_int(stmt, 4, id_res);
 	rc += sqlite3_bind_int(stmt, 5, id_em);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el par�metro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
@@ -231,35 +206,30 @@ int updateEmpleados(int id_em, char *nombre, char *cargo, char *cuentaBancaria,
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Update error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Update successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int guardar_productoIngrediente(int id_pr, int id_in, const char *path)
-{
+int guardar_productoIngrediente(int id_pr, int id_in, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int db_found = sqlite3_open(path, &db);
 
 	printf("Producto: %i Ingrediente: %i\n", id_pr, id_in);
 
-	if (db_found != SQLITE_OK)
-	{
+	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
 	}
 
 	const char *insert_sql =
-		"INSERT INTO PRODUCTO_INGREDIENTE(id_pr, id_in) VALUES (?, ?)";
+			"INSERT INTO PRODUCTO_INGREDIENTE(id_pr, id_in) VALUES (?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id_pr);
 	sqlite3_bind_int(stmt, 2, id_in);
@@ -267,12 +237,9 @@ int guardar_productoIngrediente(int id_pr, int id_in, const char *path)
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Insert successful\n");
 	}
 	sqlite3_close(db);
@@ -280,8 +247,7 @@ int guardar_productoIngrediente(int id_pr, int id_in, const char *path)
 }
 
 int guardar_productos(int id, char *nombre, char *tipo, float precio,
-					  char *tamanio, char *alergenos, const char *path)
-{
+		char *tamanio, char *alergenos, const char *path) {
 	printf("%s\n", tamanio);
 	printf("%s\n", alergenos);
 
@@ -289,15 +255,14 @@ int guardar_productos(int id, char *nombre, char *tipo, float precio,
 	sqlite3_stmt *stmt;
 	int db_found = sqlite3_open(path, &db);
 
-	if (db_found != SQLITE_OK)
-	{
+	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
 	}
 
 	const char *insert_sql =
-		"INSERT INTO Producto(ID_PR, NOMBRE,PRECIO,TIPO, TAMANIO, ALERGENOS) VALUES (?, ?, ?, ?, ?, ?)";
+			"INSERT INTO Producto(ID_PR, NOMBRE,PRECIO,TIPO, TAMANIO, ALERGENOS) VALUES (?, ?, ?, ?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
 	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
@@ -309,12 +274,9 @@ int guardar_productos(int id, char *nombre, char *tipo, float precio,
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Insert successful\n");
 	}
 
@@ -322,16 +284,14 @@ int guardar_productos(int id, char *nombre, char *tipo, float precio,
 	return 0;
 }
 
-int obtenerUltimoIdProductos(int *id, const char *path)
-{
+int obtenerUltimoIdProductos(int *id, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -341,8 +301,7 @@ int obtenerUltimoIdProductos(int *id, const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT MAX(ID_PR) FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -350,14 +309,11 @@ int obtenerUltimoIdProductos(int *id, const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
 		*id = sqlite3_column_int(stmt, 0);
 		printf("Id calculado: %i", *id);
-	}
-	else
-	{
+	} else {
 		printf("El comando no existe\n");
 	}
 
@@ -368,21 +324,19 @@ int obtenerUltimoIdProductos(int *id, const char *path)
 	return SQLITE_OK;
 }
 
-int guardar_ingredientes(int id, char *nombre, const char *path)
-{
+int guardar_ingredientes(int id, char *nombre, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int db_found = sqlite3_open(path, &db);
 
-	if (db_found != SQLITE_OK)
-	{
+	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
 	}
 
 	const char *insert_sql =
-		"INSERT INTO Ingrediente(ID_IN, NOMBRE) VALUES (?, ?)";
+			"INSERT INTO Ingrediente(ID_IN, NOMBRE) VALUES (?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
 	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
@@ -390,12 +344,9 @@ int guardar_ingredientes(int id, char *nombre, const char *path)
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Insert successful\n");
 	}
 
@@ -403,16 +354,14 @@ int guardar_ingredientes(int id, char *nombre, const char *path)
 	return 0;
 }
 
-int obtenerIngredientes(const char *path)
-{
+int obtenerIngredientes(const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -422,8 +371,7 @@ int obtenerIngredientes(const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT ID_IN, NOMBRE FROM Ingrediente";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -431,18 +379,16 @@ int obtenerIngredientes(const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
-		int id_in = (int)sqlite3_column_int(stmt, 0);
-		char *nombre = (char *)sqlite3_column_text(stmt, 1);
+		int id_in = (int) sqlite3_column_int(stmt, 0);
+		char *nombre = (char*) sqlite3_column_text(stmt, 1);
 
 		printf("%i. %s\n", id_in, nombre);
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -454,9 +400,8 @@ int obtenerIngredientes(const char *path)
 	return SQLITE_OK;
 }
 
-const char *imprimirProductos(const char *path)
-{
-	char *result = (char *)malloc(8000 * sizeof(char));
+const char* imprimirProductos(const char *path) {
+	char *result = (char*) malloc(8000 * sizeof(char));
 
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
@@ -464,8 +409,7 @@ const char *imprimirProductos(const char *path)
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -474,10 +418,9 @@ const char *imprimirProductos(const char *path)
 
 	// Preparar la consulta SQL
 	const char *sql =
-		"SELECT ID_PR,NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
+			"SELECT ID_PR,NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -485,15 +428,14 @@ const char *imprimirProductos(const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
-		int id_pr = (int)sqlite3_column_int(stmt, 0);
-		char *nombre = (char *)sqlite3_column_text(stmt, 1);
-		float precio = (float)sqlite3_column_double(stmt, 2);
-		char *tipo = (char *)sqlite3_column_text(stmt, 3);
-		char *tamanio = (char *)sqlite3_column_text(stmt, 4);
-		char *alergenos = (char *)sqlite3_column_text(stmt, 5);
+		int id_pr = (int) sqlite3_column_int(stmt, 0);
+		char *nombre = (char*) sqlite3_column_text(stmt, 1);
+		float precio = (float) sqlite3_column_double(stmt, 2);
+		char *tipo = (char*) sqlite3_column_text(stmt, 3);
+		char *tamanio = (char*) sqlite3_column_text(stmt, 4);
+		char *alergenos = (char*) sqlite3_column_text(stmt, 5);
 
 		char buffer[256];
 		sprintf(buffer,
@@ -505,8 +447,7 @@ const char *imprimirProductos(const char *path)
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -519,8 +460,7 @@ const char *imprimirProductos(const char *path)
 	return result;
 }
 
-int deleteProductos(int id_pr, const char *path)
-{
+int deleteProductos(int id_pr, const char *path) {
 	int rc;
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
@@ -528,8 +468,7 @@ int deleteProductos(int id_pr, const char *path)
 
 	printf("Producto: %i\n", id_pr);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
@@ -539,8 +478,7 @@ int deleteProductos(int id_pr, const char *path)
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	// Vincular el parametro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt, 1, id_pr); // 1 es el indice del primer `?`
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el parametro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
@@ -550,12 +488,9 @@ int deleteProductos(int id_pr, const char *path)
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Delete error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Delete successful\n");
 	}
 
@@ -564,8 +499,7 @@ int deleteProductos(int id_pr, const char *path)
 	sqlite3_prepare_v2(db, insert_sql2, strlen(insert_sql2) + 1, &stmt2, NULL);
 	// Vincular el parametro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt2, 1, id_pr); // 1 es el indice del primer `?`
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el parametro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt2);
@@ -575,12 +509,9 @@ int deleteProductos(int id_pr, const char *path)
 	result = sqlite3_step(stmt2);
 	sqlite3_finalize(stmt2);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Delete error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Delete successful\n");
 	}
 
@@ -589,16 +520,14 @@ int deleteProductos(int id_pr, const char *path)
 }
 
 int updateProductos(int id_pr, char *nombre, float precio, char *tipo,
-					char *tamanio, char *alergenos, const char *path)
-{
+		char *tamanio, char *alergenos, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -607,18 +536,17 @@ int updateProductos(int id_pr, char *nombre, float precio, char *tipo,
 
 	// Preparar la consulta SQL
 	const char *sql =
-		"UPDATE Producto SET NOMBRE = ?, PRECIO = ?, TIPO = ?, TAMANIO=?, ALERGENOS=? WHERE ID_PR = ?";
+			"UPDATE Producto SET NOMBRE = ?, PRECIO = ?, TIPO = ?, TAMANIO=?, ALERGENOS=? WHERE ID_PR = ?";
 	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
 	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
 	rc += sqlite3_bind_double(stmt, 2, precio);
 	rc += sqlite3_bind_text(stmt, 3, tipo, strlen(tipo), SQLITE_STATIC);
 	rc += sqlite3_bind_text(stmt, 4, tamanio, strlen(tamanio), SQLITE_STATIC);
 	rc += sqlite3_bind_text(stmt, 5, alergenos, strlen(alergenos),
-							SQLITE_STATIC);
+	SQLITE_STATIC);
 	rc += sqlite3_bind_int(stmt, 6, id_pr);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el par�metro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
@@ -628,28 +556,23 @@ int updateProductos(int id_pr, char *nombre, float precio, char *tipo,
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Update error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Update successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int obtenerUltimoIdClientes(int *id, const char *path)
-{
+int obtenerUltimoIdClientes(int *id, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -659,8 +582,7 @@ int obtenerUltimoIdClientes(int *id, const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT MAX(ID_CL) FROM Cliente";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -668,14 +590,11 @@ int obtenerUltimoIdClientes(int *id, const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
 		*id = sqlite3_column_int(stmt, 0);
 		printf("Id calculado: %i\n", *id);
-	}
-	else
-	{
+	} else {
 		printf("El comando no existe\n");
 	}
 
@@ -687,8 +606,7 @@ int obtenerUltimoIdClientes(int *id, const char *path)
 }
 
 int insertarClientes(char *nombre, char *email, int telefono, char *contrasena,
-					 const char *path)
-{
+		const char *path) {
 	int id;
 	obtenerUltimoIdClientes(&id, path);
 	id++;
@@ -697,15 +615,14 @@ int insertarClientes(char *nombre, char *email, int telefono, char *contrasena,
 	sqlite3_stmt *stmt;
 	int rc = sqlite3_open(path, &db);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
 	}
 
 	const char *insert_sql =
-		"INSERT INTO Cliente(ID_CL, NOMBRE,EMAIL,TLF,CONTRASENA) VALUES (?, ?, ?, ?, ?)";
+			"INSERT INTO Cliente(ID_CL, NOMBRE,EMAIL,TLF,CONTRASENA) VALUES (?, ?, ?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id);
 	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
@@ -716,12 +633,9 @@ int insertarClientes(char *nombre, char *email, int telefono, char *contrasena,
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Insert successful\n");
 	}
 
@@ -730,8 +644,7 @@ int insertarClientes(char *nombre, char *email, int telefono, char *contrasena,
 	return 0;
 }
 
-int deleteClientes(int id_cl, const char *path)
-{
+int deleteClientes(int id_cl, const char *path) {
 	int rc;
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
@@ -739,8 +652,7 @@ int deleteClientes(int id_cl, const char *path)
 
 	printf("Cliente: %i\n", id_cl);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
@@ -750,8 +662,7 @@ int deleteClientes(int id_cl, const char *path)
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	// Vincular el par�metro de la consulta (nombre de comando) al marcador de posici�n `?`
 	rc = sqlite3_bind_int(stmt, 1, id_cl); // 1 es el �ndice del primer `?`
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el par�metro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
@@ -761,28 +672,23 @@ int deleteClientes(int id_cl, const char *path)
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Delete error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Delete successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int verClientes(const char *path)
-{
+int verClientes(const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -792,8 +698,7 @@ int verClientes(const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT ID_CL,NOMBRE,EMAIL,TLF, CONTRASENA FROM Cliente";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -801,22 +706,20 @@ int verClientes(const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
-		int id_cl = (int)sqlite3_column_int(stmt, 0);
-		char *nombre = (char *)sqlite3_column_text(stmt, 1);
-		char *email = (char *)sqlite3_column_text(stmt, 2);
-		int telefono = (int)sqlite3_column_int(stmt, 3);
-		char *contrasena = (char *)sqlite3_column_text(stmt, 4);
+		int id_cl = (int) sqlite3_column_int(stmt, 0);
+		char *nombre = (char*) sqlite3_column_text(stmt, 1);
+		char *email = (char*) sqlite3_column_text(stmt, 2);
+		int telefono = (int) sqlite3_column_int(stmt, 3);
+		char *contrasena = (char*) sqlite3_column_text(stmt, 4);
 
 		printf("%i. Nombre:%s Email:%s Telefono:%i Contrasena:%s \n", id_cl,
-			   nombre, email, telefono, contrasena);
+				nombre, email, telefono, contrasena);
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -829,8 +732,7 @@ int verClientes(const char *path)
 }
 
 int updateClientes(int id_cl, char *nombre, char *email, int telefono,
-				   char *contrasena, const char *path)
-{
+		char *contrasena, const char *path) {
 	printf("%d,  %s, %s, %d, %s\n", id_cl, nombre, email, telefono, contrasena);
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
@@ -838,8 +740,7 @@ int updateClientes(int id_cl, char *nombre, char *email, int telefono,
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -848,17 +749,16 @@ int updateClientes(int id_cl, char *nombre, char *email, int telefono,
 
 	// Preparar la consulta SQL
 	const char *sql =
-		"UPDATE CLIENTE SET NOMBRE = ?, EMAIL = ?, TLF = ?, CONTRASENA=? WHERE ID_CL = ?";
+			"UPDATE CLIENTE SET NOMBRE = ?, EMAIL = ?, TLF = ?, CONTRASENA=? WHERE ID_CL = ?";
 	sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
 	rc += sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
 	rc += sqlite3_bind_text(stmt, 2, email, strlen(email), SQLITE_STATIC);
 	rc += sqlite3_bind_int(stmt, 3, telefono);
 	rc += sqlite3_bind_text(stmt, 4, contrasena, strlen(contrasena),
-							SQLITE_STATIC);
+	SQLITE_STATIC);
 	rc += sqlite3_bind_int(stmt, 5, id_cl);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al vincular el par�metro: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_finalize(stmt);
@@ -868,20 +768,16 @@ int updateClientes(int id_cl, char *nombre, char *email, int telefono,
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Update error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Update successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int obtenerIDCliente(char *nombre, const char *path)
-{
+int obtenerIDCliente(char *nombre, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
@@ -889,8 +785,7 @@ int obtenerIDCliente(char *nombre, const char *path)
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -900,8 +795,7 @@ int obtenerIDCliente(char *nombre, const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT ID_CL FROM Cliente WHERE NOMBRE = ?";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -912,12 +806,9 @@ int obtenerIDCliente(char *nombre, const char *path)
 	sqlite3_bind_text(stmt, 1, nombre, -1, SQLITE_STATIC);
 
 	// Ejecutar la consulta y obtener el ID
-	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		id = sqlite3_column_int(stmt, 0);
-	}
-	else
-	{
+	} else {
 		printf("El client '%s' no existe.\n", nombre);
 	}
 
@@ -928,15 +819,13 @@ int obtenerIDCliente(char *nombre, const char *path)
 	return id;
 }
 
-int insertarIngredientes(char *nombre, const char *path)
-{
+int insertarIngredientes(char *nombre, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -945,8 +834,7 @@ int insertarIngredientes(char *nombre, const char *path)
 
 	const char *sql = "INSERT INTO Ingrediente (NOMBRE) VALUES (?);";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -956,13 +844,10 @@ int insertarIngredientes(char *nombre, const char *path)
 	sqlite3_bind_text(stmt, 1, nombre, -1, SQLITE_STATIC);
 
 	rc = sqlite3_step(stmt);
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al insertar ingrediente: %s\n",
 				sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Ingrediente creado correctamente.\n");
 	}
 
@@ -972,15 +857,13 @@ int insertarIngredientes(char *nombre, const char *path)
 	return SQLITE_OK;
 }
 
-int imprimirIngredientes(const char *path)
-{
+int imprimirIngredientes(const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		return rc;
@@ -988,8 +871,7 @@ int imprimirIngredientes(const char *path)
 
 	const char *sql = "SELECT ID_IN, NOMBRE FROM Ingrediente;";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -997,15 +879,13 @@ int imprimirIngredientes(const char *path)
 	}
 
 	printf("Lista de ingredientes:\n");
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		int id = sqlite3_column_int(stmt, 0);
-		const char *nombre = (const char *)sqlite3_column_text(stmt, 1);
+		const char *nombre = (const char*) sqlite3_column_text(stmt, 1);
 		printf("ID: %d | Nombre: %s\n", id, nombre);
 	}
 
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al obtener ingredientes: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -1015,15 +895,13 @@ int imprimirIngredientes(const char *path)
 	return SQLITE_OK;
 }
 
-int deleteIngredientes(int id_in, const char *path)
-{
+int deleteIngredientes(int id_in, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		return rc;
@@ -1031,8 +909,7 @@ int deleteIngredientes(int id_in, const char *path)
 
 	const char *sql = "DELETE FROM Ingrediente WHERE ID_IN = ?;";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1042,13 +919,10 @@ int deleteIngredientes(int id_in, const char *path)
 	sqlite3_bind_int(stmt, 1, id_in);
 
 	rc = sqlite3_step(stmt);
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al eliminar ingrediente: %s\n",
 				sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Ingrediente eliminado correctamente.\n");
 	}
 
@@ -1058,21 +932,19 @@ int deleteIngredientes(int id_in, const char *path)
 	return SQLITE_OK;
 }
 
-int guardar_restaurantes(char *id, char *nombre, char *ciudad, const char *path)
-{
+int guardar_restaurantes(char *id, char *nombre, char *ciudad, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int db_found = sqlite3_open(path, &db);
 
-	if (db_found != SQLITE_OK)
-	{
+	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
 	}
 
 	const char *insert_sql =
-		"INSERT INTO Restaurante(ID_RES, NOMBRE, CIUDAD) VALUES (?, ?, ?)";
+			"INSERT INTO Restaurante(ID_RES, NOMBRE, CIUDAD) VALUES (?, ?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_text(stmt, 1, id, strlen(id), SQLITE_STATIC);
 	sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
@@ -1081,28 +953,23 @@ int guardar_restaurantes(char *id, char *nombre, char *ciudad, const char *path)
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Insert successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int obtenerUltimoIdRestaurante(int *id, const char *path)
-{
+int obtenerUltimoIdRestaurante(int *id, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1112,8 +979,7 @@ int obtenerUltimoIdRestaurante(int *id, const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT MAX(ID_RES) FROM Restaurante";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1121,13 +987,10 @@ int obtenerUltimoIdRestaurante(int *id, const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
 		*id = sqlite3_column_int(stmt, 0);
-	}
-	else
-	{
+	} else {
 		printf("El comando no existe\n");
 	}
 
@@ -1138,15 +1001,13 @@ int obtenerUltimoIdRestaurante(int *id, const char *path)
 	return SQLITE_OK;
 }
 
-int updateRestaurante(int id, char *nombre, char *ciudad, const char *path)
-{
+int updateRestaurante(int id, char *nombre, char *ciudad, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1155,10 +1016,9 @@ int updateRestaurante(int id, char *nombre, char *ciudad, const char *path)
 
 	// Preparar la consulta SQL para actualizar el restaurante
 	const char *sql =
-		"UPDATE Restaurante SET NOMBRE = ?, CIUDAD = ? WHERE ID_RES = ?";
+			"UPDATE Restaurante SET NOMBRE = ?, CIUDAD = ? WHERE ID_RES = ?";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1170,13 +1030,10 @@ int updateRestaurante(int id, char *nombre, char *ciudad, const char *path)
 	sqlite3_bind_int(stmt, 3, id);
 	// Ejecutar la consulta
 	rc = sqlite3_step(stmt);
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Restaurante actualizado exitosamente\n");
 	}
 	// Finalizar la consulta y cerrar la base de datos
@@ -1185,8 +1042,7 @@ int updateRestaurante(int id, char *nombre, char *ciudad, const char *path)
 	return SQLITE_OK;
 }
 
-int insertarRestaurante(char *nombre, char *ciudad, const char *path)
-{
+int insertarRestaurante(char *nombre, char *ciudad, const char *path) {
 	int id;
 	obtenerUltimoIdRestaurante(&id, path);
 	id++;
@@ -1197,8 +1053,7 @@ int insertarRestaurante(char *nombre, char *ciudad, const char *path)
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1207,10 +1062,9 @@ int insertarRestaurante(char *nombre, char *ciudad, const char *path)
 
 	// Preparar la consulta SQL para insertar un nuevo restaurante
 	const char *sql =
-		"INSERT INTO Restaurante (ID_RES,NOMBRE, CIUDAD) VALUES (?, ?, ?)";
+			"INSERT INTO Restaurante (ID_RES,NOMBRE, CIUDAD) VALUES (?, ?, ?)";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1222,13 +1076,10 @@ int insertarRestaurante(char *nombre, char *ciudad, const char *path)
 	sqlite3_bind_text(stmt, 3, ciudad, strlen(ciudad), SQLITE_STATIC);
 	// Ejecutar la consulta
 	rc = sqlite3_step(stmt);
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Restaurante creado exitosamente\n");
 	}
 	// Finalizar la consulta y cerrar la base de datos
@@ -1237,12 +1088,10 @@ int insertarRestaurante(char *nombre, char *ciudad, const char *path)
 	return SQLITE_OK;
 }
 
-const char *imprimirRestaurante(const char *path)
-{
-	char *result = (char *)malloc(8000 * sizeof(char));
+const char* imprimirRestaurante(const char *path) {
+	char *result = (char*) malloc(8000 * sizeof(char));
 
-	if (result == NULL)
-	{
+	if (result == NULL) {
 		fprintf(stderr, "Error asignando memoria\n");
 		return "";
 	}
@@ -1255,8 +1104,7 @@ const char *imprimirRestaurante(const char *path)
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1266,20 +1114,18 @@ const char *imprimirRestaurante(const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT ID_RES,NOMBRE,CIUDAD FROM Restaurante";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return "";
 	}
 	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
-		int id_res = (int)sqlite3_column_int(stmt, 0);
-		char *nombre = (char *)sqlite3_column_text(stmt, 1);
-		char *ciudad = (char *)sqlite3_column_text(stmt, 2);
+		int id_res = (int) sqlite3_column_int(stmt, 0);
+		char *nombre = (char*) sqlite3_column_text(stmt, 1);
+		char *ciudad = (char*) sqlite3_column_text(stmt, 2);
 
 		char buffer[300];
 		sprintf(buffer, "%i. Nombre:%s Ciudad:%s\n", id_res, nombre, ciudad);
@@ -1289,8 +1135,7 @@ const char *imprimirRestaurante(const char *path)
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -1302,8 +1147,7 @@ const char *imprimirRestaurante(const char *path)
 	return result;
 }
 
-int obtenerIDRestaurante(char *nombre, const char *path)
-{
+int obtenerIDRestaurante(char *nombre, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
@@ -1311,8 +1155,7 @@ int obtenerIDRestaurante(char *nombre, const char *path)
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1322,8 +1165,7 @@ int obtenerIDRestaurante(char *nombre, const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT ID_RES FROM Restaurante WHERE NOMBRE = ?";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1334,12 +1176,9 @@ int obtenerIDRestaurante(char *nombre, const char *path)
 	sqlite3_bind_text(stmt, 1, nombre, -1, SQLITE_STATIC);
 
 	// Ejecutar la consulta y obtener el ID
-	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		id = sqlite3_column_int(stmt, 0);
-	}
-	else
-	{
+	} else {
 		printf("El restaurante '%s' no existe.\n", nombre);
 	}
 
@@ -1350,16 +1189,14 @@ int obtenerIDRestaurante(char *nombre, const char *path)
 	return id;
 }
 
-int obtenerProductos(const char *path)
-{
+int obtenerProductos(const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1368,10 +1205,9 @@ int obtenerProductos(const char *path)
 
 	// Preparar la consulta SQL
 	const char *sql =
-		"SELECT ID_PR, NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
+			"SELECT ID_PR, NOMBRE,PRECIO,TIPO,TAMANIO,ALERGENOS FROM Producto";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1379,23 +1215,21 @@ int obtenerProductos(const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
-		int id_pr = (int)sqlite3_column_int(stmt, 0);
-		char *nombre = (char *)sqlite3_column_text(stmt, 1);
-		float precio = (int)sqlite3_column_int(stmt, 2);
-		char *tipo = (char *)sqlite3_column_text(stmt, 3);
-		char *tamanio = (char *)sqlite3_column_text(stmt, 4);
-		char *alergenos = (char *)sqlite3_column_text(stmt, 5);
+		int id_pr = (int) sqlite3_column_int(stmt, 0);
+		char *nombre = (char*) sqlite3_column_text(stmt, 1);
+		float precio = (int) sqlite3_column_int(stmt, 2);
+		char *tipo = (char*) sqlite3_column_text(stmt, 3);
+		char *tamanio = (char*) sqlite3_column_text(stmt, 4);
+		char *alergenos = (char*) sqlite3_column_text(stmt, 5);
 
 		printf("%i.%s.%f.%s.%s.%s\n", id_pr, nombre, precio, tipo, tamanio,
-			   alergenos);
+				alergenos);
 	}
 
 	// Verificar si ocurri� alg�n error durante la consulta
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -1407,16 +1241,14 @@ int obtenerProductos(const char *path)
 	return SQLITE_OK;
 }
 
-int guardarPedidos(int domic, int id_cl, int id_res, const char *path)
-{
+int guardarPedidos(int domic, int id_cl, int id_res, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1425,10 +1257,9 @@ int guardarPedidos(int domic, int id_cl, int id_res, const char *path)
 
 	// Preparar la consulta SQL para insertar un nuevo pedido
 	const char *sql =
-		"INSERT INTO Pedido (DOMICILIO, ID_CL, ID_RES) VALUES (?, ?, ?)";
+			"INSERT INTO Pedido (DOMICILIO, ID_CL, ID_RES) VALUES (?, ?, ?)";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1445,13 +1276,10 @@ int guardarPedidos(int domic, int id_cl, int id_res, const char *path)
 
 	// Ejecutar la consulta
 	rc = sqlite3_step(stmt);
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Pedido creado exitosamente\n");
 	}
 
@@ -1462,21 +1290,19 @@ int guardarPedidos(int domic, int id_cl, int id_res, const char *path)
 	return SQLITE_OK;
 }
 
-int guardar_productoPedido(int id_ped, int id_pr, const char *path)
-{
+int guardar_productoPedido(int id_ped, int id_pr, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int db_found = sqlite3_open(path, &db);
 
-	if (db_found != SQLITE_OK)
-	{
+	if (db_found != SQLITE_OK) {
 		printf("Error al abrir la base de datos: %s\n", sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return 1;
 	}
 
 	const char *insert_sql =
-		"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_producto) VALUES (?, ?)";
+			"INSERT INTO PRODUCTO_PEDIDO(id_ped, id_producto) VALUES (?, ?)";
 	sqlite3_prepare_v2(db, insert_sql, strlen(insert_sql) + 1, &stmt, NULL);
 	sqlite3_bind_int(stmt, 1, id_ped);
 	sqlite3_bind_int(stmt, 2, id_pr);
@@ -1484,28 +1310,23 @@ int guardar_productoPedido(int id_ped, int id_pr, const char *path)
 	int result = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
 
-	if (result != SQLITE_DONE)
-	{
+	if (result != SQLITE_DONE) {
 		printf("Insert error: %s\n", sqlite3_errmsg(db));
-	}
-	else
-	{
+	} else {
 		printf("Insert successful\n");
 	}
 	sqlite3_close(db);
 	return 0;
 }
 
-int obtenerUltimoIdPedido(int *id, const char *path)
-{
+int obtenerUltimoIdPedido(int *id, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1515,8 +1336,7 @@ int obtenerUltimoIdPedido(int *id, const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT MAX(ID_PED) FROM Pedido";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1524,14 +1344,11 @@ int obtenerUltimoIdPedido(int *id, const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	if ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		// Obtener los valores de cada columna (con comprobaci�n de NULL)
 		*id = sqlite3_column_int(stmt, 0);
 		printf("Id calculado: %i", *id);
-	}
-	else
-	{
+	} else {
 		printf("El comando no existe\n");
 	}
 
@@ -1542,16 +1359,14 @@ int obtenerUltimoIdPedido(int *id, const char *path)
 	return SQLITE_OK;
 }
 
-int getPedidos(const char *path)
-{
+int getPedidos(const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1561,8 +1376,7 @@ int getPedidos(const char *path)
 	// Preparar la consulta SQL
 	const char *sql = "SELECT ID_PED, DOMICILIO, ID_CL, ID_RES FROM Pedido";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1570,21 +1384,19 @@ int getPedidos(const char *path)
 	}
 
 	// Ejecutar la consulta y procesar los resultados
-	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-	{
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 		int id_ped = sqlite3_column_int(stmt, 0);
 		const unsigned char *domic = sqlite3_column_text(stmt, 1);
 		int id_cl = sqlite3_column_int(stmt, 2);
 		int id_res = sqlite3_column_int(stmt, 3);
 
 		printf(
-			"ID Pedido: %d\nDomicilio: %s\nID Cliente: %d\nID Restaurante: %d\n\n",
-			id_ped, domic, id_cl, id_res);
+				"ID Pedido: %d\nDomicilio: %s\nID Cliente: %d\nID Restaurante: %d\n\n",
+				id_ped, domic, id_cl, id_res);
 	}
 
 	// Verificar si ocurrió algún error durante la consulta
-	if (rc != SQLITE_DONE)
-	{
+	if (rc != SQLITE_DONE) {
 		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
 				sqlite3_errmsg(db));
 	}
@@ -1596,8 +1408,125 @@ int getPedidos(const char *path)
 	return SQLITE_OK;
 }
 
-int esUsuarioValido(char *email, char *contrasena, const char *path)
-{
+const char* historialPedidosUsuario(int id_cl, const char *path) {
+	char *result = (char*) malloc(8000 * sizeof(char));
+
+	if (result == NULL) {
+		fprintf(stderr, "Error asignando memoria\n");
+		return "";
+	}
+
+	result[0] = '\0';
+
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int rc;
+
+	// Abrir la base de datos
+	rc = sqlite3_open(path, &db);
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "Error al abrir la base de datos: %s\n",
+				sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return "";
+	}
+
+	// Preparar la consulta SQL
+	const char *sql = "SELECT ID_PED,domicilio,ID_RES FROM Pedido where ID_CL = ?";
+	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	sqlite3_bind_int(stmt, 1, id_cl);
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "Error al preparar la consulta: %s\n",
+				sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return "";
+	}
+	// Ejecutar la consulta y procesar los resultados
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+		// Obtener los valores de cada columna (con comprobaci�n de NULL)
+		int id_ped = (int) sqlite3_column_int(stmt, 0);
+		char *domicilio = (char*) sqlite3_column_text(stmt, 1);
+		int id_res = (int) sqlite3_column_int(stmt, 2);
+
+		char buffer[300];
+		sprintf(buffer, "%i;%s;%i\n", id_ped, domicilio, id_res);
+
+		printf("%s", buffer);
+		strcat(result, buffer);
+	}
+
+	// Verificar si ocurri� alg�n error durante la consulta
+	if (rc != SQLITE_DONE) {
+		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
+				sqlite3_errmsg(db));
+	}
+
+	// Finalizar la consulta y cerrar la base de datos
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+	fflush(stdout);
+	return result;
+}
+
+const char* obtenerProductosPedido(int id_ped, const char *path) {
+	char *result = (char*) malloc(8000 * sizeof(char));
+
+	if (result == NULL) {
+		fprintf(stderr, "Error asignando memoria\n");
+		return "";
+	}
+
+	result[0] = '\0';
+
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int rc;
+
+	// Abrir la base de datos
+	rc = sqlite3_open(path, &db);
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "Error al abrir la base de datos: %s\n",
+				sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return "";
+	}
+
+	// Preparar la consulta SQL
+	const char *sql = "SELECT ID_producto from PRODUCTO_PEDIDO where id_ped=?";
+	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	sqlite3_bind_int(stmt, 1, id_ped);
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "Error al preparar la consulta: %s\n",
+				sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return "";
+	}
+	// Ejecutar la consulta y procesar los resultados
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+		// Obtener los valores de cada columna (con comprobaci�n de NULL)
+		int id_producto = (int) sqlite3_column_int(stmt, 0);
+
+		char buffer[300];
+		sprintf(buffer, "%i\n", id_producto);
+
+		printf("%s", buffer);
+		strcat(result, buffer);
+	}
+
+	// Verificar si ocurri� alg�n error durante la consulta
+	if (rc != SQLITE_DONE) {
+		fprintf(stderr, "Error al ejecutar la consulta: %s\n",
+				sqlite3_errmsg(db));
+	}
+
+	// Finalizar la consulta y cerrar la base de datos
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+	fflush(stdout);
+	return result;
+}
+
+int esUsuarioValido(char *email, char *contrasena, const char *path) {
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;
@@ -1605,8 +1534,7 @@ int esUsuarioValido(char *email, char *contrasena, const char *path)
 
 	// Abrir la base de datos
 	rc = sqlite3_open(path, &db);
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al abrir la base de datos: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
@@ -1615,21 +1543,19 @@ int esUsuarioValido(char *email, char *contrasena, const char *path)
 
 	// Preparar la consulta SQL
 	const char *sql =
-		"SELECT ID_CL FROM Cliente where EMAIL = ? and CONTRASENA = ? ";
+			"SELECT ID_CL FROM Cliente where EMAIL = ? and CONTRASENA = ? ";
 	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	sqlite3_bind_text(stmt, 1, email, strlen(email), SQLITE_STATIC);
 	sqlite3_bind_text(stmt, 2, contrasena, strlen(contrasena), SQLITE_STATIC);
 
-	if (rc != SQLITE_OK)
-	{
+	if (rc != SQLITE_OK) {
 		fprintf(stderr, "Error al preparar la consulta: %s\n",
 				sqlite3_errmsg(db));
 		sqlite3_close(db);
 		return rc;
 	}
 
-	if (sqlite3_step(stmt) == SQLITE_ROW)
-	{
+	if (sqlite3_step(stmt) == SQLITE_ROW) {
 		id = sqlite3_column_int(stmt, 0);
 	}
 
@@ -1637,8 +1563,7 @@ int esUsuarioValido(char *email, char *contrasena, const char *path)
 	sqlite3_finalize(stmt);
 	sqlite3_close(db);
 	fflush(stdout);
-	if (id == 0)
-	{
+	if (id == 0) {
 		return 1; // false
 	}
 	return id * (-1); // true

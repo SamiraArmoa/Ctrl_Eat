@@ -28,6 +28,7 @@ public:
 	void setDomicilio(const char* domicilio);
 	void setIdCliente(int idCliente);
 	void setIdRestaurante(int idRestaurante);
+	void mostrar() const;
 };
 
 #endif /* REMOTE_SRC_PEDIDO_PEDIDOS_H_ */

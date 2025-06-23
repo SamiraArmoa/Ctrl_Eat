@@ -42,7 +42,8 @@ extern "C"
     int guardar_productoPedido(int id_ped, int id_pr, const char *path);
     int obtenerUltimoIdPedido(int *id, const char *path);
     int getPedidos(const char *path);
-
+    const char* historialPedidosUsuario(int id_cl, const char* path);
+    const char* obtenerProductosPedido(int id_ped, const char* path);
     int esUsuarioValido(char *email, char *contrasena, const char *path);
 
 #ifdef __cplusplus

@@ -18,7 +18,6 @@ public:
 	void datosPedido();
 	int pagarPedido(Pedido &pedido);
 	int hacerPedido(Pedido &pedido);
-	void historialDePedido();
 
 	int pedido();
 
@@ -28,4 +27,6 @@ public:
 	static const char *obtenerRestaurantesControlador();
 	static Restaurante **obtenerListaRestaurantesControlador(int &numRestaurantes);
 	static Restaurante obtenerRestaurantePorId(int id);
+	static Pedido** obtenerHistorialPedidosControlador(int idUsuario, int &numPedidos);
+	static int** obtenerIdsProductosPedido(int idPedido, int &numIdsProducto);
 };

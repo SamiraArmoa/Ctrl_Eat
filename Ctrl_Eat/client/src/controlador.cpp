@@ -11,11 +11,10 @@
 #include <sstream>
 using namespace std;
 
-int controlador::registrarseControlador(Usuario &u)
-{
+int controlador::registrarseControlador(Usuario &u) {
 	char *registrar;
 	registrar = registerSocket(u.getNombre(), u.getContrasena(), u.getEmail(),
-							   u.getTelefono());
+			u.getTelefono());
 	int res = atoi(enviarSocket(registrar));
 
 	cout << "Respuesta desde el controlador: " << res << endl;
@@ -25,8 +24,7 @@ int controlador::registrarseControlador(Usuario &u)
 	return id;
 }
 
-int controlador::iniciarSesionControlador(Usuario &u)
-{
+int controlador::iniciarSesionControlador(Usuario &u) {
 	char *login;
 	login = loginSocket(u.getEmail(), u.getContrasena());
 	int res = atoi(enviarSocket(login));
@@ -35,23 +33,22 @@ int controlador::iniciarSesionControlador(Usuario &u)
 	return (res * -1); // Si no es 0, existe
 }
 
-int controlador::editarPerfilControlador(Usuario &u){
-	char* update;
-	update = updateUsuarioSocket(u.getId(),u.getNombre(), u.getContrasena(), u.getEmail(), u.getTelefono());
+int controlador::editarPerfilControlador(Usuario &u) {
+	char *update;
+	update = updateUsuarioSocket(u.getId(), u.getNombre(), u.getContrasena(),
+			u.getEmail(), u.getTelefono());
 	int res = atoi(enviarSocket(update));
 
-	cout<< "Respuesta desde el controlador" << res << endl;
+	cout << "Respuesta desde el controlador" << res << endl;
 	return res; // Si res == 1, actualizado correctamente
 }
 
-const char *controlador::obtenerRestaurantesControlador()
-{
+const char* controlador::obtenerRestaurantesControlador() {
 	char *restaurantes = restaurantesSocket();	  // "4"
 	const char *res = enviarSocket(restaurantes); // respuesta del servidor
 	delete[] restaurantes;						  // liberar memoria
 
-	if (res == nullptr || strlen(res) == 0)
-	{
+	if (res == nullptr || strlen(res) == 0) {
 		std::cerr << "No se recibieron datos de restaurantes." << std::endl;
 		return "";
 	}
@@ -63,8 +60,8 @@ const char *controlador::obtenerRestaurantesControlador()
 	return res;
 }
 
-Restaurante **controlador::obtenerListaRestaurantesControlador(int &numRestaurantes)
-{
+Restaurante** controlador::obtenerListaRestaurantesControlador(
+		int &numRestaurantes) {
 //	std::cout << "DEBUG: Iniciando obtenerListaRestaurantesControlador()" << std::endl;
 	numRestaurantes = 0;
 
@@ -75,8 +72,7 @@ Restaurante **controlador::obtenerListaRestaurantesControlador(int &numRestauran
 
 //	std::cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]" << std::endl;
 
-	if (res == nullptr || strlen(res) == 0)
-	{
+	if (res == nullptr || strlen(res) == 0) {
 		std::cerr << "No se recibieron datos de restaurantes." << std::endl;
 		return nullptr; // devolver null
 	}
@@ -87,33 +83,29 @@ Restaurante **controlador::obtenerListaRestaurantesControlador(int &numRestauran
 	std::string linea;
 	int contador = 0;
 
-	while (std::getline(stream, linea))
-	{
-		if (!linea.empty() && linea.find('.') != std::string::npos &&
-			linea.find("Nombre:") != std::string::npos &&
-			linea.find("Ciudad:") != std::string::npos)
-		{
+	while (std::getline(stream, linea)) {
+		if (!linea.empty() && linea.find('.') != std::string::npos
+				&& linea.find("Nombre:") != std::string::npos
+				&& linea.find("Ciudad:") != std::string::npos) {
 			contador++;
 		}
 	}
 
 //	std::cout << "DEBUG: Total de restaurantes encontrados: " << contador << std::endl;
 
-	if (contador == 0)
-	{
+	if (contador == 0) {
 		return nullptr;
 	}
 
 	// Crear el array dinámico
-	Restaurante **listaRestaurantes = new Restaurante *[contador];
+	Restaurante **listaRestaurantes = new Restaurante*[contador];
 	numRestaurantes = contador;
 	int indice = 0;
 
 	// Reiniciar el stream para parsear
 	std::istringstream stream2(respuesta);
 
-	while (std::getline(stream2, linea) && indice < contador)
-	{
+	while (std::getline(stream2, linea) && indice < contador) {
 //		std::cout << "DEBUG: Procesando línea: [" << linea << "]" << std::endl;
 
 		if (linea.empty())
@@ -126,18 +118,18 @@ Restaurante **controlador::obtenerListaRestaurantesControlador(int &numRestauran
 
 //		std::cout << "DEBUG: Posiciones - Punto: " << puntoPos << ", Nombre: " << nombrePos << ", Ciudad: " << ciudadPos << std::endl;
 
-		if (puntoPos != std::string::npos && nombrePos != std::string::npos && ciudadPos != std::string::npos)
-		{
+		if (puntoPos != std::string::npos && nombrePos != std::string::npos
+				&& ciudadPos != std::string::npos) {
 			// Extraer el ID
 			std::string idStr = linea.substr(0, puntoPos);
 			int id = std::stoi(idStr);
 
 			// Extraer el nombre (entre "Nombre:" y "Ciudad:")
-			std::string nombre = linea.substr(nombrePos + 7, ciudadPos - nombrePos - 8);
+			std::string nombre = linea.substr(nombrePos + 7,
+					ciudadPos - nombrePos - 8);
 
 			// Limpiar espacios al final del nombre
-			while (!nombre.empty() && nombre.back() == ' ')
-			{
+			while (!nombre.empty() && nombre.back() == ' ') {
 				nombre.pop_back();
 			}
 
@@ -145,8 +137,7 @@ Restaurante **controlador::obtenerListaRestaurantesControlador(int &numRestauran
 			std::string ciudad = linea.substr(ciudadPos + 7);
 
 			// Limpiar espacios al inicio de la ciudad
-			while (!ciudad.empty() && ciudad.front() == ' ')
-			{
+			while (!ciudad.empty() && ciudad.front() == ' ') {
 				ciudad.erase(0, 1);
 			}
 
@@ -154,7 +145,8 @@ Restaurante **controlador::obtenerListaRestaurantesControlador(int &numRestauran
 
 			// Crear objeto Restaurante y añadirlo al array
 //			std::cout << "DEBUG: Creando objeto Restaurante..." << std::endl;
-			listaRestaurantes[indice] = new Restaurante(id, nombre.c_str(), ciudad.c_str());
+			listaRestaurantes[indice] = new Restaurante(id, nombre.c_str(),
+					ciudad.c_str());
 //			std::cout << "DEBUG: Objeto creado y añadido en índice: " << indice << std::endl;
 			indice++;
 		}
@@ -173,25 +165,21 @@ Restaurante **controlador::obtenerListaRestaurantesControlador(int &numRestauran
 	return listaRestaurantes;
 }
 
-Restaurante controlador::obtenerRestaurantePorId(int id)
-{
+Restaurante controlador::obtenerRestaurantePorId(int id) {
 	int numRestaurantes = 0;
-	Restaurante **listaRestaurantes = controlador::obtenerListaRestaurantesControlador(numRestaurantes);
+	Restaurante **listaRestaurantes =
+			controlador::obtenerListaRestaurantesControlador(numRestaurantes);
 
-	if (listaRestaurantes == nullptr)
-	{
+	if (listaRestaurantes == nullptr) {
 		return Restaurante(); // devolver un restaurante vacío
 	}
 
-	for (int i = 0; i < numRestaurantes; i++)
-	{
-		if (listaRestaurantes[i]->getId() == id)
-		{
+	for (int i = 0; i < numRestaurantes; i++) {
+		if (listaRestaurantes[i]->getId() == id) {
 			Restaurante resultado = *listaRestaurantes[i]; // copia del restaurante encontrado
 
 			// Liberar memoria del array
-			for (int j = 0; j < numRestaurantes; j++)
-			{
+			for (int j = 0; j < numRestaurantes; j++) {
 				delete listaRestaurantes[j];
 			}
 			delete[] listaRestaurantes;
@@ -201,8 +189,7 @@ Restaurante controlador::obtenerRestaurantePorId(int id)
 	}
 
 	// Liberar memoria del array
-	for (int i = 0; i < numRestaurantes; i++)
-	{
+	for (int i = 0; i < numRestaurantes; i++) {
 		delete listaRestaurantes[i];
 	}
 	delete[] listaRestaurantes;
@@ -210,3 +197,160 @@ Restaurante controlador::obtenerRestaurantePorId(int id)
 	// Si no se encuentra, devolver un restaurante vacío
 	return Restaurante();
 }
+
+Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario, int &numPedidos) {
+	std::cout << "DEBUG: Iniciando obtenerHistorialPedidosControlador()" << std::endl;
+	numPedidos = 0;
+
+	char *pedidos = historialPedidoSocket(idUsuario); // "6"
+	//	std::cout << "DEBUG: Mensaje a enviar: " << restaurantes << std::endl;
+	const char *res = enviarSocket(pedidos);
+
+
+	std::cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]"
+			<< std::endl;
+
+	if (res == nullptr || strlen(res) == 0) {
+		std::cerr << "No se recibieron datos del historial de pedidos."
+				<< std::endl;
+		return nullptr;
+	}
+
+	// Contar la cantidad de pedidos
+	std::string respuesta(res);
+	std::istringstream stream(respuesta);
+	std::string linea;
+	int contador = 0;
+
+	while (std::getline(stream, linea)) {
+		if (!linea.empty()) {
+			contador++;
+		}
+	}
+
+	std::cout << "DEBUG: Total de pedidos encontrados: " << contador
+			<< std::endl;
+
+	if (contador == 0) {
+		return nullptr;
+	}
+
+	Pedido **listaPedidos = new Pedido*[contador];
+	numPedidos = contador;
+	int indice = 0;
+
+	std::istringstream stream2(respuesta);
+	while (std::getline(stream2, linea) && indice < contador) {
+		std::cout << "DEBUG: Procesando línea: [" << linea << "]" << std::endl;
+
+		if (linea.empty())
+			continue;
+
+		size_t pos1 = linea.find(';');
+		size_t pos2 = linea.rfind(';');
+
+		std::cout << "DEBUG: Posiciones - Primer ';': " << pos1
+				<< ", Segundo ';': " << pos2 << std::endl;
+
+		if (pos1 == std::string::npos || pos2 == std::string::npos
+				|| pos1 == pos2) {
+			std::cout << "DEBUG: Línea con formato inválido, se omite."
+					<< std::endl;
+			continue;
+		}
+
+		// Parsear campos
+		std::string idStr = linea.substr(0, pos1);
+		std::string domicilioStr = linea.substr(pos1 + 1, pos2 - pos1 - 1);
+		std::string idResStr = linea.substr(pos2 + 1);
+
+		int idPedido = std::stoi(idStr);
+		int idRestaurante = std::stoi(idResStr);
+
+		std::cout << "DEBUG: Parseando - ID: " << idPedido << ", Domicilio: ["
+				<< domicilioStr << "], ID Restaurante: " << idRestaurante
+				<< std::endl;
+
+		// Crear objeto Pedido
+		std::cout << "DEBUG: Creando objeto Pedido..." << std::endl;
+		listaPedidos[indice] = new Pedido(idPedido, domicilioStr.c_str(),
+				idUsuario, idRestaurante);
+		std::cout << "DEBUG: Objeto creado y añadido en índice: " << indice
+				<< std::endl;
+
+		indice++;
+	}
+
+	std::cout << "DEBUG: Fin del bucle de parsing. Total de pedidos creados: "
+			<< indice << std::endl;
+
+	// Imprimir lista de pedidos (opcional)
+	/*
+	 std::cout << "Lista de pedidos creada:" << std::endl;
+	 for (int i = 0; i < numPedidos; i++) {
+	 std::cout << listaPedidos[i]->getId() << ". Domicilio: " << listaPedidos[i]->getDomicilio()
+	 << " Restaurante: " << listaPedidos[i]->getIdRestaurante() << std::endl;
+	 }
+	 */
+
+	return listaPedidos;
+}
+
+int** controlador::obtenerIdsProductosPedido(int idPedido, int &numIdsProducto) {
+	std::cout << "DEBUG: Iniciando obtenerIdsProductosPedido()" << std::endl;
+	numIdsProducto = 0;
+
+	char *idsProducto = obtenerProductosPedidoSocket(idPedido); // "7"
+	//	std::cout << "DEBUG: Mensaje a enviar: " << restaurantes << std::endl;
+	const char *res = enviarSocket(idsProducto);
+
+	std::cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]" << std::endl;
+
+	if (res == nullptr || strlen(res) == 0) {
+		std::cerr << "No se recibieron datos de productos para el pedido." << std::endl;
+		return nullptr;
+	}
+
+	std::string respuesta(res);
+	std::istringstream stream(respuesta);
+	std::string linea;
+	int contador = 0;
+
+	// Contar productos
+	while (std::getline(stream, linea)) {
+		if (!linea.empty()) {
+			contador++;
+		}
+	}
+
+	std::cout << "DEBUG: Total de productos encontrados: " << contador << std::endl;
+
+	if (contador == 0) {
+		return nullptr;
+	}
+
+	// Crear array dinámico de punteros a int
+	int** listaIds = new int*[contador];
+	numIdsProducto = contador;
+	int indice = 0;
+
+	std::istringstream stream2(respuesta);
+	while (std::getline(stream2, linea) && indice < contador) {
+		std::cout << "DEBUG: Procesando línea: [" << linea << "]" << std::endl;
+
+		if (linea.empty()) continue;
+
+		int id = std::stoi(linea);
+		std::cout << "DEBUG: Parseando ID Producto: " << id << std::endl;
+
+		listaIds[indice] = new int(id);
+		std::cout << "DEBUG: ID añadido en índice " << indice << std::endl;
+
+		indice++;
+	}
+
+	std::cout << "DEBUG: Fin del bucle de parsing. Total de IDs creados: " << indice << std::endl;
+
+	return listaIds;
+}
+
