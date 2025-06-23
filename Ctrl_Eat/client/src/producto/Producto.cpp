@@ -11,9 +11,9 @@
 using namespace std;
 
 Producto::Producto(){
-	this-> id = 0;
-	this-> nombre = "";
-	this->precio = 0.0;
+	this->id = 0;
+	this->nombre = "";
+	this->precio = 0;
 }
 
 Producto::Producto(int id, const char* nombre, int precio){
@@ -40,7 +40,7 @@ int Producto::getPrecio() const{
 }
 
 void Producto::setId(int id){
-	this->id;
+	this->id = id;
 }
 
 void Producto::setNombre(const char* nombre){
@@ -50,7 +50,7 @@ void Producto::setNombre(const char* nombre){
 }
 
 void Producto::setPrecio(int precio){
-	this->id;
+	this->precio = precio;
 }
 
 void Producto::mostrar() const{
