@@ -11,7 +11,7 @@
 #include "plato/Plato.h"
 #include <string.h>
 #include <iostream>
-//#include <sstream>
+#include <sstream>
 //#include <cstring>
 using namespace std;
 
@@ -186,119 +186,129 @@ Restaurante controlador::obtenerRestaurantePorId(int id) {
 }
 
 Producto** controlador::obtenerListaProductosControlador(int &numProductos) {
-	numProductos = 0;
-	char *productos = menuSocket();
-	const char *res = enviarSocket(productos);
-	delete[] productos;
+    numProductos = 0;
+    char *productos = menuSocket();
+    const char *res = enviarSocket(productos);
+    delete[] productos;
 
-	if (res == nullptr || strlen(res) == 0) {
-		std::cerr << "No se recibieron productos." << std::endl;
-		return nullptr;
-	}
+    if (res == nullptr || strlen(res) == 0) {
+        std::cerr << "No se recibieron productos." << std::endl;
+        return nullptr;
+    }
 
-	std::string respuesta(res);
-	std::istringstream stream(respuesta);
-	std::string linea;
-	int contador = 0;
+    // Copiar la respuesta para no modificar la original
+    char *respuesta = new char[strlen(res) + 1];
+    strcpy(respuesta, res);
 
-	// Contar cuántos productos hay
-	while (std::getline(stream, linea)) {
-		if (!linea.empty() && linea.find('.') != std::string::npos
-				&& linea.find("Nombre:") != std::string::npos
-				&& linea.find("Precio:") != std::string::npos
-				&& linea.find("Tipo:") != std::string::npos
-				&& linea.find("Tamanio:") != std::string::npos
-				&& linea.find("Alergenos:") != std::string::npos) {
-			contador++;
-		}
-	}
+    // Contar cuántos productos hay
+    int contador = 0;
+    char *linea = strtok(respuesta, "\n");
+    while (linea != nullptr) {
+        if (strchr(linea, '.') && strstr(linea, "Nombre:") && strstr(linea, "Precio:")
+            && strstr(linea, "Tipo:") && strstr(linea, "Tamanio:") && strstr(linea, "Alergenos:")) {
+            contador++;
+        }
+        linea = strtok(nullptr, "\n");
+    }
 
-	if (contador == 0)
-		return nullptr;
+    if (contador == 0) {
+        delete[] respuesta;
+        return nullptr;
+    }
 
-	Producto **lista = new Producto*[contador];
-	numProductos = contador;
-	int indice = 0;
+    Producto **lista = new Producto*[contador];
+    numProductos = contador;
+    int indice = 0;
 
-	std::istringstream stream2(respuesta);
+    // Volver a copiar la respuesta para el segundo recorrido
+    char *respuesta2 = new char[strlen(res) + 1];
+    strcpy(respuesta2, res);
+    linea = strtok(respuesta2, "\n");
 
-	while (std::getline(stream2, linea) && indice < contador) {
-		if (linea.empty())
-			continue;
+    while (linea != nullptr && indice < contador) {
+        if (strlen(linea) == 0) {
+            linea = strtok(nullptr, "\n");
+            continue;
+        }
 
-//		cout << "HOLA: " << linea << endl;
-		size_t puntoPos = linea.find('.');
-		size_t nombrePos = linea.find("Nombre:");
-		size_t precioPos = linea.find("Precio:");
-		size_t tipoPos = linea.find("Tipo:");
-		size_t tamanioPos = linea.find("Tamanio:");
-		size_t alergenosPos = linea.find("Alergenos:");
+        // Buscar posiciones de cada campo
+        char *puntoPos = strchr(linea, '.');
+        char *nombrePos = strstr(linea, "Nombre:");
+        char *precioPos = strstr(linea, "Precio:");
+        char *tipoPos = strstr(linea, "Tipo:");
+        char *tamanioPos = strstr(linea, "Tamanio:");
+        char *alergenosPos = strstr(linea, "Alergenos:");
 
-		if (puntoPos != std::string::npos && nombrePos != std::string::npos
-				&& precioPos != std::string::npos
-				&& tipoPos != std::string::npos
-				&& tamanioPos != std::string::npos
-				&& alergenosPos != std::string::npos) {
-			std::string idStr = linea.substr(0, puntoPos);
-			int id = std::stoi(idStr);
+        if (puntoPos && nombrePos && precioPos && tipoPos && tamanioPos && alergenosPos) {
+            // ID
+            char idStr[10] = {0};
+            strncpy(idStr, linea, puntoPos - linea);
+            int id = atoi(idStr);
 
-			std::string nombre = linea.substr(nombrePos + 7,
-					precioPos - nombrePos - 8);
-			while (!nombre.empty() && nombre.back() == ' ')
-				nombre.pop_back();
+            // Nombre
+            int lenNombre = precioPos - nombrePos - 8;
+            char *nombre = new char[lenNombre + 1];
+            strncpy(nombre, nombrePos + 7, lenNombre);
+            nombre[lenNombre] = '\0';
 
-			std::string precioStr = linea.substr(precioPos + 7,
-					tipoPos - precioPos - 8);
-			int precio = static_cast<int>(std::stof(precioStr)); // Para manejar decimales
+            // Precio
+            int lenPrecio = tipoPos - precioPos - 8;
+            char precioStr[20] = {0};
+            strncpy(precioStr, precioPos + 7, lenPrecio);
+            int precio = static_cast<int>(atof(precioStr));
 
-			std::string tipo = linea.substr(tipoPos + 5,
-					tamanioPos - tipoPos - 6);
-			while (!tipo.empty() && tipo.back() == ' ')
-				tipo.pop_back();
+            // Tipo
+            int lenTipo = tamanioPos - tipoPos - 6;
+            char *tipo = new char[lenTipo + 1];
+            strncpy(tipo, tipoPos + 5, lenTipo);
+            tipo[lenTipo] = '\0';
 
-			std::string tamanio = linea.substr(tamanioPos + 8,
-					alergenosPos - tamanioPos - 9);
-			while (!tamanio.empty() && tamanio.back() == ' ')
-				tamanio.pop_back();
+            // Tamanio
+            int lenTamanio = alergenosPos - tamanioPos - 9;
+            char *tamanio = new char[lenTamanio + 1];
+            strncpy(tamanio, tamanioPos + 8, lenTamanio);
+            tamanio[lenTamanio] = '\0';
 
-			std::string alergenos = linea.substr(alergenosPos + 10);
-			while (!alergenos.empty() && alergenos.back() == ' ')
-				alergenos.pop_back();
+            // Alergenos
+            char *alergenos = new char[strlen(alergenosPos + 10) + 1];
+            strcpy(alergenos, alergenosPos + 10);
 
-			// Crear producto con todos los campos
-//			cout << "Nombre" << nombre << endl;
-//			cout << "Precio" << precio << endl;
-//			cout << "Tipo" << tipo << endl;
-//			cout << "Tamanio" << tamanio << endl;
-//			cout << "Alergernos" << alergenos << endl;
+            // Crear producto
+            if (strcmp(tipo, "bebida") == 0 || strcmp(tipo, "Bebida") == 0) {
+                lista[indice] = new Bebida(id, nombre, precio, tamanio);
+            } else {
+                lista[indice] = new Plato(id, nombre, precio, alergenos);
+            }
+            indice++;
 
-			if (strcmp(tipo, "bebida") == 0 || strcmp(tipo, "Bebida") == 0) {
-			    lista[indice] = new Bebida(id, nombre, precio, tamanio);
-			} else {
-			    lista[indice] = new Plato(id, nombre, precio, alergenos);
-			}
-			indice++;
-		}
-	}
-	return lista;
+            delete[] nombre;
+            delete[] tipo;
+            delete[] tamanio;
+            delete[] alergenos;
+        }
+
+        linea = strtok(nullptr, "\n");
+    }
+
+    delete[] respuesta;
+    delete[] respuesta2;
+    return lista;
 }
+
 
 Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 		int &numPedidos) {
-	std::cout << "DEBUG: Iniciando obtenerHistorialPedidosControlador()"
-			<< std::endl;
+	cout << "DEBUG: Iniciando obtenerHistorialPedidosControlador()" << endl;
 	numPedidos = 0;
 
 	char *pedidos = historialPedidoSocket(idUsuario); // "6"
 	//	std::cout << "DEBUG: Mensaje a enviar: " << restaurantes << std::endl;
 	const char *res = enviarSocket(pedidos);
 
-	std::cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]"
-			<< std::endl;
+	cout << "DEBUG: Respuesta recibida: [" << (res ? res : "NULL") << "]"<< endl;
 
 	if (res == nullptr || strlen(res) == 0) {
-		std::cerr << "No se recibieron datos del historial de pedidos."
-				<< std::endl;
+		cerr << "No se recibieron datos del historial de pedidos." << endl;
 		return nullptr;
 	}
 
@@ -314,8 +324,7 @@ Pedido** controlador::obtenerHistorialPedidosControlador(int idUsuario,
 		}
 	}
 
-	std::cout << "DEBUG: Total de pedidos encontrados: " << contador
-			<< std::endl;
+	cout << "DEBUG: Total de pedidos encontrados: " << contador << endl;
 
 	if (contador == 0) {
 		return nullptr;
