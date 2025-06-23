@@ -24,9 +24,10 @@ public:
 	static int editarPerfilControlador(Usuario &u);
 	static int registrarseControlador(Usuario &u);
 	static int iniciarSesionControlador(Usuario &u);
-	static const char *obtenerRestaurantesControlador();
 	static Restaurante **obtenerListaRestaurantesControlador(int &numRestaurantes);
 	static Restaurante obtenerRestaurantePorId(int id);
 	static Pedido** obtenerHistorialPedidosControlador(int idUsuario, int &numPedidos);
 	static int** obtenerIdsProductosPedido(int idPedido, int &numIdsProducto);
+	static Producto** obtenerListaProductosControlador(int &numProductos);
+	static Producto obtenerProductoPorId(int id);
 };

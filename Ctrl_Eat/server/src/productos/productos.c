@@ -65,10 +65,11 @@ int crearProductos()
 		return -1; // Error si no se pudo asignar memoria
 	}
 	strcpy(tipo, str); // Copiar la cadena le�da en nombre
+	printf(tipo);
 
-	if (strcmp(tipo, "Bebida\n"))
+	if (strcmp(tipo, "Bebida") == 0 || strcmp(tipo, "bebida") == 0)
 	{
-		printf("\nTamaño: ");
+		printf("\nTamayo: ");
 		fgets(str, MAX_LENGTH, stdin);
 		str[strcspn(str, "\n")] = '\0';
 		tamanyo = (char *)malloc((strlen(str) + 1) * sizeof(char));

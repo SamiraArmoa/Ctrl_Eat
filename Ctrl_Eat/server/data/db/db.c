@@ -403,6 +403,13 @@ int obtenerIngredientes(const char *path) {
 const char* imprimirProductos(const char *path) {
 	char *result = (char*) malloc(8000 * sizeof(char));
 
+		if (result == NULL) {
+			fprintf(stderr, "Error asignando memoria\n");
+			return "";
+		}
+
+		result[0] = '\0';
+
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int rc;

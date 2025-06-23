@@ -105,6 +105,7 @@ void elegirProductos() {
 	cout << "Selecciona un producto:" << endl;
 	cout << "Introduce el id del producto: ";
 	// cin >> idProductos;
+
 }
 
 void editarPerfil() {
@@ -303,13 +304,26 @@ void historialDePedido() {
 //		listaPedidos[i]->mostrar();
 //	}
 
-	int numIds = 0;
-	int **listaIdsProducto = controlador::obtenerIdsProductosPedido(4, numIds);
+//	int numIds = 0;
+//	int **listaIdsProducto = controlador::obtenerIdsProductosPedido(4, numIds);
+//
+//	cout << "Ids productos: " <<endl;
+//	for (int i = 0; i < numIds; ++i) {
+//		cout << *listaIdsProducto[i];
+//	}
 
-	cout << "Ids productos: " <<endl;
-	for (int i = 0; i < numIds; ++i) {
-		cout << *listaIdsProducto[i];
+	int numProductos = 0;
+	Producto **listaProducto = controlador::obtenerListaProductosControlador(numProductos);
+
+	for (int i = 0; i < numProductos; ++i) {
+		listaProducto[i] -> mostrar();
 	}
+
+
+//	cout << "Ids productos: " <<endl;
+//	for (int i = 0; i < numIds; ++i) {
+//		cout << *listaIdsProducto[i];
+//	}
 }
 
 int main() {
