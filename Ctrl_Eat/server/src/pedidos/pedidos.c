@@ -30,8 +30,6 @@ int crearPedido()
 {
 	char str[MAX_LENGTH];
 	int domic; // 0 = No, 1 = Sí
-	char *fchPedido;
-	char *fchEntrega;
 	char id_res_str[3];
 	int id_res;
 	char id_cl_str[3];
@@ -42,33 +40,6 @@ int crearPedido()
 	fflush(stdin);
 	fgets(str, MAX_LENGTH, stdin);
 	sscanf(str, "%i", &domic);
-
-	printf("\nFecha Pedido: ");
-	fflush(stdin);
-	fgets(str, MAX_LENGTH, stdin);
-
-	str[strcspn(str, "\n")] = '\0';
-	// Asignar memoria din�mica para el nombre seg�n la longitud
-	fchPedido = (char *)malloc((strlen(str) + 1) * sizeof(char));
-	if (fchPedido == NULL)
-	{
-		printf("Error al asignar memoria para el nombre.\n");
-		return -1; // Error si no se pudo asignar memoria
-	}
-	strcpy(fchPedido, str); // Copiar la cadena le�da en nombre
-	printf("\nFecha Entrega: ");
-	fflush(stdin);
-	fgets(str, MAX_LENGTH, stdin);
-
-	str[strcspn(str, "\n")] = '\0';
-	// Asignar memoria din�mica para el nombre seg�n la longitud
-	fchEntrega = (char *)malloc((strlen(str) + 1) * sizeof(char));
-	if (fchEntrega == NULL)
-	{
-		printf("Error al asignar memoria para el nombre.\n");
-		return -1; // Error si no se pudo asignar memoria
-	}
-	strcpy(fchEntrega, str); // Copiar la cadena le�da en nombre
 
 	verRestaurantes();
 	printf("\nID Restaurante: ");
